@@ -18,7 +18,7 @@ keyring = "*"
 pinject = "*"
 rx = "*"
 send2trash = "*"
-pycryptodome = "*"
+pycryptodomex = "*"
 
 [requires]
 python_version = "3.7"

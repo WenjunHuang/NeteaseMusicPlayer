@@ -63,14 +63,16 @@ def choose_user_agent(ua: Optional[UserAgentType]):
     return kUserAgentList[index]
 
 
-async def request(session: http.ClientSession, method: HTTPMethod, url: str, data: Mapping[str, Any],
+async def request(session: http.ClientSession,
+                  method: HTTPMethod,
+                  url: str,
+                  data: Mapping[str, Any],
                   options: RequestOption):
     headers = {'User-Agent': choose_user_agent(options.ua)}
     if method == HTTPMethod.POST:
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
-    if url.find('music.163.com') != -1:
-        headers['Referer'] = 'https://music.163.com'
-
+    # if url.find('music.163.com') != -1:
+    headers['Referer'] = 'https://music.163.com'
     headers['Cookie'] = '; '.join([f"{quote_plus(key)}={quote_plus(value)}" for key, value in options.cookie.items()])
 
     if options.crypto == CryptoType.WEAPI:
@@ -81,12 +83,11 @@ async def request(session: http.ClientSession, method: HTTPMethod, url: str, dat
         else:
             data['csrf_token'] = ''
         data = Crypto.weapi(data)
+    elif options.crypto == CryptoType.LINUX_API:
+        data = Crypto.linux_api({'method': method.value, 'url': url, 'params': data})
+        headers['User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
+        url = 'https://music.163.com/api/linux/forward'
 
-    # request = http.ClientRequest(method=method.value,
-    #                    url = url,
-    #                    headers=headers,
-    #                    data=asdict(data))
-    # return await request.send(session)
     return await session.request(method.value,
                                  url,
                                  headers=headers,
