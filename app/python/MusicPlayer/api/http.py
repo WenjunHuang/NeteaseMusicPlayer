@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass, field, asdict
 from enum import IntEnum, Enum
 from random import randrange
-from typing import Optional, Mapping, Any
+from typing import Optional, Mapping, Any, Union
 from urllib.parse import quote_plus
 
 import aiohttp as http
@@ -48,7 +48,7 @@ class CryptoType(IntEnum):
 @dataclass
 class RequestOption:
     crypto: CryptoType
-    cookie: Mapping[str, str] = field(default_factory=dict)
+    cookie: Optional[Union[str, Mapping[str, str]]] = None
     ua: Optional[UserAgentType] = None
 
 
@@ -73,19 +73,26 @@ async def request(session: http.ClientSession,
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
     # if url.find('music.163.com') != -1:
     headers['Referer'] = 'https://music.163.com'
-    headers['Cookie'] = '; '.join([f"{quote_plus(key)}={quote_plus(value)}" for key, value in options.cookie.items()])
+    if options.cookie:
+        if type(options.cookie) == str:
+            headers['Cookie'] = options.cookie
+        elif type(options.cookie) == dict:
+            headers['Cookie'] = '; '.join(
+                [f"{quote_plus(key)}={quote_plus(value)}" for key, value in options.cookie.items()])
 
     if options.crypto == CryptoType.WEAPI:
         regex = re.compile(r"_csrf=([^(;|$)]+)")
         csrf_token = regex.findall(headers.get('Cookie', ''))
+
         if csrf_token:
-            data['csrf_token'] = csrf_token[1]
+            data['csrf_token'] = csrf_token[0]
         else:
             data['csrf_token'] = ''
         data = Crypto.weapi(data)
     elif options.crypto == CryptoType.LINUX_API:
         data = Crypto.linux_api({'method': method.value, 'url': url, 'params': data})
-        headers['User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
+        headers[
+            'User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
         url = 'https://music.163.com/api/linux/forward'
 
     return await session.request(method.value,

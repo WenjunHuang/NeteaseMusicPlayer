@@ -3,8 +3,12 @@ from typing import Union, Optional
 import aiohttp
 from typing_extensions import Literal
 from Cryptodome.Hash import MD5
+from dataclasses import replace
 
+from MusicPlayer.api.data.user_login import APIUserLoginData
+from MusicPlayer.api.data.user_private_message import APIUserPrivateMessagesData
 from MusicPlayer.api.http import request, HTTPMethod, RequestOption, CryptoType
+from MusicPlayer.api.parse_response import parse_response
 
 
 class NeteaseMusicApi:
@@ -163,20 +167,50 @@ class NeteaseMusicApi:
                              {"limit": limit, "offset": offset, "type": type_},
                              RequestOption(crypto=CryptoType.WEAPI))
 
-    async def login_cellphone(self, password: str, phone: str, country_code: Optional[str] = None)->aiohttp.ClientResponse:
+    async def login_cellphone(self, password: str, phone: str,
+                              country_code: Optional[str] = None) -> aiohttp.ClientResponse:
         password = MD5.new(password.encode('utf-8')).digest().hex()
-        response =  await request(self._http_session,
-                             HTTPMethod.POST,
-                             "https://music.163.com/weapi/login/cellphone",
-                             {
-                                 "phone": phone,
-                                 "countrycode": country_code,
-                                 "password": password,
-                                 "remberLogin": "true"
-                             },
-                             RequestOption(crypto=CryptoType.WEAPI, cookie={
-                                 "os": "pc"
-                             }))
-        cookies= response.cookies
-        print(cookies)
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 "https://music.163.com/weapi/login/cellphone",
+                                 {
+                                     "phone": phone,
+                                     "countrycode": country_code,
+                                     "password": password,
+                                     "remberLogin": "true"
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI, cookie={
+                                     "os": "pc"
+                                 }))
+        result = await parse_response(response, APIUserLoginData)
+        if type(result) == APIUserLoginData:
+            cookies = '; '.join([f"{key}={value.value}" for key, value in response.cookies.items()])
+            result = replace(result, cookies=cookies)
+        return result
+
+    async def user_event(self, uid: str, limit: int):
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/event/get/{uid}",
+                                 {
+                                     "getcounts": True,
+                                     "time": -1,
+                                     "limit": limit,
+                                     "total": False
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
         return response
+
+    async def msg_private(self, auth_cookie: str, limit: int, offset: int):
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/api/msg/private/users",
+                                 {
+                                     "offset": offset,
+                                     "limit": limit,
+                                     "total": "true"
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI,
+                                               cookie=auth_cookie))
+        result = await parse_response(response, APIUserPrivateMessagesData)
+        return result
