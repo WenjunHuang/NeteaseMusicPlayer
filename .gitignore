@@ -1,1 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
+
+.idea/
+build/
+app/python/test/test_account.py
