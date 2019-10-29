@@ -157,3 +157,17 @@ class TestTopList(unittest.TestCase):
         result = self.loop.run_until_complete(self.api.mv_all(area="日本"))
         print(result)
 
+    def test_mv_detail(self):
+        result = self.loop.run_until_complete(self.api.mv_detail(5436712))
+        print(result)
+
+    def test_mv_url(self):
+        result = self.loop.run_until_complete(self.api.mv_url(5436712))
+        print(result)
+
+    def test_personalized(self):
+        result = self.loop.run_until_complete(self.api.personalized(4))
+        print(result)
+        text = self.loop.run_until_complete(result.text())
+        print(result.status)
+        print(text)

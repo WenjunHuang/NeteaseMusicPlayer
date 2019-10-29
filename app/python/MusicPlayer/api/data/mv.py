@@ -1,6 +1,7 @@
-from dataclasses import dataclass
-from typing import List, Optional
-from dataclasses_json import dataclass_json, LetterCase
+import json
+from dataclasses import dataclass, field
+from typing import List, Optional, Mapping
+from dataclasses_json import dataclass_json, LetterCase, config
 from MusicPlayer.api.data.album import APIArtistData
 
 
@@ -60,3 +61,70 @@ class APIMVAllData:
     has_more: bool
     count: int
     data: List[APIMVData]
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
+class APIMVDetailDataArtistData:
+    id: int
+    name: str
+
+
+def identity(obj):
+    return obj
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
+class APIMVDetailDataData:
+    id: int
+    name: str
+    artist_id: int
+    artist_name: str
+    brief_desc: str
+    cover: str
+    cover_id: int
+    play_count: int
+    sub_count: int
+    share_count: int
+    like_count: int
+    comment_count: int
+    duration: int
+    n_type: int
+    publish_time: str
+    brs: Mapping[str, str] = field(metadata=config(decoder=identity))
+    artists: List[APIMVDetailDataArtistData]
+    is_reward: bool
+    comment_thread_id: str
+    desc: Optional[str] = None
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
+class APIMVDetailData:
+    loading_pic: str
+    buffer_pic: str
+    subed: bool
+    data: APIMVDetailDataData
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
+class APIMVUrlDataData:
+    id: int
+    url: str
+    r: int
+    size: int
+    md5: str
+    code: int
+    expi: int
+    fee: int
+    mv_fee: int
+    st: int
+    msg: str
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
+class APIMVUrlData:
+    data: APIMVUrlDataData

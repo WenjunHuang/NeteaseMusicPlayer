@@ -14,7 +14,7 @@ from MusicPlayer.api.data.banner import APIBannersData
 from MusicPlayer.api.data.dj_banner import APIDJBannersData
 from MusicPlayer.api.data.dj_category import APIDJCategoryExcludeHotData, APIDJCategoryRecommendData, \
     APIDJCategoryListData
-from MusicPlayer.api.data.mv import APIArtistMVsData, APIMVAllData
+from MusicPlayer.api.data.mv import APIArtistMVsData, APIMVAllData, APIMVDetailData, APIMVUrlData
 from MusicPlayer.api.data.user_login import APIUserLoginData
 from MusicPlayer.api.data.user_private_message import APIUserPrivateMessagesData
 from MusicPlayer.api.error import APIError
@@ -391,5 +391,29 @@ class NeteaseMusicApi:
                                      "id": mv_id,
                                      "r": 1080 if not resolution else resolution
                                  },
-                                 RequestOption(crypto=CryptoType.LINUX_API))
-        return await parse_response(response, APIBannersData)
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIMVUrlData)
+
+    async def mv_detail(self, mv_id: int):
+        # MV 详情
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/mv/detail",
+                                 {
+                                     "id": mv_id,
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIMVDetailData)
+
+    async def personalized(self, limit: int = 30):
+        # 推荐歌单
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/personalized/playlist",
+                                 {
+                                     "limit": limit,
+                                     "total": True,
+                                     "n": 1000
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return response
