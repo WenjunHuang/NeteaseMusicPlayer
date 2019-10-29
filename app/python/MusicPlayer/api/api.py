@@ -5,8 +5,15 @@ from typing_extensions import Literal
 from Cryptodome.Hash import MD5
 from dataclasses import replace
 
+from MusicPlayer.api.data.album import APIAlbumDynamicData, APIAlbumNewestData, APIAlbumSubscriptionListData, \
+    APIAlbumInfoData, APIArtistAlbumData
+from MusicPlayer.api.data.artist import APIArtistDescData
+from MusicPlayer.api.data.dj_banner import APIDJBannersData
+from MusicPlayer.api.data.dj_category import APIDJCategoryExcludeHotData, APIDJCategoryRecommendData, \
+    APIDJCategoryListData
 from MusicPlayer.api.data.user_login import APIUserLoginData
 from MusicPlayer.api.data.user_private_message import APIUserPrivateMessagesData
+from MusicPlayer.api.error import APIError
 from MusicPlayer.api.http import request, HTTPMethod, RequestOption, CryptoType
 from MusicPlayer.api.parse_response import parse_response
 
@@ -15,34 +22,38 @@ class NeteaseMusicApi:
     def __init__(self, http_session: aiohttp.ClientSession):
         self._http_session = http_session
 
-    async def dj_banner(self):
-        return await request(self._http_session,
-                             HTTPMethod.POST,
-                             "https://music.163.com/weapi/djradio/banner/get",
-                             {},
-                             RequestOption(crypto=CryptoType.WEAPI, cookie={"os": "pc"}))
+    async def dj_banner(self) -> Union[APIError, APIDJBannersData]:
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 "https://music.163.com/weapi/djradio/banner/get",
+                                 {},
+                                 RequestOption(crypto=CryptoType.WEAPI, cookie={"os": "pc"}))
+        return await parse_response(response, APIDJBannersData)
 
-    async def dj_category_excludehot(self):
-        return await request(self._http_session,
-                             HTTPMethod.POST,
-                             "https://music.163.com/weapi/djradio/category/excludehot",
-                             {},
-                             RequestOption(crypto=CryptoType.WEAPI))
+    async def dj_category_excludehot(self) -> Union[APIError, APIDJCategoryExcludeHotData]:
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 "https://music.163.com/weapi/djradio/category/excludehot",
+                                 {},
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIDJCategoryExcludeHotData)
 
     async def dj_category_recommend(self):
-        return await request(self._http_session,
-                             HTTPMethod.POST,
-                             "https://music.163.com/weapi/djradio/home/category/recommend",
-                             {},
-                             RequestOption(crypto=CryptoType.WEAPI))
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 "https://music.163.com/weapi/djradio/home/category/recommend",
+                                 {},
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIDJCategoryRecommendData)
 
     async def dj_catelist(self):
         # 电台分类列表
-        return await request(self._http_session,
-                             HTTPMethod.POST,
-                             "https://music.163.com/weapi/djradio/category/get",
-                             {},
-                             RequestOption(crypto=CryptoType.WEAPI))
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 "https://music.163.com/weapi/djradio/category/get",
+                                 {},
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIDJCategoryListData)
 
     async def dj_hot(self, limit: int, offset: int):
         # 热门电台
@@ -204,7 +215,7 @@ class NeteaseMusicApi:
     async def msg_private(self, auth_cookie: str, limit: int, offset: int):
         response = await request(self._http_session,
                                  HTTPMethod.POST,
-                                 f"https://music.163.com/api/msg/private/users",
+                                 f"https://music.163.com/weapi/msg/private/users",
                                  {
                                      "offset": offset,
                                      "limit": limit,
@@ -214,3 +225,67 @@ class NeteaseMusicApi:
                                                cookie=auth_cookie))
         result = await parse_response(response, APIUserPrivateMessagesData)
         return result
+
+    async def album_detail_dynamic(self, album_id: int):
+        # 专辑动态信息
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/album/detail/dynamic",
+                                 {
+                                     "id": album_id
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIAlbumDynamicData)
+
+    async def album_newest(self):
+        # 最新专辑
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/discovery/newAlbum",
+                                 {},
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIAlbumNewestData)
+
+    async def album_sublist(self, auth_cookies: str, limit: int = 30, offset: int = 0):
+        # 已经收藏专辑列表
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/album/sublist",
+                                 {
+                                     "limit": limit,
+                                     "offset": offset,
+                                     "total": True
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI, cookie=auth_cookies))
+        return await parse_response(response, APIAlbumSubscriptionListData)
+
+    async def album(self, album_id: int):
+        # 专辑内容
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/v1/album/{album_id}",
+                                 {},
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIAlbumInfoData)
+
+    async def artist_album(self, artist_id: int, limit: int = 30, offset: int = 0):
+        # 歌手专辑列表
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/artist/albums/{artist_id}",
+                                 {
+                                     "limit": limit,
+                                     "offset": offset,
+                                     "total": True
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIArtistAlbumData)
+
+    async def artist_desc(self, artist_id: int):
+        # 歌手介绍
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/artist/introduction",
+                                 {"id": artist_id},
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIArtistDescData)

@@ -5,9 +5,9 @@ from random import randrange
 from typing import Optional, Mapping, Any, Union
 from urllib.parse import quote_plus
 
-import aiohttp as http
+import aiohttp
 
-from app.python.MusicPlayer.api.crypto import Crypto
+from MusicPlayer.api.crypto import Crypto
 
 kUserAgentList = [
     'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
@@ -63,7 +63,7 @@ def choose_user_agent(ua: Optional[UserAgentType]):
     return kUserAgentList[index]
 
 
-async def request(session: http.ClientSession,
+async def request(session: aiohttp.ClientSession,
                   method: HTTPMethod,
                   url: str,
                   data: Mapping[str, Any],

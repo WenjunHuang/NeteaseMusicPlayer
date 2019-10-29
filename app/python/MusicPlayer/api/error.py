@@ -8,4 +8,4 @@ from dataclasses_json import dataclass_json, LetterCase
 @dataclass
 class APIError:
     code: int
-    message: Optional[str]
+    message: Optional[str] = None

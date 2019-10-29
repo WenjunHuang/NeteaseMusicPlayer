@@ -22,7 +22,7 @@ def load(cls, value: str):
 
 async def deserialize_object(response: aiohttp.ClientResponse, cls) -> Union[T, APIError]:
     try:
-        jobj = await response.json(loads=json.loads)
+        jobj = await response.json(loads=json.loads,content_type="")
         code = jobj['code']
         if code != 200:
             return APIError.from_dict(jobj)
