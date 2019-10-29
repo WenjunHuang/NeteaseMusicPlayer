@@ -2,7 +2,7 @@ import base64
 import json
 import os
 from dataclasses import dataclass
-from typing import Mapping, Any, Union
+from typing import Mapping, Any, Union, Optional
 
 from Cryptodome.Cipher import AES
 from Cryptodome.Cipher.AES import MODE_CBC, MODE_ECB
@@ -57,7 +57,10 @@ def pad_for_encryption(message: bytes, target_length: int):
 class Crypto:
     @classmethod
     def aes_encrypt(cls, data: bytes, key: bytes, iv: bytes, mode=MODE_CBC) -> bytes:
-        cipher = AES.new(key, mode, iv)
+        if mode == MODE_CBC:
+            cipher = AES.new(key, mode, iv)
+        if mode == MODE_ECB:
+            cipher = AES.new(key, mode)
         return cipher.encrypt(pad(data, 16))
 
     @classmethod
@@ -84,7 +87,7 @@ class Crypto:
     def linux_api(cls, data: Mapping[str, Any]):
         text = json.dumps(data)
         return LinuxAPIResult(
-            eparams=Crypto.aes_encrypt(text.encode('utf-8'), linux_api_key, b'', MODE_ECB).hex().upper()
+            eparams=Crypto.aes_encrypt(text.encode('utf-8'), linux_api_key, None, MODE_ECB).hex().upper()
         )
 
     @classmethod

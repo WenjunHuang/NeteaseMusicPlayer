@@ -27,7 +27,7 @@ class APIArtistData:
     pic_url: str
     img1v1_url: str
     album_size: int
-    alias: List[str]
+    alias: Optional[List[str]]
     trans: str
     music_size: int
     topic_person: int
@@ -66,7 +66,7 @@ class APIAlbumNewestData:
 class APIAlbumSubscriptionItemData:
     sub_time: int
     msg: List[str]
-    alias: List[str]
+    alias: Optional[List[str]]
     artists: List[APIArtistData]
 
 
@@ -84,7 +84,7 @@ class APIAlbumSubscriptionListData:
 class APISongArtistData:
     id: int
     name: str
-    alia: List[str]
+    alia: Optional[List[str]] = None
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -94,7 +94,7 @@ class APISongAlbumData:
     name: str
     pic_url: str
     pic: int
-    alia: List[str]
+    alia: Optional[List[str]] = None
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -133,15 +133,15 @@ class APISongData:
     ar: List[APISongArtistData]
     al: APISongAlbumData
     st: int
-    m: Optional[APISongQualityData]
-    h: Optional[APISongQualityData]
-    l: Optional[APISongQualityData]
-    alia: List[str]
     pop: float
-    rt: str
     name: str
     id: int
     privilege: APISongPrivilegeData
+    m: Optional[APISongQualityData] = None
+    h: Optional[APISongQualityData] = None
+    l: Optional[APISongQualityData] = None
+    alia: Optional[List[str]] = None
+    rt: Optional[str] = None
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -154,6 +154,6 @@ class APIAlbumInfoData:
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class APIArtistAlbumData:
-    more:bool
-    artist:APIArtistData
-    hot_albums:List[APIAlbumData]
+    more: bool
+    artist: APIArtistData
+    hot_albums: List[APIAlbumData]

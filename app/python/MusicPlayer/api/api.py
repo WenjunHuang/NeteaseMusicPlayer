@@ -1,3 +1,4 @@
+import json
 from typing import Union, Optional
 
 import aiohttp
@@ -7,10 +8,13 @@ from dataclasses import replace
 
 from MusicPlayer.api.data.album import APIAlbumDynamicData, APIAlbumNewestData, APIAlbumSubscriptionListData, \
     APIAlbumInfoData, APIArtistAlbumData
-from MusicPlayer.api.data.artist import APIArtistDescData
+from MusicPlayer.api.data.artist import APIArtistDescData, APIArtistListData
+from MusicPlayer.api.data.artist_songs import APIArtistSongsData
+from MusicPlayer.api.data.banner import APIBannersData
 from MusicPlayer.api.data.dj_banner import APIDJBannersData
 from MusicPlayer.api.data.dj_category import APIDJCategoryExcludeHotData, APIDJCategoryRecommendData, \
     APIDJCategoryListData
+from MusicPlayer.api.data.mv import APIArtistMVsData, APIMVAllData
 from MusicPlayer.api.data.user_login import APIUserLoginData
 from MusicPlayer.api.data.user_private_message import APIUserPrivateMessagesData
 from MusicPlayer.api.error import APIError
@@ -289,3 +293,103 @@ class NeteaseMusicApi:
                                  {"id": artist_id},
                                  RequestOption(crypto=CryptoType.WEAPI))
         return await parse_response(response, APIArtistDescData)
+
+    async def artist_list(self, category_code: int, initial: Optional[str], limit: int = 30, offset: int = 0):
+        # 歌手分类
+        # categoryCode 取值
+        # 入驻歌手 5001
+        # 华语男歌手 1001
+        # 华语女歌手 1002
+        # 华语组合/乐队 1003
+        # 欧美男歌手 2001
+        # 欧美女歌手 2002
+        # 欧美组合/乐队 2003
+        # 日本男歌手 6001
+        # 日本女歌手 6002
+        # 日本组合/乐队 6003
+        # 韩国男歌手 7001
+        # 韩国女歌手 7002
+        # 韩国组合/乐队 7003
+        # 其他男歌手 4001
+        # 其他女歌手 4002
+        # 其他组合/乐队 4003
+        #
+        # initial 取值 a-z/A-Z
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/artist/list",
+                                 {
+                                     "categoryCode": category_code,
+                                     "initial": '' if not initial else initial.upper()[0],
+                                     "offset": offset,
+                                     "limit": limit,
+                                     "total": True
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIArtistListData)
+
+    async def artist_mv(self, artist_id: int, limit: int = 30, offset: int = 0):
+        # 歌手相关mv
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/artist/mvs",
+                                 {
+                                     "artistId": artist_id,
+                                     "offset": offset,
+                                     "limit": limit,
+                                     "total": True
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIArtistMVsData)
+
+    async def artists(self, artist_id: int):
+        # 歌手歌单
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/v1/artist/{artist_id}",
+                                 {},
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIArtistSongsData)
+
+    async def banner(self):
+        # 首页轮播图
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/api/v2/banner/get",
+                                 {
+                                     "clientType": "pc"
+                                 },
+                                 RequestOption(crypto=CryptoType.LINUX_API))
+        return await parse_response(response, APIBannersData)
+
+    async def mv_all(self, area: Optional[str] = None, type_: Optional[str] = None, order: Optional[str] = None,
+                     limit: int = 30, offset: int = 0):
+        # 全部MV
+        # area: 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
+        #  type: 类型,可选值为全部,官方版,原生,现场版,网易出品,不填则为全部
+        # order: 排序,可选值为上升最快,最热,最新,不填则为上升最快
+        tags = json.dumps({"地区": area or "全部", "类型": type_ or "全部", "排序": order or "上升最快"})
+
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://interface.music.163.com/weapi/mv/all",
+                                 {
+                                     "tags": tags,
+                                     "offset": offset,
+                                     "limit": limit,
+                                     "total": True
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIMVAllData)
+
+    async def mv_url(self, mv_id: int, resolution: Optional[int] = None):
+        # mv 链接
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/song/enhance/play/mv/url",
+                                 {
+                                     "id": mv_id,
+                                     "r": 1080 if not resolution else resolution
+                                 },
+                                 RequestOption(crypto=CryptoType.LINUX_API))
+        return await parse_response(response, APIBannersData)

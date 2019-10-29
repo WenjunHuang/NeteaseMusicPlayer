@@ -3,6 +3,8 @@ from typing import List
 
 from dataclasses_json import dataclass_json, LetterCase
 
+from MusicPlayer.api.data.album import APIArtistData
+
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
@@ -110,3 +112,10 @@ class APIArtistDescData:
     brief_desc: str
     introduction: List[APIArtistDescIntroductionItemData]
     topic_data: List[APIArtistDescTopicData]
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
+class APIArtistListData:
+    more: bool
+    artists: List[APIArtistData]
