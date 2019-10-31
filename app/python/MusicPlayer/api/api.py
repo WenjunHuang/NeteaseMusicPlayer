@@ -22,7 +22,7 @@ from MusicPlayer.api.http import request, HTTPMethod, RequestOption, CryptoType
 from MusicPlayer.api.parse_response import parse_response
 
 
-class NeteaseMusicApi:
+class API:
     def __init__(self, http_session: aiohttp.ClientSession):
         self._http_session = http_session
 

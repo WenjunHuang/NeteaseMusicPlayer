@@ -13,7 +13,7 @@ class TestTopList(unittest.TestCase):
 
         self.loop = asyncio.get_event_loop()
         self.session = self.loop.run_until_complete(create_session())
-        self.api = NeteaseMusicApi(self.session)
+        self.api = API(self.session)
 
     def tearDown(self) -> None:
         self.loop.run_until_complete(self.session.close())
