@@ -15,6 +15,7 @@ from MusicPlayer.api.data.dj_banner import APIDJBannersData
 from MusicPlayer.api.data.dj_category import APIDJCategoryExcludeHotData, APIDJCategoryRecommendData, \
     APIDJCategoryListData
 from MusicPlayer.api.data.mv import APIArtistMVsData, APIMVAllData, APIMVDetailData, APIMVUrlData
+from MusicPlayer.api.data.personalized import APIPersonalizedData
 from MusicPlayer.api.data.user_login import APIUserLoginData
 from MusicPlayer.api.data.user_private_message import APIUserPrivateMessagesData
 from MusicPlayer.api.error import APIError
@@ -366,7 +367,7 @@ class API:
                      limit: int = 30, offset: int = 0):
         # 全部MV
         # area: 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
-        #  type: 类型,可选值为全部,官方版,原生,现场版,网易出品,不填则为全部
+        # type: 类型,可选值为全部,官方版,原生,现场版,网易出品,不填则为全部
         # order: 排序,可选值为上升最快,最热,最新,不填则为上升最快
         tags = json.dumps({"地区": area or "全部", "类型": type_ or "全部", "排序": order or "上升最快"})
 
@@ -416,4 +417,19 @@ class API:
                                      "n": 1000
                                  },
                                  RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIPersonalizedData)
+
+    async def comment_album(self, album_id: int, before_time: int = 0,limit: int = 20, offset: int = 0):
+        # 专辑评论
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/v1/resource/comments/R_AL_3_{album_id}",
+                                 {
+                                     "rid": album_id,
+                                     "limit": limit,
+                                     "offset": offset,
+                                     "beforeTime": before_time
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
         return response
+        # return await parse_response(response, APIPersonalizedData)

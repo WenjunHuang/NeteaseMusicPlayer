@@ -91,8 +91,7 @@ async def request(session: aiohttp.ClientSession,
         data = Crypto.weapi(data)
     elif options.crypto == CryptoType.LINUX_API:
         data = Crypto.linux_api({'method': method.value, 'url': url, 'params': data})
-        headers[
-            'User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
+        headers['User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
         url = 'https://music.163.com/api/linux/forward'
 
     return await session.request(method.value,
