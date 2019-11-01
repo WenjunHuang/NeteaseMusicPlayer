@@ -12,6 +12,8 @@ from PyQt5.QtQml import QQmlApplicationEngine
 from aiosqlite import Connection
 from asyncqt import QEventLoop
 
+from MusicPlayer.api.api import API
+
 
 class BasicBindingSpec(pinject.BindingSpec):
     def provide_app(self):

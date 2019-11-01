@@ -352,7 +352,7 @@ class API:
                                  RequestOption(crypto=CryptoType.WEAPI))
         return await parse_response(response, APIArtistSongsData)
 
-    async def banner(self):
+    async def banner(self)->APIBannersData:
         # 首页轮播图
         response = await request(self._http_session,
                                  HTTPMethod.POST,

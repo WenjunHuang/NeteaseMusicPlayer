@@ -1,7 +1,9 @@
 import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Controls 2.13
-import Music 1.0
+import MusicPlayer 1.0
+import "./discover_music/personal_recommendation"
+import "./styles/variables.mjs" as StyleVariables
 
 Window {
     visible:true
@@ -12,8 +14,10 @@ Window {
     color:StyleVariables.syntax_header_color
     }
 
-    Button{
-    text:"fuck me"
-
+    BannerCarousel {
+    anchors.left: parent.left
+    anchors.right: parent.right
+        height: 240
+        id:banner
     }
 }

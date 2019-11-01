@@ -1,4 +1,4 @@
-import * as Colors from "./color_system"
+import * as Colors from "./color_system.mjs"
 
 
 export const overlay_background_color = Colors.hexPlusAlpha('#000', 0.4)
