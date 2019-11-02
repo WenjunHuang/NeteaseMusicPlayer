@@ -8,8 +8,9 @@ RESOURCES += \
     discover_music/RecommendationSongLists.qml \
     MusicPlayer/Button.qml \
     MusicPlayer/Panel.qml \
+    octicons/Octicon.qml \
     styles/variables.mjs \
-    styles/color_system.mjs
+    styles/color_system.mjs\
     main.qml
 
 INSTALLS += target

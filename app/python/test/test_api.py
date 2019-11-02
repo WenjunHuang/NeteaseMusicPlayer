@@ -166,8 +166,11 @@ class TestTopList(unittest.TestCase):
         print(result)
 
     def test_personalized(self):
-        result = self.loop.run_until_complete(self.api.personalized(4))
+        result = self.loop.run_until_complete(self.api.personalized(10))
         print(result)
+        # text = self.loop.run_until_complete(result.text())
+        # print(result.status)
+        # print(text)
 
     def test_comment_album(self):
         result = self.loop.run_until_complete(self.api.comment_album(82784844))

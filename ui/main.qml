@@ -2,22 +2,26 @@ import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Controls 2.13
 import MusicPlayer 1.0
-import "./discover_music/personal_recommendation"
+import "./discover_music"
 import "./styles/variables.mjs" as StyleVariables
 
 Window {
-    visible:true
-    height:100
-    width:200
-    Rectangle{
-    anchors.fill:parent
-    color:StyleVariables.syntax_header_color
+    visible: true
+    minimumWidth: 1000
+    minimumHeight: 670
+
+    Rectangle {
+        anchors.fill: parent
+        color: "gray"
     }
 
-    BannerCarousel {
-    anchors.left: parent.left
-    anchors.right: parent.right
-        height: 240
-        id:banner
+    //    BannerCarousel {
+    //        id: banner
+    //        anchors.left: parent.left
+    //        anchors.right: parent.right
+    //        height: 240
+    //    }
+    RecommendationSongLists {
+        anchors.fill: parent
     }
 }

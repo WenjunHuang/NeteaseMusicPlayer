@@ -13,6 +13,7 @@ from aiosqlite import Connection
 from asyncqt import QEventLoop
 
 from MusicPlayer.api.api import API
+from MusicPlayer.static import init_qml_engine, get_qml_engine
 
 
 class BasicBindingSpec(pinject.BindingSpec):
@@ -23,7 +24,8 @@ class BasicBindingSpec(pinject.BindingSpec):
 
     def provide_qml_engine(self, app):
         # must dependent on app
-        return QQmlApplicationEngine()
+        init_qml_engine()
+        return get_qml_engine()
 
     def provide_event_loop(self, app):
         loop = QEventLoop(app)

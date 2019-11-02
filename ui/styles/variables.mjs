@@ -82,8 +82,8 @@ export const darwin_title_bar_height = 22
 
 export const spacing = 10
 export const spacingX2 = spacing * 2
-export const spacingX4 = spacing * 3
-export const spacingX5 = spacing * 3
+export const spacingX4 = spacing * 4
+export const spacingX5 = spacing * 5
 export const spacing_half = spacing / 2
 export const spacing_third = spacing / 3
 
