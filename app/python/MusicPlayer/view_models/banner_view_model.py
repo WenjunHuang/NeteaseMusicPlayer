@@ -1,18 +1,16 @@
+import asyncio
 from enum import IntEnum
 from typing import Dict, Any, List
 
-import pinject
-import asyncio
 from PyQt5.QtCore import QAbstractListModel, QModelIndex, pyqtProperty, pyqtSignal
-from PyQt5.QtQuick import QQuickItem
 
 from MusicPlayer.api.api import API
 from MusicPlayer.api.data.banner import APIBannersData, APIBannerData
 from MusicPlayer.common import with_logger
-from MusicPlayer.object_graph import get_object_graph
+from MusicPlayer.view_models.base import BaseViewModel
 
 
-class Roles(IntEnum):
+class _Roles(IntEnum):
     imageUrl = 0
     targetId = 1
     targetType = 2
@@ -21,7 +19,7 @@ class Roles(IntEnum):
     encodeId = 5
 
 
-class BannerImageList(QAbstractListModel):
+class _BannerImageList(QAbstractListModel):
     _list: List[APIBannerData]
 
     def __init__(self, parent=None):
@@ -31,7 +29,7 @@ class BannerImageList(QAbstractListModel):
     def roleNames(self) -> Dict[int, 'QByteArray']:
         roles = dict()
 
-        for name, member in Roles.__members__.items():
+        for name, member in _Roles.__members__.items():
             roles[member.value] = name.encode()
 
         return roles
@@ -46,35 +44,32 @@ class BannerImageList(QAbstractListModel):
         self.endResetModel()
 
     def data(self, index: QModelIndex, role: int) -> Any:
-        if role == Roles.imageUrl:
+        if role == _Roles.imageUrl:
             return self._list[index.row()].image_url
-        elif role == Roles.encodeId:
+        elif role == _Roles.encodeId:
             return self._list[index.row()].encode_id
-        elif role == Roles.targetId:
+        elif role == _Roles.targetId:
             return self._list[index.row()].target_id
-        elif role == Roles.targetType:
+        elif role == _Roles.targetType:
             return self._list[index.row()].target_type
-        elif role == Roles.titleColor:
+        elif role == _Roles.titleColor:
             return self._list[index.row()].title_color
-        elif role == Roles.typeTitle:
+        elif role == _Roles.typeTitle:
             return self._list[index.row()].type_title
 
 
-class BannerViewModelDependencies:
+class _Dependency:
     def __init__(self, api: API):
         self.api = api
 
 
 @with_logger
-class BannerViewModel(QQuickItem):
+class BannerViewModel(BaseViewModel):
     bannerCountChanged = pyqtSignal()
 
     def __init__(self, parent=None):
-        super().__init__(parent)
-        obj_graph: pinject.object_graph = get_object_graph()
-
-        self._d = obj_graph.provide(BannerViewModelDependencies)
-        self._banner_model = BannerImageList(self)
+        super().__init__(_Dependency, parent)
+        self._banner_model = _BannerImageList(self)
 
     def componentComplete(self):
         asyncio.create_task(self.load_banner_data())

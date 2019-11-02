@@ -352,7 +352,7 @@ class API:
                                  RequestOption(crypto=CryptoType.WEAPI))
         return await parse_response(response, APIArtistSongsData)
 
-    async def banner(self)->APIBannersData:
+    async def banner(self) -> APIBannersData:
         # 首页轮播图
         response = await request(self._http_session,
                                  HTTPMethod.POST,
@@ -406,7 +406,7 @@ class API:
                                  RequestOption(crypto=CryptoType.WEAPI))
         return await parse_response(response, APIMVDetailData)
 
-    async def personalized(self, limit: int = 30):
+    async def personalized(self, limit: int = 30) -> APIPersonalizedData:
         # 推荐歌单
         response = await request(self._http_session,
                                  HTTPMethod.POST,
@@ -419,7 +419,7 @@ class API:
                                  RequestOption(crypto=CryptoType.WEAPI))
         return await parse_response(response, APIPersonalizedData)
 
-    async def comment_album(self, album_id: int, before_time: int = 0,limit: int = 20, offset: int = 0):
+    async def comment_album(self, album_id: int, before_time: int = 0, limit: int = 20, offset: int = 0):
         # 专辑评论
         response = await request(self._http_session,
                                  HTTPMethod.POST,

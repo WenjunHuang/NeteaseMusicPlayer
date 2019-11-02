@@ -1,6 +1,6 @@
 from PyQt5.QtQml import qmlRegisterType
 
-from MusicPlayer.view_models.banner_view_model.view_model import BannerViewModel
+from MusicPlayer.view_models.banner_view_model import BannerViewModel
 
 
 def register_qml_types():

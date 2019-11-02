@@ -18,7 +18,7 @@ from MusicPlayer.api.api import API
 class BasicBindingSpec(pinject.BindingSpec):
     def provide_app(self):
         sys_argv = sys.argv
-        sys_argv += ['--style', './ui/Music']
+        sys_argv += ['--style', './ui/MusicPlayer']
         return QGuiApplication(sys.argv)
 
     def provide_qml_engine(self, app):

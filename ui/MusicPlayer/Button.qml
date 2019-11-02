@@ -1,7 +1,8 @@
 
 import QtQuick 2.13
 import QtQuick.Templates 2.13 as T
-import Music 1.0
+import MusicPlayer 1.0
+import "../styles/variables.mjs" as StyleVariables
 
 T.Button {
     id: control

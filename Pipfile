@@ -19,6 +19,7 @@ pinject = "*"
 rx = "*"
 send2trash = "*"
 pycryptodomex = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.7"
