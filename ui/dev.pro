@@ -8,6 +8,7 @@ RESOURCES += \
     discover_music/personalized/BannerCarousel.qml \
     discover_music/personalized/RecommendationSongLists.qml \
     discover_music/personalized/PersonalizedNewSongs.qml \
+    discover_music/DiscoverMusic.qml \
     MusicPlayer/Button.qml \
     MusicPlayer/Panel.qml \
     MusicPlayer/RoundCorner.qml \

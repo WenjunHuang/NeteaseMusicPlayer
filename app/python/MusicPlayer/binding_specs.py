@@ -20,7 +20,8 @@ class BasicBindingSpec(pinject.BindingSpec):
     def provide_app(self):
         sys_argv = sys.argv
         sys_argv += ['--style', './ui/MusicPlayer']
-        return QGuiApplication(sys.argv)
+        app =  QGuiApplication(sys.argv)
+        return app
 
     def provide_qml_engine(self, app):
         # must dependent on app

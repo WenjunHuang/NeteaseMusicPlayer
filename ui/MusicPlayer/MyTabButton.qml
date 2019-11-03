@@ -1,6 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Templates 2.12 as T
-import QtQuick.Layouts 1.12
+import QtQuick 2.13
+import QtQuick.Controls 2.13
+import QtQuick.Templates 2.13 as T
+import QtQuick.Layouts 1.13
 import "../styles/variables.mjs" as Vars
 
 T.TabButton {
@@ -10,9 +11,14 @@ T.TabButton {
     property Item badge
 
     font.pixelSize: Vars.font_size
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             implicitContentHeight + topPadding + bottomPadding)
 
     contentItem: RowLayout {
         spacing: Vars.spacing_half
+
         Item {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignLeft
             visible: control.badge ? true : false
@@ -21,9 +27,10 @@ T.TabButton {
             implicitWidth: control.badge ? control.badge.implicitWidth : 0
         }
         Text {
+            Layout.alignment:Qt.AlignHCenter
             text: control.text
             font: control.font
-            color: Vars.text_color
+            color:Vars.text_color
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
