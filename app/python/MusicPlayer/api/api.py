@@ -16,6 +16,7 @@ from MusicPlayer.api.data.dj_category import APIDJCategoryExcludeHotData, APIDJC
     APIDJCategoryListData
 from MusicPlayer.api.data.mv import APIArtistMVsData, APIMVAllData, APIMVDetailData, APIMVUrlData
 from MusicPlayer.api.data.personalized import APIPersonalizedData
+from MusicPlayer.api.data.personalized_newsong import APIPersonalizedNewSongData
 from MusicPlayer.api.data.user_login import APIUserLoginData
 from MusicPlayer.api.data.user_private_message import APIUserPrivateMessagesData
 from MusicPlayer.api.error import APIError
@@ -418,6 +419,17 @@ class API:
                                  },
                                  RequestOption(crypto=CryptoType.WEAPI))
         return await parse_response(response, APIPersonalizedData)
+
+    async def personalized_newsong(self) -> APIPersonalizedNewSongData:
+        # 推荐新歌
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/personalized/newsong",
+                                 {
+                                     "type": "recommend"
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return await parse_response(response, APIPersonalizedNewSongData)
 
     async def comment_album(self, album_id: int, before_time: int = 0, limit: int = 20, offset: int = 0):
         # 专辑评论

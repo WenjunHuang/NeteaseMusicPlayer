@@ -5,16 +5,17 @@ import QtGraphicalEffects 1.13
 import MusicPlayer 1.0
 import "../styles/variables.mjs" as Vars
 import "../octicons"
+import "../MusicPlayer"
 
 ColumnLayout {
     id: root
+    spacing: Vars.spacing
     property int itemCountPerRow: 5
 
     RecommendationSongListsViewModel {
         id: viewModel
     }
 
-    spacing: Vars.spacing
     Text {
         text: "推荐歌单 >"
         font.pixelSize: Vars.font_size_lg
@@ -48,7 +49,8 @@ ColumnLayout {
             id: content
             spacing: Vars.spacing
 
-            Item {
+            RoundCorner {
+                radius:Vars.border_radius
                 // 背景图
                 Layout.preferredWidth: (grid.width - (itemCountPerRow - 1)
                                         * grid.columnSpacing) / itemCountPerRow
@@ -136,20 +138,6 @@ ColumnLayout {
                     anchors.bottom: parent.bottom
                     anchors.rightMargin: Vars.spacing
                     anchors.bottomMargin: Vars.spacing
-                }
-
-                Rectangle {
-                    // 圆角遮罩
-                    id: mask
-                    width: image.width
-                    height: image.height
-                    radius: Vars.border_radius
-                    visible: false
-                }
-
-                layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: mask
                 }
             }
             Text {

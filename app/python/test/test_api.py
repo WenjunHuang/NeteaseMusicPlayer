@@ -178,3 +178,7 @@ class TestTopList(unittest.TestCase):
         text = self.loop.run_until_complete(result.text())
         print(result.status)
         print(text)
+
+    def test_personalized_newsong(self):
+        result = self.loop.run_until_complete(self.api.personalized_newsong())
+        print(result)
