@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Mapping
 from dataclasses_json import dataclass_json, LetterCase, config
 from MusicPlayer.api.data.album import APIArtistData
+from MusicPlayer.convert import identity
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -70,8 +71,6 @@ class APIMVDetailDataArtistData:
     name: str
 
 
-def identity(obj):
-    return obj
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)

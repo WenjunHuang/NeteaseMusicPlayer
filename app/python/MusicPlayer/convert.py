@@ -45,3 +45,5 @@ def _(data: Iterable[Any]):
         js_array.setProperty(idx, result)
     return js_array
 
+def identity(obj):
+    return obj

@@ -284,3 +284,6 @@ export const font_size_lg = 28
 export const font_size_xl = 32
 export const font_size_xxl = 42
 export const font_size_xs = 9
+
+export const content_minimum_width = 740
+export const content_maximum_width = 1040

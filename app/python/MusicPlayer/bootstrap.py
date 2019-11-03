@@ -9,7 +9,7 @@ class Bootstrap:
         self.event_loop = event_loop
 
     def run(self):
-        self.qml_engine.addImportPath("./ui/import")
+        self.qml_engine.addImportPath("./ui")
         self.qml_engine.load("./ui/main.qml")
         with self.event_loop:
             sys.exit(self.event_loop.run_forever())

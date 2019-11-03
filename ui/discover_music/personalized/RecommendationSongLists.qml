@@ -3,9 +3,9 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 import QtGraphicalEffects 1.13
 import MusicPlayer 1.0
-import "../styles/variables.mjs" as Vars
-import "../octicons"
-import "../MusicPlayer"
+import "../../styles/variables.mjs" as Vars
+import "../../octicons"
+import "../../MusicPlayer"
 
 ColumnLayout {
     id: root

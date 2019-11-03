@@ -182,3 +182,11 @@ class TestTopList(unittest.TestCase):
     def test_personalized_newsong(self):
         result = self.loop.run_until_complete(self.api.personalized_newsong())
         print(result)
+
+    def test_personalized_mv(self):
+        result = self.loop.run_until_complete(self.api.personalized_mv())
+        print(result)
+
+    def test_playlist_catlist(self):
+        result = self.loop.run_until_complete(self.api.playlist_catlist())
+        print(result)
