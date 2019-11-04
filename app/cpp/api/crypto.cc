@@ -1,58 +1,45 @@
 #include <QtCore>
 #include <cryptopp/aes.h>
-#include <cryptopp/rsa.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/modes.h>
+#include <cryptopp/rsa.h>
 #include <string>
 
-const QByteArray iv("0102030405060708");
-const QByteArray presetKey("0CoJUm6Qyw8W8jud");
-const QByteArray linuxapiKey("rFgB&h#%2?^eDg:Q");
-const QByteArray base62("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-const QByteArray publicKey(
-    "-----BEGIN PUBLIC KEY-----\n"
-    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/"
-    "aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/"
-    "DDaFt6Rr7iVZMldczhC0JNgTz+"
-    "SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB\n"
-    "-----END PUBLIC KEY-----");
-const QByteArray eapiKey("e82ckenh8dichen8");
-
-QByteArray aesEncryptCBC(const QByteArray &buffer, const QByteArray &key) {
+QByteArray aesEncryptCBC(const QByteArray& buffer, const QByteArray& key,
+                         const QByteArray& iv) {
     CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption encryptor(
-        reinterpret_cast<const byte *>(key.data()),
+        reinterpret_cast<const byte*>(key.data()),
         CryptoPP::AES::DEFAULT_KEYLENGTH,
-        reinterpret_cast<const byte *>(iv.data()));
+        reinterpret_cast<const byte*>(iv.data()));
 
     std::string ciphertext;
     CryptoPP::StreamTransformationFilter stfEnc(
         encryptor, new CryptoPP::StringSink(ciphertext));
-    stfEnc.Put(reinterpret_cast<const unsigned char *>(buffer.data()),
+    stfEnc.Put(reinterpret_cast<const unsigned char*>(buffer.data()),
                buffer.length());
     stfEnc.MessageEnd();
 
     return QByteArray(ciphertext.c_str(), ciphertext.size());
 }
 
-QByteArray aseEncryptECB(const QByteArray& buffer,const QByteArray& key) {
+QByteArray aseEncryptECB(const QByteArray& buffer, const QByteArray& key) {
     CryptoPP::ECB_Mode<CryptoPP::AES>::Encryption encryptor(
-        reinterpret_cast<const byte *>(key.data()),
-        CryptoPP::AES::DEFAULT_KEYLENGTH,
-        reinterpret_cast<const byte *>(iv.data()));
+        reinterpret_cast<const byte*>(key.data()),
+        CryptoPP::AES::DEFAULT_KEYLENGTH);
 
     std::string ciphertext;
     CryptoPP::StreamTransformationFilter stfEnc(
         encryptor, new CryptoPP::StringSink(ciphertext));
-    stfEnc.Put(reinterpret_cast<const unsigned char *>(buffer.data()),
+    stfEnc.Put(reinterpret_cast<const unsigned char*>(buffer.data()),
                buffer.length());
     stfEnc.MessageEnd();
 
     return QByteArray(ciphertext.c_str(), ciphertext.size());
-
 }
 
-QByteArray rsaEncrypt(const QByteArray& buffer,const QByteArray& key) {
-    CryptoPP::StringSource ss(key.data(),true);
+QByteArray rsaEncrypt(const QByteArray& buffer, const QByteArray& key) {
+    CryptoPP::StringSource ss(key.data(), true);
     CryptoPP::RSA::PublicKey pk;
     pk.Load(ss);
+    pk.
 }
