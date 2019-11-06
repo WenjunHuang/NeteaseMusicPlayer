@@ -12,3 +12,14 @@ TEST_CASE("Factorials are computed", "[factorial]") {
 
     qDebug() << result;
 }
+
+TEST_CASE("RSA","[RSA]") {
+    QByteArray data{"{\"radioId\":\"336355127\",\"limit\":30,\"offset\":0,"
+                    "\"asc\":false,\"csrf_token\":\"\"}"};
+    QByteArray key{"0CoJUm6Qyw8W8jud"};
+    QByteArray iv{"0102030405060708"};
+
+    QString result(rsaEncrypt(data,publicKey).toHex());
+
+    qDebug() << result;
+}
