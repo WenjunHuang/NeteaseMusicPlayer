@@ -7,24 +7,24 @@
 #include <QJsonArray>
 #include <optional>
 
-namespace MusicPlayer {
+namespace MusicPlayer::Util {
     template <typename T> T fromJsonValue(const QJsonValue& value) {
         return T::fromJsonValue(value);
     }
 
-    template <> QString fromJsonValue(const QJsonValue& value) {
-        return value.toString();
-    }
 
-    template <> int fromJsonValue(const QJsonValue& value) {
-        return value.toInt();
-    }
+
+    template <> QString fromJsonValue(const QJsonValue& value);
+
+    template <> int fromJsonValue(const QJsonValue& value);
+
+    template<> bool fromJsonValue(const QJsonValue& value);
 
     template <typename T> QVector<T> fromJsonArray(const QJsonValue& value) {
         auto array = value.toArray();
         QVector<T> result;
         for (const auto& v : array) {
-            result.append(::fromJsonValue<T>(v));
+            result.append(fromJsonValue<T>(v));
         }
         return result;
     }

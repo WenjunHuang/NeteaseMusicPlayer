@@ -1,11 +1,14 @@
 
 #pragma once
-#include "json.h"
+
+#include "../../util/json.h"
 #include <QJsonObject>
 #include <QString>
 #include <QtCore/QJsonValue>
 
 namespace MusicPlayer::API {
+    using namespace MusicPlayer::Util;
+
     struct APIDJBannerData {
         int targetId;
         int targetType;
@@ -14,23 +17,35 @@ namespace MusicPlayer::API {
         QString typeTitle;
         bool exclusive;
 
-        static APIDJBannerData fromJsonValue(const QJsonValue& value) {
-            auto object = value.toObject();
+        static APIDJBannerData fromJsonValue(const QJsonValue &value) {
+          auto object = value.toObject();
 
-            return {
-                MusicPlayer::fromJsonValue<int>(
-                    object.value(QLatin1Literal("target_id"))),
-                    MusicPlayer::fromJsonValue<int>(
-                        object.value(QLatin1Literal("target_type"))),
-                    MusicPlayer::fromJsonValue<QString>(
-                        object.value(QLatin1Literal("pic"))),
-                    MusicPlayer::fromJsonValue<QString>(
-                        object.value(QLatin1Literal("url"))),
-                    MusicPlayer::fromJsonValue<QString>(
-                        object.value(QLatin1Literal("type_title"))),
-                    MusicPlayer::fromJsonValue<bool>(
-                        object.value(QLatin1Literal("exclusive")))
-            };
+          return {
+            Util::fromJsonValue<int>(
+              object.value(QLatin1Literal("targetId"))),
+            Util::fromJsonValue<int>(
+              object.value(QLatin1Literal("targetType"))),
+            Util::fromJsonValue<QString>(
+              object.value(QLatin1Literal("pic"))),
+            Util::fromJsonValue<QString>(
+              object.value(QLatin1Literal("url"))),
+            Util::fromJsonValue<QString>(
+              object.value(QLatin1Literal("typeTitle"))),
+            Util::fromJsonValue<bool>(
+              object.value(QLatin1Literal("exclusive")))
+          };
+        }
+    };
+
+    struct APIDJBannersData {
+        QVector<APIDJBannerData> data;
+
+        static APIDJBannersData fromJsonValue(const QJsonValue &value) {
+          auto object = value.toObject();
+          return {
+            Util::fromJsonArray<APIDJBannerData>(object.value(QLatin1Literal("data")))
+          };
+
         }
     };
 }

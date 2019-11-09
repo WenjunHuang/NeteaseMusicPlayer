@@ -80,7 +80,15 @@ class Crypto:
                 Crypto.aes_encrypt(base64.b64encode(Crypto.aes_encrypt(text.encode('utf-8'), preset_key, iv)),
                                    secret_key, iv)).decode('utf-8'),
             encSecKey=Crypto.rsa_encrypt(secret_key, public_key).hex())
+        # params=ItgWYKVmn3lEK533YOJkx+Nif3cmR/WXO+haPyiyzn3f4O41E5/KwyFw7U57LB2g&encSecKey=7e6963f54b2c015046b628bbc05d45652fa6b5ff7e4267037cc1e7a22ddaa7949e397e681add85b202efeca98d8f4321c3a702e04acfd5f491a40e16914a497a333c928bf23438395e06075616679ae44d3fe59d96623f8b7c88d5534c6c39eb58530f89a2ea9dbd20347adea75358175349e395140fd5fb9f897806f5243618"
+        #"params=pViD54P/3a4Vyx3GBXadgtt+lBA8eaFJPk93xHBivE64yFosT6tES3swgER2rcWu&encSecKey=97181f327b48323526484150b3eb9a7ad21315c87aca28c61bcae9ccfcff4274e6dc44eb4af610e08f78199e007a6d30f2ecb84b6d6d16ac77aead738a3806d5939fd139b4ddf604a7e3c87fe216fb761812106db4d22334b2612fefa268e57a2840507e99df604369042d27f873276b76f581b6e2bbf0338e1043c6902fb928"
+
+        # result = WEAPIResult(
+        #     params='pViD54P/3a4Vyx3GBXadgtt+lBA8eaFJPk93xHBivE64yFosT6tES3swgER2rcWu',
+        #     encSecKey='97181f327b48323526484150b3eb9a7ad21315c87aca28c61bcae9ccfcff4274e6dc44eb4af610e08f78199e007a6d30f2ecb84b6d6d16ac77aead738a3806d5939fd139b4ddf604a7e3c87fe216fb761812106db4d22334b2612fefa268e57a2840507e99df604369042d27f873276b76f581b6e2bbf0338e1043c6902fb928'
+        # )
         print(result)
+
         return result
 
     @classmethod

@@ -20,7 +20,7 @@ class BasicBindingSpec(pinject.BindingSpec):
     def provide_app(self):
         sys_argv = sys.argv
         sys_argv += ['--style', './ui/MusicPlayer']
-        app =  QGuiApplication(sys.argv)
+        app = QGuiApplication(sys.argv)
         return app
 
     def provide_qml_engine(self, app):
@@ -50,6 +50,8 @@ class HttpApiBindingSpec(pinject.BindingSpec):
 
     def provide_http_session(self):
         # return event_loop.run_until_complete(aiohttp.ClientSession(json_serialize=json_generator))
+        conn = aiohttp.SocksConnector(proxy=aiosocks.Socks5Addr(PROXY_ADDRESS, PROXY_PORT), proxy_auth=None, remote_resolve=True)
+
         return aiohttp.ClientSession()
 
     def dependencies(self):
