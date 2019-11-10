@@ -26,6 +26,18 @@ namespace MusicPlayer::API {
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/13.10586"
     };
 
+
+    QString httpMethodName(const HttpMethod &method) {
+      if (method == HttpMethod::GET) {
+        return "GET";
+      } else if (method == HttpMethod::POST) {
+        return "POST";
+      } else if (method == HttpMethod::PUT) {
+        return "PUT";
+      }
+      return "";
+    }
+
     QString chooseUserAgent(std::optional<UserAgentType> ua) {
       int index = -1;
       if (!ua) {
@@ -39,8 +51,10 @@ namespace MusicPlayer::API {
       return kUserAgentList[index];
     }
 
-    HttpWorker::HttpWorker(QObject *parent)
-      : QObject{parent}, _network{new QNetworkAccessManager} {
+    HttpWorker *HttpWorker::_instance = nullptr;
+
+    HttpWorker::HttpWorker()
+      : _network{new QNetworkAccessManager} {
 
       _worker = new QThread;
       _worker->setObjectName("HttpWorker");
@@ -81,7 +95,7 @@ namespace MusicPlayer::API {
                         }
                     }, option.cookie.value());
                   }
-                  data["csrf_token"] = QString("");
+
 
                   QNetworkReply *reply = nullptr;
                   if (method == HttpMethod::GET) {
@@ -90,8 +104,26 @@ namespace MusicPlayer::API {
                     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
                     QByteArray content;
-                    if (option.cryptoType == CryptoType::WEAPI)
+                    if (option.cryptoType == CryptoType::WEAPI) {
+
+                      // 设置认证字段
+                      QRegExp re{R"(_csrf=([^(;|$)]+))"};
+                      if (auto pos = re.indexIn(request.rawHeader("Cookie"));pos != -1) {
+                        data["csrf_token"] = re.cap(1);
+                      } else {
+                        data["csrf_token"] = QString("");
+                      }
                       content = weapi(data);
+                    } else if (option.cryptoType == CryptoType::LINUX_API) {
+                      QVariantHash linuxData{{"method", httpMethodName(method)},
+                                             {"url",    url},
+                                             {"params", data}};
+                      content = linuxApi(linuxData);
+                      request.setHeader(QNetworkRequest::UserAgentHeader,
+                                        QLatin1Literal(
+                                          "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36"));
+                      request.setUrl(QUrl(QLatin1Literal("https://music.163.com/api/linux/forward")));
+                    }
 
                     reply = _network->post(request, content);
                   }
@@ -111,5 +143,25 @@ namespace MusicPlayer::API {
       QFutureInterface<QNetworkReply *> promise;
       emit _request(HttpMethod::POST, url, option, data, promise);
       return promise.future();
+    }
+
+    void HttpWorker::initInstance() {
+      if (!_instance) {
+        _instance = new HttpWorker;
+        qRegisterMetaType<HttpMethod>("HttpMethod");
+        qRegisterMetaType<RequestOption>("RequestOption");
+        qRegisterMetaType<QFutureInterface<QNetworkReply *>>("QFutureInterface<QNetworkReply*>");
+      }
+    }
+
+    void HttpWorker::freeInstance() {
+      if (_instance) {
+        delete _instance;
+        _instance = nullptr;
+      }
+    }
+
+    HttpWorker *HttpWorker::instance() {
+      return _instance;
     }
 }

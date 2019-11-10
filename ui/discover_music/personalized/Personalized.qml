@@ -6,9 +6,11 @@ import "../../styles/variables.mjs" as Vars
 Item {
     id: root
     ScrollView {
+        id:scroll
         anchors.fill: parent
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         contentHeight: layout.height
+
 
         ColumnLayout {
             id:layout
@@ -19,7 +21,6 @@ Item {
                 Layout.minimumWidth: Vars.content_minimum_width
                 Layout.maximumWidth: Vars.content_maximum_width
                 Layout.alignment: Qt.AlignCenter
-
                 height: 240
             }
             RecommendationSongLists {

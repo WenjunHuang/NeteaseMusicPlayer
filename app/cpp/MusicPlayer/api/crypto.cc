@@ -98,3 +98,13 @@ QByteArray weapi(const QVariantHash &data) {
   r.replace(QChar('+'), "%2B"); // Qt的bug:不会转意+字符
   return r;
 }
+
+QByteArray linuxApi(const QVariantHash &data) {
+  QByteArray text{QJsonDocument(QJsonObject::fromVariantHash(data)).toJson(QJsonDocument::Compact)};
+  auto eparams = aseEncryptECB(text, kLinuxapiKey).toHex().toUpper();
+  QUrlQuery result;
+  result.addQueryItem("eparams", eparams);
+  auto r = result.toString(QUrl::FullyEncoded).toUtf8();
+  r.replace(QChar('+'), "%2B"); // Qt的bug:不会转意+字符
+  return r;
+}

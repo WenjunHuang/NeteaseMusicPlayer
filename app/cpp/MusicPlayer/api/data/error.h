@@ -35,4 +35,4 @@ namespace MusicPlayer::API {
     };
 
     using Error = std::variant<APIError, NetworkError, JsonFormatError>;
-} // namespace MusicPlayer::API
+} // namespace MusicPlayer::MusicAPI

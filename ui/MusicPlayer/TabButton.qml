@@ -10,11 +10,19 @@ T.TabButton {
     property bool selected: control.TabBar.tabBar.currentIndex === control.TabBar.index
     property Item badge
 
-    font.pixelSize: Vars.font_size
+    font.pixelSize: Vars.font_size_lg
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
+    width: implicitWidth
+    height: implichtHeight
+
+    topPadding: Vars.spacingX2
+    bottomPadding: Vars.spacingX2
+    leftPadding: Vars.spacingX3
+    rightPadding: Vars.spacingX3
+    spacing: Vars.spacing_half
 
     contentItem: RowLayout {
         spacing: Vars.spacing_half
@@ -27,10 +35,10 @@ T.TabButton {
             implicitWidth: control.badge ? control.badge.implicitWidth : 0
         }
         Text {
-            Layout.alignment:Qt.AlignHCenter
+            Layout.alignment: Qt.AlignHCenter
             text: control.text
             font: control.font
-            color:Vars.text_color
+            color: Vars.text_color
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -39,25 +47,9 @@ T.TabButton {
 
     background: Rectangle {
         implicitHeight: Vars.tab_bar_height
+        width: control.width
+        height: control.height
         color: control.hovered ? Vars.tab_bar_hover_background_color : Vars.tab_bar_background_color
-
-        Border {
-            commonBorder: false
-            lBorderwidth: 0
-            tBorderwidth: 0
-            bBorderwidth: 1
-            rBorderwidth: control.TabBar.index === control.TabBar.tabBar.count - 1 ? 0 : 1
-            color: Vars.box_border_color
-        }
-
-        Rectangle {
-            implicitHeight: 3
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: Vars.tab_bar_active_color
-            visible: selected
-        }
     }
 
     hoverEnabled: true

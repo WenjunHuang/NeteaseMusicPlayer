@@ -64,6 +64,7 @@ class _RecommendationSongsListModel(QAbstractListModel):
         self._list.clear()
         # self._list.append(_EveryDayRecommendation())
         self._list.extend(data.result)
+
         self.endResetModel()
 
     def data(self, index: QModelIndex, role: int) -> Any:

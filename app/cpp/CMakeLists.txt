@@ -12,12 +12,6 @@ find_package(Qt5 REQUIRED Core Network Quick Concurrent)
 pkg_search_module(cryptopp REQUIRED libcrypto++)
 include(DownloadProject.cmake)
 
-download_project(PROJ fruit
-        GIT_REPOSITORY https://github.com/google/fruit.git
-        GIT_TAG v3.4.0
-        GIT_SHALLOW
-        ${UPDATE_DISCONNECTED_IF_AVAILABLE}
-        )
 
 add_subdirectory(MusicPlayer)
 add_subdirectory(test)

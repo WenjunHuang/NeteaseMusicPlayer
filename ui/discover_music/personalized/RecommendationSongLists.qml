@@ -5,7 +5,7 @@ import QtGraphicalEffects 1.13
 import MusicPlayer 1.0
 import "../../styles/variables.mjs" as Vars
 import "../../octicons"
-import "../../MusicPlayer"
+import "../../utils"
 
 ColumnLayout {
     id: root

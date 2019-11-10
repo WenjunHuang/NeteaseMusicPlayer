@@ -18,6 +18,9 @@ namespace MusicPlayer::Util {
 
     template <> int fromJsonValue(const QJsonValue& value);
 
+    template<> double fromJsonValue(const QJsonValue& value);
+
+
     template<> bool fromJsonValue(const QJsonValue& value);
 
     template <typename T> QVector<T> fromJsonArray(const QJsonValue& value) {

@@ -1,20 +1,27 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
+import "../utils"
+import "../styles/variables.mjs" as Vars
+import "./personalized"
 
 Pane {
     ColumnLayout {
         width: parent.width
+        spacing: 0
+
         RowLayout {
-            Item{
+            spacing: 0
+            Item {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
             }
 
             TabBar {
                 id: tabBar
                 Layout.fillWidth: false
+                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter
-                height: 100
                 TabButton {
                     text: "个性推荐"
                 }
@@ -34,27 +41,29 @@ Pane {
                     text: "最新音乐"
                 }
             }
-            Item{
+            Item {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
             }
         }
+
         Rectangle {
             Layout.fillWidth: true
-            height:1
-            color:"black"
-            //Layout.topMargin: -10
-            z:-1
+            height: 1
+            color: Vars.seperator_color
+            Layout.topMargin: -2
+            //z: -1
         }
-
-        Rectangle{
-            Layout.fillHeight: true
-        }
-
-        //        StackLayout{
-        //            Layout.fillWidth: true
-        //            currentIndex: tabBar.currentIndex
-        //            Pane{
-        //            }
+        //        Rectangle {
+        //            Layout.fillHeight: true
         //        }
+        StackLayout {
+            //            Layout.fillWidth: true
+            //            Layout.fillHeight: true
+            currentIndex: tabBar.currentIndex
+            Personalized {
+                id: banner
+            }
+        }
     }
 }

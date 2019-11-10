@@ -13,10 +13,11 @@
 #include <vector>
 
 namespace MusicPlayer::API {
-    enum class HttpMethod {
+    enum class HttpMethod{
         GET,
         POST,
         PUT
+
     };
 
     enum class CryptoType {
@@ -40,14 +41,23 @@ namespace MusicPlayer::API {
     class HttpWorker : public QObject {
     Q_OBJECT
 
+        Q_DISABLE_COPY(HttpWorker)
+
         Q_ENUM(HttpMethod)
 
+        HttpWorker();
+
     public:
-        explicit HttpWorker(QObject *parent = nullptr);
+
+        static void initInstance();
+
+        static void freeInstance();
+
+        static HttpWorker *instance();
 
         QFuture<QNetworkReply *> post(QUrl url,
                                       RequestOption option,
-                                      const QHash<QString,QVariant>& data);
+                                      const QHash<QString, QVariant> &data);
 
     signals:
 
@@ -55,13 +65,15 @@ namespace MusicPlayer::API {
         void _request(HttpMethod method,
                       QUrl url,
                       RequestOption option,
-                      QHash<QString,QVariant> data,
+                      QHash<QString, QVariant> data,
                       QFutureInterface<QNetworkReply *> futureItr);
 
     private:
+        static HttpWorker* _instance;
         QThread *_worker;
         QNetworkAccessManager *_network;
     };
+
 }
 Q_DECLARE_METATYPE(MusicPlayer::API::HttpMethod)
-//Q_DECLARE_METATYPE(MusicPlayer::API::HttpWorker)
+//Q_DECLARE_METATYPE(MusicPlayer::MusicAPI::HttpWorker)

@@ -50,7 +50,6 @@ class HttpApiBindingSpec(pinject.BindingSpec):
 
     def provide_http_session(self):
         # return event_loop.run_until_complete(aiohttp.ClientSession(json_serialize=json_generator))
-        conn = aiohttp.SocksConnector(proxy=aiosocks.Socks5Addr(PROXY_ADDRESS, PROXY_PORT), proxy_auth=None, remote_resolve=True)
 
         return aiohttp.ClientSession()
 

@@ -1,5 +1,6 @@
 import QtQuick 2.13
 import QtQuick.Templates 2.13 as T
+import "../styles/variables.mjs" as Vars
 
 T.TabBar {
     id: control
@@ -9,7 +10,7 @@ T.TabBar {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              contentHeight + topPadding + bottomPadding)
 
-    spacing: -1
+    spacing: 0
 
     contentItem: ListView {
         model: control.contentModel
@@ -21,17 +22,17 @@ T.TabBar {
         flickableDirection: Flickable.AutoFlickIfNeeded
         snapMode: ListView.SnapToItem
 
-        highlightMoveDuration: 1000
+        highlightMoveDuration: 300
         highlightRangeMode: ListView.ApplyRange
         preferredHighlightBegin: 40
         preferredHighlightEnd: width - 40
         highlight: Rectangle {
             z: 100
-            color:"transparent"
+            color: "transparent"
 
             Rectangle {
                 color: "blue"
-                height: 10
+                height: Vars.tab_highlight_rect_height
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -39,17 +40,12 @@ T.TabBar {
         }
     }
 
-    background: Item {
-        implicitHeight: 21
-
-        Rectangle {
-            width: parent.width
-            height: 1
-            y: control.position === T.TabBar.Header ? parent.height - 1 : 0
-            //color: Fusion.outline(control.palette)
-        }
-    }
-    Component.onCompleted: {
-        console.log("ok")
+    background: Rectangle {
+        anchors.fill: parent
+        color:"black"
+//        width: parent.width
+//        height: 1
+//        y: control.position === T.TabBar.Header ? parent.height - 1 : 0
+        //color: Fusion.outline(control.palette)
     }
 }
