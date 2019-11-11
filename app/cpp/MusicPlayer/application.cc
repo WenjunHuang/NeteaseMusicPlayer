@@ -9,7 +9,7 @@
 namespace MusicPlayer {
     int Application::exec(const QStringList &params) {
       QQmlApplicationEngine engine;
-//      engine.addImportPath("qrc:/");
+      engine.addImportPath(":/ui");
       for (const auto &path:engine.importPathList())
         qDebug() << path;
 

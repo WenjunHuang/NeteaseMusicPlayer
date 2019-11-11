@@ -6,9 +6,12 @@
 
 int main(int argc, char *argv[]) {
   using namespace MusicPlayer;
+  for (int i = 0;i < argc;i++){
+    qDebug() << strlen(argv[i]);
+  }
   try {
-//    QQuickStyle::addStylePath(":/ui");
-//    QQuickStyle::setStyle("MusicPlayer");
+    QQuickStyle::addStylePath(":/ui");
+    QQuickStyle::setStyle("MusicPlayer");
 //    QQuickStyle::setStyle("Material");
 //    QQuickStyle::setFallbackStyle("Fusion");
 //    std::unique_ptr<Application> application{std::make_unique<Application>(Util::getUserIDString(), argc, argv)};
