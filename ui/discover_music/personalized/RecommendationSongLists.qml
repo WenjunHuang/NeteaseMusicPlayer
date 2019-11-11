@@ -39,18 +39,38 @@ ColumnLayout {
         }
     }
 
-    Rectangle {
-        Layout.fillHeight: true
+    //    Rectangle {
+    //        Layout.fillHeight: true
+    //    }
+    Component {
+        id: delegate
+        ColumnLayout {
+            spacing: 0
+            Loader {
+                id: loader
+                property var modelImageUrl: imageUrl
+                property var modelPlayCount: playCount
+                property var modelName: name
+                property var modelWeekday: weekday
+                property var modelToday: today
+                Layout.preferredWidth: (grid.width - (itemCountPerRow - 1)
+                                        * grid.columnSpacing) / itemCountPerRow
+                sourceComponent: kind == RecommendationSongListsViewModel.Normal ? normalDelegate : todayDelegate
+            }
+            Rectangle {
+                Layout.fillHeight: true
+            }
+        }
     }
 
     Component {
-        id: delegate
+        id: normalDelegate
         ColumnLayout {
             id: content
             spacing: Vars.spacing
 
             RoundCorner {
-                radius:Vars.border_radius
+                radius: Vars.border_radius
                 // 背景图
                 Layout.preferredWidth: (grid.width - (itemCountPerRow - 1)
                                         * grid.columnSpacing) / itemCountPerRow
@@ -60,8 +80,8 @@ ColumnLayout {
                     id: image
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectFit
-                    source: imageUrl
-                    visible:false
+                    source: modelImageUrl
+                    visible: false
                 }
 
                 LinearGradient {
@@ -79,7 +99,7 @@ ColumnLayout {
                             color: "white"
                         }
                     }
-                    visible:false
+                    visible: false
                 }
 
                 Blend {
@@ -98,17 +118,15 @@ ColumnLayout {
                     showColor: true
                     anchors.right: textPlayCount.left
                     anchors.rightMargin: Vars.spacing_third
-                    anchors.verticalCenter:textPlayCount.verticalCenter
-
+                    anchors.verticalCenter: textPlayCount.verticalCenter
                 }
-
 
                 Text {
                     // 播放数
                     id: textPlayCount
                     font.pixelSize: Vars.font_size
                     color: "white"
-                    text: playCount
+                    text: modelPlayCount
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.rightMargin: Vars.spacing_half
@@ -144,7 +162,54 @@ ColumnLayout {
                 id: nameText
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
-                text: name
+                text: modelName
+                font.pixelSize: Vars.font_size_md
+            }
+        }
+    }
+
+    Component {
+        id: todayDelegate
+        ColumnLayout {
+            RoundCorner {
+                radius: Vars.border_radius
+                Layout.preferredWidth: (grid.width - (itemCountPerRow - 1)
+                                        * grid.columnSpacing) / itemCountPerRow
+                Layout.preferredHeight: Layout.preferredWidth
+                Image {
+                    id: image
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectFit
+                    source: modelImageUrl
+                    visible: false
+                }
+                GaussianBlur {
+                    anchors.fill: image
+                    source: image
+                    radius: 10
+                    samples: 20
+                }
+                Text {
+                    text: modelWeekday
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: Vars.spacing_half
+                }
+                Text {
+                    text: modelToday
+                    anchors.centerIn: parent
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }
+            }
+            Text {
+                id: nameText
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: modelName
                 font.pixelSize: Vars.font_size_md
             }
             Rectangle {

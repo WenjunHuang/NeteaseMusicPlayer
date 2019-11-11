@@ -85,4 +85,8 @@ namespace MusicPlayer::ViewModels {
           }, reply);
       });
     }
+
+    QAbstractListModel *PersonalizedNewSongViewModel::newSongListModel() const {
+      return _newSongModel;
+    }
 }

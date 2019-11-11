@@ -290,4 +290,4 @@ export const content_minimum_width = 740
 export const content_maximum_width = 1040
 
 export const tab_highlight_rect_height = 4
-export const seperator_color = Colors.getColor("gray","400")
+export const seperator_color = Colors.getColor("gray","200")

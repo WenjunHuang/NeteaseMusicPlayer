@@ -46,9 +46,12 @@ namespace MusicPlayer::ViewModels {
     class PersonalizedNewSongViewModel : public QObject, public QQmlParserStatus {
         Q_OBJECT
         Q_INTERFACES(QQmlParserStatus)
+        Q_PROPERTY(QAbstractListModel* newSongListModel READ newSongListModel)
     public:
         explicit PersonalizedNewSongViewModel(QObject *parent = nullptr);
 
+
+        QAbstractListModel* newSongListModel() const;
 
         void componentComplete() override {
           loadData();

@@ -5,13 +5,14 @@ import "../utils"
 import "../styles/variables.mjs" as Vars
 import "./personalized"
 
-Pane {
+Item {
     ColumnLayout {
-        width: parent.width
+        anchors.fill: parent
         spacing: 0
 
         RowLayout {
             spacing: 0
+            Layout.fillHeight: false
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -58,8 +59,8 @@ Pane {
         //            Layout.fillHeight: true
         //        }
         StackLayout {
-            //            Layout.fillWidth: true
-            //            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             currentIndex: tabBar.currentIndex
             Personalized {
                 id: banner

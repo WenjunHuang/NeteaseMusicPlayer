@@ -10,6 +10,16 @@
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
 
+    static QString kWeekDays[] = {
+      QStringLiteral(u"星期一"),
+      QStringLiteral(u"星期二"),
+      QStringLiteral(u"星期三"),
+      QStringLiteral(u"星期四"),
+      QStringLiteral(u"星期五"),
+      QStringLiteral(u"星期六"),
+      QStringLiteral(u"星期日"),
+    };
+
     class RecommendationSongsListModel : public QAbstractListModel {
     Q_OBJECT
     public:
@@ -21,6 +31,7 @@ namespace MusicPlayer::ViewModels {
             PlayCount,
             Tips,
             Today,
+            Weekday,
             Kind
         };
 
@@ -35,8 +46,10 @@ namespace MusicPlayer::ViewModels {
         void setRecommendationSongListsData(const APIPersonalizedData &data) {
           beginResetModel();
           _songsList.clear();
-//          _songsList.append(EveryDayRecommendation{});
-          std::copy(data.result.cbegin(), data.result.cend(), std::back_inserter(_songsList));
+          _songsList.append(EveryDayRecommendation{
+            data.result.last().picUrl
+          });
+          std::copy(data.result.cbegin(), data.result.cend() - 1, std::back_inserter(_songsList));
           endResetModel();
         }
 
@@ -75,6 +88,10 @@ namespace MusicPlayer::ViewModels {
               return value.tips;
             if (role == Roles::Today)
               return value.today.date().day();
+            if (role == Roles::Weekday)
+              return kWeekDays[value.today.date().dayOfWeek() - 1];
+            if (role==Roles::ImageUrl)
+              return value.imageUrl;
             return QVariant();
           }
       }, item);
@@ -89,13 +106,14 @@ namespace MusicPlayer::ViewModels {
       names[Roles::PlayCount] = "playCount";
       names[Roles::Tips] = "tips";
       names[Roles::Today] = "today";
+      names[Roles::Weekday] = "weekday";
       names[Roles::Kind] = "kind";
 
       return names;
     }
 
     int RecommendationSongsListModel::rowCount(const QModelIndex &index) const {
-      int c =  _songsList.size();
+      int c = _songsList.size();
       return c;
     }
 
