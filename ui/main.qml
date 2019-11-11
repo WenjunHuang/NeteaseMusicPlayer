@@ -6,6 +6,7 @@ import MusicPlayer 1.0
 import "./discover_music"
 import "./styles/variables.mjs" as StyleVariables
 
+
 Window {
     visible: true
     minimumWidth: 1000

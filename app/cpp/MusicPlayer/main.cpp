@@ -7,12 +7,15 @@
 int main(int argc, char *argv[]) {
   using namespace MusicPlayer;
   try {
-    QQuickStyle::addStylePath("./ui");
-    QQuickStyle::setStyle("MusicPlayer");
+//    QQuickStyle::addStylePath(":/ui");
+//    QQuickStyle::setStyle("MusicPlayer");
 //    QQuickStyle::setStyle("Material");
 //    QQuickStyle::setFallbackStyle("Fusion");
-    auto application = std::make_unique<Application>(Util::getUserIDString(), argc, argv);
-    application->exec(QStringList());
+//    std::unique_ptr<Application> application{std::make_unique<Application>(Util::getUserIDString(), argc, argv)};
+//    auto application = new Application(Util::getUserIDString(),argc,argv);
+//    application->exec(QStringList());
+    Application app(Util::getUserIDString(), argc, argv);
+    app.exec(QStringList());
   } catch (...) {
   }
 

@@ -5,11 +5,15 @@
 #include <QtQml/QQmlApplicationEngine>
 #include <QQuickStyle>
 #include "application.h"
+
 namespace MusicPlayer {
     int Application::exec(const QStringList &params) {
       QQmlApplicationEngine engine;
-      engine.addImportPath("./ui");
-      engine.load("./ui/main.qml");
+//      engine.addImportPath("qrc:/");
+      for (const auto &path:engine.importPathList())
+        qDebug() << path;
+
+      engine.load("qrc:/ui/main.qml");
       return QGuiApplication::exec();
     }
 }

@@ -16,7 +16,7 @@
 namespace MusicPlayer {
     class Application : public QGuiApplication {
     public:
-        Application(const QString &id, int argc, char **argv) : QGuiApplication(argc, argv) {
+        Application(const QString &id, int argc, char *argv[]) : QGuiApplication(argc, argv) {
           Util::Logger::initInstance();
           API::HttpWorker::initInstance();
 
