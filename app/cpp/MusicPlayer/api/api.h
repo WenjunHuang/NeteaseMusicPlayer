@@ -39,6 +39,29 @@ namespace MusicPlayer::API {
 
         // 推荐歌单
         APIResponse<APIPersonalizedData> personalized(int limit = 30);
+
+        // 用户手机登录
+        APIResponse<>
+//        async def login_cellphone(self, password: str, phone: str,
+//          country_code: Optional[str] = None) -> aiohttp.ClientResponse:
+//          password = MD5.new(password.encode('utf-8')).digest().hex()
+//        response = await request(self._http_session,
+//        HTTPMethod.POST,
+//        "https://music.163.com/weapi/login/cellphone",
+//        {
+//          "phone": phone,
+//            "countrycode": country_code,
+//            "password": password,
+//            "remberLogin": "true"
+//        },
+//        RequestOption(crypto=CryptoType.WEAPI, cookie={
+//          "os": "pc"
+//        }))
+//        result = await parse_response(response, APIUserLoginData)
+//        if type(result) == APIUserLoginData:
+//          cookies = '; '.join([f"{key}={value.value}" for key, value in response.cookies.items()])
+//        result = replace(result, cookies=cookies)
+//        return result
     };
 } // namespace MusicPlayer::MusicAPI
 

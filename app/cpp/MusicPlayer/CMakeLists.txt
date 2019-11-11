@@ -15,8 +15,11 @@ add_subdirectory(util)
 add_subdirectory(api)
 add_subdirectory(view_models)
 
-#qtquick_compiler_add_resources(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
-set(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
+if (${CMAKE_BUILD_TYPE} EQUAL Release)
+    qtquick_compiler_add_resources(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
+else ()
+    set(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
+endif ()
 add_executable(MusicPlayer main.cpp application.cc ${RESOURCES})
 target_link_libraries(MusicPlayer LINK_PRIVATE api util view_models
         Qt5::Core
