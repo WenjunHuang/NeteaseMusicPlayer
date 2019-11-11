@@ -22,9 +22,9 @@ inline QByteArray kEapiKey("e82ckenh8dichen8");
 QByteArray aesEncryptCBC(const QByteArray &buffer, const QByteArray &key,
                          const QByteArray &iv) {
   CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption encryptor(
-    reinterpret_cast<const CryptoPP::byte *>(key.data()),
+    reinterpret_cast<const byte *>(key.data()),
     CryptoPP::AES::DEFAULT_KEYLENGTH,
-    reinterpret_cast<const CryptoPP::byte *>(iv.data()));
+    reinterpret_cast<const byte *>(iv.data()));
 
   std::string ciphertext;
   CryptoPP::StreamTransformationFilter stfEnc(
@@ -38,7 +38,7 @@ QByteArray aesEncryptCBC(const QByteArray &buffer, const QByteArray &key,
 
 QByteArray aseEncryptECB(const QByteArray &buffer, const QByteArray &key) {
   CryptoPP::ECB_Mode<CryptoPP::AES>::Encryption encryptor(
-    reinterpret_cast<const CryptoPP::byte *>(key.data()),
+    reinterpret_cast<const byte *>(key.data()),
     CryptoPP::AES::DEFAULT_KEYLENGTH);
 
   std::string ciphertext;
@@ -62,7 +62,7 @@ QByteArray padForEncryption(const QByteArray &buffer, size_t targetLength) {
 }
 
 QByteArray rsaEncrypt(const QByteArray &buffer, const QByteArray &key) {
-  CryptoPP::StringSource ss(reinterpret_cast<const CryptoPP::byte *>(key.data()),
+  CryptoPP::StringSource ss(reinterpret_cast<const byte *>(key.data()),
                             key.length(), true,
                             new CryptoPP::Base64Decoder());
   CryptoPP::RSA::PublicKey pk;

@@ -16,7 +16,7 @@ T.TabButton {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
     width: implicitWidth
-    height: implichtHeight
+    height: implicitHeight
 
     topPadding: Vars.spacingX2
     bottomPadding: Vars.spacingX2
