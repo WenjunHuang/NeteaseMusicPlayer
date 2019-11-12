@@ -19,6 +19,10 @@ inline const QByteArray kPublicKey(
   "SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB");
 inline QByteArray kEapiKey("e82ckenh8dichen8");
 
+#ifdef Q_OS_MACOS
+#define byte CryptoPP::byte
+#endif
+
 QByteArray aesEncryptCBC(const QByteArray &buffer, const QByteArray &key,
                          const QByteArray &iv) {
   CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption encryptor(

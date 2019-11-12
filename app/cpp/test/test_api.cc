@@ -167,4 +167,28 @@ TEST_CASE("personalized", "[MusicAPI]") {
   });
   app.exec();
 }
+
+TEST_CASE("loginCellphone", "[MusicAPI]") {
+    using namespace MusicPlayer::API;
+    char *argv[] = {"test"};
+    int argc = 1;
+    QGuiApplication app{argc, argv};
+    HttpWorker::initInstance();
+    MusicAPI api;
+    auto f = api.loginCellphone("","");
+    observe(f).subscribe([](Response<APIUserLoginData> value) {
+      std::visit([](const auto &v) {
+        if constexpr (std::is_convertible_v<decltype(v), APIUserLoginData>) {
+            if (v.cookieToken)
+                qDebug() << v.cookieToken.value();
+        } else {
+            std::visit([](const auto &error) {
+              qDebug() << "error";
+            }, v);
+        }
+        qApp->quit();
+      }, value);
+    });
+    app.exec();
+}
 //}

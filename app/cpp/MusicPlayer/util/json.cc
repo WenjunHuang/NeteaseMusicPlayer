@@ -17,6 +17,10 @@ namespace MusicPlayer::Util {
     }
 
     template<>
+    long fromJsonValue(const QJsonValue &value) {
+        return static_cast<long>(value.toDouble());
+    }
+    template<>
     double fromJsonValue(const QJsonValue& value) {
       return value.toDouble();
     }
