@@ -17,7 +17,7 @@ add_subdirectory(util)
 add_subdirectory(api)
 add_subdirectory(view_models)
 
-if (${CMAKE_BUILD_TYPE} EQUAL Release)
+if (CMAKE_BUILD_TYPE EQUAL "Release")
     qtquick_compiler_add_resources(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
 else ()
     set(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)

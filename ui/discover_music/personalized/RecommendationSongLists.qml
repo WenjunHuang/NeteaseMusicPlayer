@@ -26,8 +26,9 @@ ColumnLayout {
     GridLayout {
         id: grid
         Layout.fillHeight: false
-        anchors.left: parent.left
-        anchors.right: parent.right
+        Layout.fillWidth: true
+//        anchors.left: parent.left
+//        anchors.right: parent.right
 
         columns: itemCountPerRow
         columnSpacing: Vars.spacingX2
@@ -212,9 +213,9 @@ ColumnLayout {
                 text: modelName
                 font.pixelSize: Vars.font_size_md
             }
-            Rectangle {
-                Layout.fillHeight: true
-            }
+//            Rectangle {
+//                Layout.fillHeight: true
+//            }
         }
     }
 }

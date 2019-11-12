@@ -23,8 +23,8 @@ ColumnLayout {
     GridLayout {
         id: grid
         Layout.fillHeight: false
-        anchors.left: parent.left
-        anchors.right: parent.right
+//        anchors.left: parent.left
+//        anchors.right: parent.right
 
         columns: 2
         columnSpacing: Vars.spacingX2
