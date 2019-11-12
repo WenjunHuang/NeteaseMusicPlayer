@@ -9,7 +9,7 @@ import "./styles/variables.mjs" as StyleVariables
 
 Window {
     visible: true
-    minimumWidth: 1000
+    //minimumWidth: 1000
     minimumHeight: 670
     DiscoverMusic{
         anchors.fill:parent

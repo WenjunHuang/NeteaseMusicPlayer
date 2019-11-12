@@ -6,41 +6,51 @@ import "../../styles/variables.mjs" as Vars
 Item {
     id: root
     ScrollView {
-        id:scroll
+        id: scroll
         clip: true
         anchors.fill: parent
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         contentHeight: layout.height
 
-
-        ColumnLayout {
-            id:layout
-            //minimumWidth: Vars.content_minimum_width
-            //maximumWidth: Vars.content_maximum_width
+        RowLayout {
+            id: layout
             width: root.width
-            spacing:Vars.spacingX3
+            spacing: 0
             Rectangle {
-                height: 0
-                Layout.fillWidth: true
+                Layout.minimumWidth: Vars.spacingX2
             }
 
-            BannerCarousel {
+            ColumnLayout {
                 Layout.minimumWidth: Vars.content_minimum_width
-                Layout.maximumWidth: Vars.content_maximum_width
-                Layout.alignment: Qt.AlignCenter
-                height: 240
-            }
+                //maximumWidth: Vars.content_maximum_width
+                spacing: Vars.spacingX3
+                Rectangle {
+                    height: 0
+                    Layout.fillWidth: true
+                }
 
-            RecommendationSongLists {
-                Layout.minimumWidth: Vars.content_minimum_width
-                Layout.maximumWidth: Vars.content_maximum_width
-                Layout.alignment: Qt.AlignCenter
-            }
+                BannerCarousel {
+                    Layout.minimumWidth: Vars.content_minimum_width
+                    Layout.maximumWidth: Vars.content_maximum_width
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignCenter
+                    height: 240
+                }
 
-            PersonalizedNewSongs {
-                Layout.minimumWidth: Vars.content_minimum_width
-                Layout.maximumWidth: Vars.content_maximum_width
-                Layout.alignment: Qt.AlignCenter
+                RecommendationSongLists {
+                    Layout.minimumWidth: Vars.content_minimum_width
+                    Layout.maximumWidth: Vars.content_maximum_width
+                    Layout.alignment: Qt.AlignCenter
+                }
+
+                PersonalizedNewSongs {
+                    Layout.minimumWidth: Vars.content_minimum_width
+                    Layout.maximumWidth: Vars.content_maximum_width
+                    Layout.alignment: Qt.AlignCenter
+                }
+            }
+            Rectangle {
+                Layout.minimumWidth: 20
             }
         }
     }

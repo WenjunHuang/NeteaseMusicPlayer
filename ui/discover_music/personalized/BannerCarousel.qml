@@ -76,6 +76,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
+        clip:true
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
         model: viewModel.banners
