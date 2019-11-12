@@ -175,12 +175,35 @@ TEST_CASE("loginCellphone", "[MusicAPI]") {
     QGuiApplication app{argc, argv};
     HttpWorker::initInstance();
     MusicAPI api;
-    auto f = api.loginCellphone("","");
+    auto f = api.loginCellphone("18027190235","Rick198023");
     observe(f).subscribe([](Response<APIUserLoginData> value) {
       std::visit([](const auto &v) {
         if constexpr (std::is_convertible_v<decltype(v), APIUserLoginData>) {
             if (v.cookieToken)
                 qDebug() << v.cookieToken.value();
+        } else {
+            std::visit([](const auto &error) {
+              qDebug() << "error";
+            }, v);
+        }
+        qApp->quit();
+      }, value);
+    });
+    app.exec();
+}
+
+TEST_CASE("userPrivateMessages", "[MusicAPI]") {
+    using namespace MusicPlayer::API;
+    char *argv[] = {"test"};
+    int argc = 1;
+    QGuiApplication app{argc, argv};
+    HttpWorker::initInstance();
+    MusicAPI api;
+    auto f = api.userPrivateMessages("; MUSIC_U=32506ca1e2f682f81fb7fe6a0ebf3c746125db7247d6651fd053861143761ee3053a3c2009db5a182cd526183697c5bcfe2897047e8106fb; __csrf=0b15c1aee3089531a9e5575b5053c104");
+    observe(f).subscribe([](Response<APIUserPrivateMessagesData> value) {
+      std::visit([](const auto &v) {
+        if constexpr (std::is_convertible_v<decltype(v), APIUserPrivateMessagesData>) {
+                qDebug() << v.newMsgCount;
         } else {
             std::visit([](const auto &error) {
               qDebug() << "error";

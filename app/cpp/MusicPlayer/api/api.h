@@ -12,6 +12,7 @@
 #include "data/personalized_newsong.h"
 #include "data/banner.h"
 #include "data/personalized.h"
+#include "data/user_private_message.h"
 #include <QFuture>
 #include <QJsonDocument>
 #include <QtConcurrent/QtConcurrent>
@@ -43,6 +44,9 @@ namespace MusicPlayer::API {
 
         // 用户手机登录
         APIResponse<APIUserLoginData> loginCellphone(const QString& cellphone,const QString& password);
+
+        // 用户私信
+        APIResponse<APIUserPrivateMessagesData> userPrivateMessages(const QString& cookieToken,int limit = 30,int offset = 0);
     };
 } // namespace MusicPlayer::MusicAPI
 

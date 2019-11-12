@@ -105,29 +105,6 @@ namespace MusicPlayer::API {
     APIResponse<APIUserLoginData>
     MusicAPI::loginCellphone(const QString& cellphone,
                              const QString& password) {
-
-        //        async def login_cellphone(self, password: str, phone: str,
-        //          country_code: Optional[str] = None) ->
-        //          aiohttp.ClientResponse: password =
-        //          MD5.new(password.encode('utf-8')).digest().hex()
-        //        response = await request(self._http_session,
-        //        HTTPMethod.POST,
-        //        "https://music.163.com/weapi/login/cellphone",
-        //        {
-        //          "phone": phone,
-        //            "countrycode": country_code,
-        //            "password": password,
-        //            "remberLogin": "true"
-        //        },
-        //        RequestOption(crypto=CryptoType.WEAPI, cookie={
-        //          "os": "pc"
-        //        }))
-        //        result = await parse_response(response, APIUserLoginData)
-        //        if type(result) == APIUserLoginData:
-        //          cookies = '; '.join([f"{key}={value.value}" for key, value
-        //          in response.cookies.items()])
-        //        result = replace(result, cookies=cookies)
-        //        return result
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(password.toUtf8());
         QString hashedPassword{md5.result().toHex()};
@@ -163,12 +140,26 @@ namespace MusicPlayer::API {
                                                      cookie.value());
                                         });
                                     value.cookieToken = cookieToken;
-                                } else { }
+                                } else {
+                                }
                             },
                             response);
                         return response;
                     })
                     .future();
+            })
+            .future();
+    }
+    APIResponse<APIUserPrivateMessagesData>
+    MusicAPI::userPrivateMessages(const QString& cookieToken, int limit,
+                                  int offset) {
+        QUrl url("https://music.163.com/weapi/msg/private/users");
+        auto response = HttpWorker::instance()->post(
+            url, {CryptoType::WEAPI, cookieToken},
+            {{"offset", offset}, {"limit", limit}, {"total", "true"}});
+        return AsyncFuture::observe(response)
+            .subscribe([this](QNetworkReply* reply) {
+                return parseResponse<APIUserPrivateMessagesData>(reply);
             })
             .future();
     }
