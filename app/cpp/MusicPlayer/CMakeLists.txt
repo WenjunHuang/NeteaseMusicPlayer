@@ -16,6 +16,7 @@ pkg_search_module(cryptopp REQUIRED libcrypto++ IMPORTED_TARGET)
 add_subdirectory(util)
 add_subdirectory(api)
 add_subdirectory(view_models)
+add_subdirectory(repositories)
 
 if (CMAKE_BUILD_TYPE EQUAL "Release")
     qtquick_compiler_add_resources(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
