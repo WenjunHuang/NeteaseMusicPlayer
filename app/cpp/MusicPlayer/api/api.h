@@ -13,6 +13,7 @@
 #include "data/banner.h"
 #include "data/personalized.h"
 #include "data/user_private_message.h"
+#include "data/playlist_catlist.h"
 #include <QFuture>
 #include <QJsonDocument>
 #include <QtConcurrent/QtConcurrent>
@@ -47,6 +48,9 @@ namespace MusicPlayer::API {
 
         // 用户私信
         APIResponse<APIUserPrivateMessagesData> userPrivateMessages(const QString& cookieToken,int limit = 30,int offset = 0);
+
+        // 全部歌单分类
+        APIResponse<APIPlaylistCatListData> playlistCatlist();
     };
 } // namespace MusicPlayer::MusicAPI
 

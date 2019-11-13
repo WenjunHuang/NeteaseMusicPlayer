@@ -25,10 +25,9 @@ ColumnLayout {
 
     GridLayout {
         id: grid
-        Layout.fillHeight: false
-        Layout.fillWidth: true
-//        anchors.left: parent.left
-//        anchors.right: parent.right
+        //Layout.fillHeight: false
+        anchors.left: parent.left
+        anchors.right: parent.right
 
         columns: itemCountPerRow
         columnSpacing: Vars.spacingX2

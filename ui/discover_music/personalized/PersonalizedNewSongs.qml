@@ -23,8 +23,9 @@ ColumnLayout {
     GridLayout {
         id: grid
         Layout.fillHeight: false
-//        anchors.left: parent.left
-//        anchors.right: parent.right
+        //Layout.fillWidth: true
+        //anchors.left: parent.left
+        //anchors.right: parent.right
 
         columns: 2
         columnSpacing: Vars.spacingX2
@@ -43,6 +44,10 @@ ColumnLayout {
             Layout.column: Math.floor(index / 5)
             Layout.margins: Vars.spacing
             spacing: Vars.spacing_half
+
+            Component.onCompleted: {
+                console.log(`${index % 5},${Math.floor(index / 5)}`)
+            }
 
             RoundCorner {
                 Layout.preferredWidth: 62

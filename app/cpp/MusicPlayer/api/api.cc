@@ -164,4 +164,15 @@ namespace MusicPlayer::API {
             .future();
     }
 
+    APIResponse<APIPlaylistCatListData> MusicAPI::playlistCatlist() {
+        QUrl url("https://music.163.com/weapi/playlist/catalogue");
+        auto response =
+            HttpWorker::instance()->post(url, {CryptoType::WEAPI}, {});
+        return AsyncFuture::observe(response)
+            .subscribe([this](QNetworkReply* reply) {
+                return parseResponse<APIPlaylistCatListData>(reply);
+            })
+            .future();
+    }
+
 } // namespace MusicPlayer::API

@@ -214,4 +214,28 @@ TEST_CASE("userPrivateMessages", "[MusicAPI]") {
     });
     app.exec();
 }
+
+TEST_CASE("playlistCatlist", "[MusicAPI]") {
+    using namespace MusicPlayer::API;
+    char *argv[] = {"test"};
+    int argc = 1;
+    QGuiApplication app{argc, argv};
+    HttpWorker::initInstance();
+    MusicAPI api;
+    auto f = api.playlistCatlist();
+    observe(f).subscribe([](Response<APIPlaylistCatListData> value) {
+      std::visit([](const auto &v) {
+        if constexpr (std::is_convertible_v<decltype(v), APIPlaylistCatListData>) {
+            qDebug() << v.all.name;
+            qDebug() << v.sub.size();
+        } else {
+            std::visit([](const auto &error) {
+              qDebug() << "error";
+            }, v);
+        }
+        qApp->quit();
+      }, value);
+    });
+    app.exec();
+}
 //}
