@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QtCore>
-#include "../../util/json.h"
 
 namespace MusicPlayer::API {
     using namespace MusicPlayer::Util;
@@ -26,12 +25,11 @@ namespace MusicPlayer::API {
         QString encodeId;
         QString scm;
 
-//        bool operator==(const APIBannerData&other) {
-//            return imageUrl == other.imageUrl && targetId == other.targetId && targetType == other.
-//        }
-        bool operator<=>(const APIBannerData& other) const = default;
+        bool operator==(const APIBannerData& other);
 
-        static APIBannerData fromJsonValue(const QJsonValue &json);
+        bool operator!=(const APIBannerData& other);
+
+        static APIBannerData fromJsonValue(const QJsonValue& json);
     };
 
     struct APIBannersData {
@@ -40,8 +38,12 @@ namespace MusicPlayer::API {
       public:
         QVariantList banners;
 
-        static APIBannersData fromJsonValue(const QJsonValue &json);
+        bool operator==(const APIBannersData& other);
+
+        bool operator!=(const APIBannersData& other);
+
+        static APIBannersData fromJsonValue(const QJsonValue& json);
     };
-}
+} // namespace MusicPlayer::API
 
 Q_DECLARE_METATYPE(MusicPlayer::API::APIBannerData)

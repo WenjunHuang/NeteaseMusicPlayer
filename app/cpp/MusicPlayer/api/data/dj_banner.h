@@ -1,51 +1,42 @@
-
 #pragma once
 
-#include "../../util/json.h"
-#include <QJsonObject>
-#include <QString>
-#include <QtCore/QJsonValue>
+#include <QtCore>
 
 namespace MusicPlayer::API {
-    using namespace MusicPlayer::Util;
 
     struct APIDJBannerData {
+        Q_GADGET
+        Q_PROPERTY(int targetId MEMBER targetId)
+        Q_PROPERTY(int targetType MEMBER targetType)
+        Q_PROPERTY(QString pic MEMBER pic)
+        Q_PROPERTY(QUrl url MEMBER url)
+        Q_PROPERTY(QString typeTitle MEMBER typeTitle)
+        Q_PROPERTY(bool exclusive MEMBER exclusive)
+
+      public:
         int targetId;
         int targetType;
         QString pic;
-        QString url;
+        QUrl url;
         QString typeTitle;
         bool exclusive;
 
-        static APIDJBannerData fromJsonValue(const QJsonValue &value) {
-          auto object = value.toObject();
+        bool operator==(const APIDJBannerData& other) const;
+        bool operator!=(const APIDJBannerData& other) const;
 
-          return {
-            Util::fromJsonValue<int>(
-              object.value(QLatin1Literal("targetId"))),
-            Util::fromJsonValue<int>(
-              object.value(QLatin1Literal("targetType"))),
-            Util::fromJsonValue<QString>(
-              object.value(QLatin1Literal("pic"))),
-            Util::fromJsonValue<QString>(
-              object.value(QLatin1Literal("url"))),
-            Util::fromJsonValue<QString>(
-              object.value(QLatin1Literal("typeTitle"))),
-            Util::fromJsonValue<bool>(
-              object.value(QLatin1Literal("exclusive")))
-          };
-        }
+        static APIDJBannerData fromJsonValue(const QJsonValue& value);
     };
 
     struct APIDJBannersData {
-        QVector<APIDJBannerData> data;
+        Q_GADGET
+        Q_PROPERTY(QVariantList data MEMBER data)
+      public:
+        QVariantList data;
 
-        static APIDJBannersData fromJsonValue(const QJsonValue &value) {
-          auto object = value.toObject();
-          return {
-            Util::fromJsonArray<APIDJBannerData>(object.value(QLatin1Literal("data")))
-          };
+        bool operator==(const APIDJBannersData& other) const;
 
-        }
+        bool operator!=(const APIDJBannersData& other) const;
+
+        static APIDJBannersData fromJsonValue(const QJsonValue& value);
     };
 }

@@ -2,7 +2,8 @@
 // Created by HUANG WEN JUN on 2019/11/25.
 //
 #include "banner.h"
-namespace MusicPlayer::API{
+#include "../../util/json.h"
+namespace MusicPlayer::API {
     APIBannerData APIBannerData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
@@ -21,11 +22,26 @@ namespace MusicPlayer::API{
             Util::fromJsonValue<QString>(object.value(QLatin1Literal("scm"))),
         };
     }
+    bool APIBannerData::operator==(const APIBannerData& other) {
+        return imageUrl == other.imageUrl && targetId == other.targetId &&
+               targetType == other.targetType &&
+               titleColor == other.titleColor && typeTitle == other.typeTitle &&
+               exclusive == other.exclusive && encodeId == other.encodeId &&
+               scm == other.scm;
+    }
+    bool APIBannerData::operator!=(const APIBannerData& other) {
+        return !operator==(other);
+    }
     APIBannersData APIBannersData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
 
-        return {
-            Util::jsonArrayToVariantList<APIBannerData>(object.value(QLatin1Literal("banners")))
-        };
+        return {Util::jsonArrayToVariantList<APIBannerData>(
+            object.value(QLatin1Literal("banners")))};
     }
-}
+    bool APIBannersData::operator==(const APIBannersData& other) {
+        return banners == other.banners;
+    }
+    bool APIBannersData::operator!=(const APIBannersData& other) {
+        return !((*this) == other);
+    }
+} // namespace MusicPlayer::API

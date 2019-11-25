@@ -52,4 +52,14 @@ namespace MusicPlayer::Util {
             return std::make_optional(fromJsonValue<T>(value));
         }
     }
+
+    template<typename T>
+    QVariant jsonValueToVariant(const QJsonValue& value) {
+        if (value.isNull() || value.isUndefined())
+            return QVariant();
+        else {
+            return QVariant(fromJsonValue<T>(value));
+        }
+
+    }
 } // namespace MusicPlayer::Util

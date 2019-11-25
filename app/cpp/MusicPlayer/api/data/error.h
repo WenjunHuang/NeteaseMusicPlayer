@@ -2,28 +2,28 @@
 // Created by rick on 2019/11/7.
 //
 #pragma once
-#include "../../util/json.h"
-#include <QJsonObject>
-#include <QJsonValue>
-#include <QString>
-#include <QtCore/QJsonParseError>
-#include <optional>
-#include <variant>
+#include <QtCore>
 
 namespace MusicPlayer::API {
-    using namespace MusicPlayer::Util;
+    class APIErrorKind: public QObject {
+        Q_OBJECT
+      public:
+        enum class Kind {
+            ErrorResponseError,
+            NetworkError,
+            JsonFormatError,
+        };
+    };
     struct APIError {
+        Q_GADGET
+        Q_PROPERTY(int code MEMBER code)
+        Q_PROPERTY(QVariant message MEMBER message)
+      public:
         int code;
-        std::optional<QString> message;
+        QVariant message;
+//        std::optional<QString> message;
 
-        static APIError fromJsonValue(const QJsonValue& value) {
-            auto object = value.toObject();
-
-            return {Util::fromJsonValue<int>(
-                        object.value(QLatin1Literal("code"))),
-                    Util::fromOptionalJsonValue<QString>(
-                        QLatin1Literal("message"))};
-        }
+        static APIError fromJsonValue(const QJsonValue& value);
     };
 
     struct NetworkError {

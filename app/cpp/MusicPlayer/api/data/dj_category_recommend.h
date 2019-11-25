@@ -1,68 +1,65 @@
 
 #pragma once
 
-#include <QJsonValue>
-#include <QJsonObject>
-#include <QVector>
-#include <optional>
-#include "../../util/json.h"
+#include <QtCore>
 
-using namespace std;
 namespace MusicPlayer::API {
-    using namespace MusicPlayer::Util;
 
     struct APIDJCategoryRecommendItemRadioData {
+        Q_GADGET
+        Q_PROPERTY(int id MEMBER id)
+        Q_PROPERTY(QString name MEMBER name)
+        Q_PROPERTY(QString rcmdText MEMBER rcmdText)
+        Q_PROPERTY(int radioFeeType MEMBER radioFeeType)
+        Q_PROPERTY(int feeScope MEMBER feeScope)
+        Q_PROPERTY(QUrl picUrl MEMBER picUrl)
+        Q_PROPERTY(int programCount MEMBER programCount)
+        Q_PROPERTY(QString alg MEMBER alg)
+        Q_PROPERTY(QVariant playCount MEMBER playCount)
+        Q_PROPERTY(QString lastProgramName MEMBER lastProgramName)
+      public:
         int id;
         QString name;
         QString rcmdText;
         int radioFeeType;
         int feeScope;
-        QString picUrl;
+        QUrl picUrl;
         int programCount;
-        optional<int> playCount;
+        //        optional<int> playCount;
+        QVariant playCount; // optional<int>
         QString alg;
         QString lastProgramName;
 
-        static APIDJCategoryRecommendItemRadioData fromJsonValue(const QJsonValue &json) {
-          auto object = json.toObject();
-          return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("rcmdText"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("radioFeeType"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("feeScope"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("picUrl"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("programCount"))),
-            Util::fromOptionalJsonValue<int>(object.value(QLatin1Literal("playCount"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("alg"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("lastProgramName")))
-          };
-        }
+        static APIDJCategoryRecommendItemRadioData
+        fromJsonValue(const QJsonValue& json);
     };
 
     struct APIDJCategoryRecommendItemData {
+        Q_GADGET
+        Q_PROPERTY(int categoryId MEMBER categoryId)
+        Q_PROPERTY(QString categoryName MEMBER categoryName)
+        Q_PROPERTY(QVariantList radios MEMBER radios)
+      public:
         int categoryId;
         QString categoryName;
-        QVector<APIDJCategoryRecommendItemRadioData> radios;
+        //        QVector<APIDJCategoryRecommendItemRadioData> radios;
+        QVariantList radios;
 
-        static APIDJCategoryRecommendItemData fromJsonValue(const QJsonValue &json) {
-          auto object = json.toObject();
-          return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("categoryId"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("categoryName"))),
-            Util::fromJsonArray<APIDJCategoryRecommendItemRadioData>(object.value(QLatin1Literal("radios"))),
-          };
-        }
+        static APIDJCategoryRecommendItemData
+        fromJsonValue(const QJsonValue& json);
     };
 
     struct APIDJCategoryRecommendData {
-        QVector<APIDJCategoryRecommendItemData> data;
+        Q_GADGET
+        Q_PROPERTY(QVariantList data MEMBER data)
+      public:
+//        QVector<APIDJCategoryRecommendItemData> data;
+        QVariantList data;
 
-        static APIDJCategoryRecommendData fromJsonValue(const QJsonValue &json) {
-          auto object = json.toObject();
-          return {
-            Util::fromJsonArray<APIDJCategoryRecommendItemData>(object.value(QLatin1Literal("data")))
-          };
-        }
+        static APIDJCategoryRecommendData fromJsonValue(const QJsonValue& json);
     };
-}
+} // namespace MusicPlayer::API
+
+Q_DECLARE_METATYPE(MusicPlayer::API::APIDJCategoryRecommendData)
+Q_DECLARE_METATYPE(MusicPlayer::API::APIDJCategoryRecommendItemData)
+Q_DECLARE_METATYPE(MusicPlayer::API::APIDJCategoryRecommendItemRadioData)

@@ -10,28 +10,28 @@
 
 namespace MusicPlayer::API {
     struct APIDJCategoryItemData {
+        Q_GADGET
+        Q_PROPERTY(int id MEMBER id)
+        Q_PROPERTY(QString name MEMBER name)
+      public:
         int id;
         QString name;
 
-        static APIDJCategoryItemData fromJsonValue(const QJsonValue &json) {
-          auto object = json.toObject();
-          return {
-            Util::fromJsonValue<int>(
-              object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<QString>(
-              object.value(QLatin1Literal("name")))
-          };
-        }
+        bool operator==(const APIDJCategoryItemData& other);
+        bool operator!=(const APIDJCategoryItemData& other);
+
+        static APIDJCategoryItemData fromJsonValue(const QJsonValue &json);
     };
 
     struct APIDJCategoryExcludeHotData {
-        QVector<APIDJCategoryItemData> data;
+        Q_GADGET
+        Q_PROPERTY(QVariantList data MEMBER data)
+      public:
+        QVariantList data;
 
-        static APIDJCategoryExcludeHotData fromJsonValue(const QJsonValue &json) {
-          auto object = json.toObject();
-          return {
-            Util::fromJsonArray<APIDJCategoryItemData>(object.value(QLatin1Literal("data")))
-          };
-        }
+        bool operator==(const APIDJCategoryExcludeHotData& other);
+        bool operator!=(const APIDJCategoryExcludeHotData& other);
+
+        static APIDJCategoryExcludeHotData fromJsonValue(const QJsonValue &json);
     };
 }
