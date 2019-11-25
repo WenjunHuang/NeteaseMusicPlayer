@@ -10,6 +10,9 @@ add_library(api STATIC
         data/dj_category_excludehot.h
         data/dj_category_recommend.h
         data/personalized_newsong.h
-        data/user_private_message.h data/playlist_catlist.h)
+        data/user_private_message.h
+        data/playlist_catlist.h
+        data/banner.cc
+data/user_private_message.h data/playlist_catlist.h)
 target_link_libraries(api PUBLIC Qt5::Core Qt5::Network Qt5::Quick Qt5::Concurrent cryptopp-static util)
 

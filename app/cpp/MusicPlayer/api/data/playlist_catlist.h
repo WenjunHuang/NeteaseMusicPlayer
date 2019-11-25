@@ -7,7 +7,18 @@
 
 namespace MusicPlayer::API {
     using namespace MusicPlayer::Util;
+
     struct APIPlaylistCatListItemData {
+        Q_GADGET
+        Q_PROPERTY(QString name MEMBER name)
+        Q_PROPERTY(int resourceCount MEMBER resourceCount)
+        Q_PROPERTY(int imgId MEMBER imgId)
+        Q_PROPERTY(int type MEMBER type)
+        Q_PROPERTY(int category MEMBER category)
+        Q_PROPERTY(int resourceType MEMBER resourceType)
+        Q_PROPERTY(bool hot MEMBER hot)
+        Q_PROPERTY(bool activity MEMBER activity)
+      public:
         QString name;
         int resourceCount;
         int imgId;
@@ -37,17 +48,38 @@ namespace MusicPlayer::API {
         }
     };
 
+    inline bool operator==(const APIPlaylistCatListItemData& first,
+                    const APIPlaylistCatListItemData& second) {
+        return first.name == second.name &&
+               first.resourceCount == second.resourceCount &&
+               first.imgId == second.imgId && first.type == second.type &&
+               first.category == second.category &&
+               first.resourceType == second.resourceType &&
+               first.hot == second.hot && first.activity == second.activity;
+    }
+
+    inline bool operator!=(const APIPlaylistCatListItemData& first,
+                    const APIPlaylistCatListItemData& second) {
+        return !(first == second);
+    }
+
     struct APIPlaylistCatListData {
+        Q_GADGET
+        Q_PROPERTY(APIPlaylistCatListItemData all MEMBER all)
+        Q_PROPERTY(QVariantHash categories MEMBER categories)
+        Q_PROPERTY(QVariantList sub MEMBER sub)
+      public:
         APIPlaylistCatListItemData all;
-        QVector<APIPlaylistCatListItemData> sub;
+        QVariantList sub;
         QVariantHash categories;
+        //        QVector<APIPlaylistCatListItemData> sub;
 
         static APIPlaylistCatListData fromJsonValue(const QJsonValue& json) {
             auto object = json.toObject();
             return {
                 Util::fromJsonValue<APIPlaylistCatListItemData>(
                     object.value(QLatin1Literal("all"))),
-                Util::fromJsonArray<APIPlaylistCatListItemData>(
+                Util::jsonArrayToVariantList<APIPlaylistCatListItemData>(
                     object.value(QLatin1Literal("sub"))),
                 object.value(QLatin1Literal("categories"))
                     .toObject()
@@ -55,4 +87,10 @@ namespace MusicPlayer::API {
             };
         }
     };
+
+    inline bool operator==(const APIPlaylistCatListData& first,const APIPlaylistCatListData& second) {
+        return first.all == second.all && first.sub == second.sub && first.categories == second.categories;
+    }
 } // namespace MusicPlayer::API
+Q_DECLARE_METATYPE(MusicPlayer::API::APIPlaylistCatListItemData)
+Q_DECLARE_METATYPE(MusicPlayer::API::APIPlaylistCatListData)

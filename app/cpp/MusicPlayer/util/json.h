@@ -2,9 +2,11 @@
 // Created by rick on 2019/11/7.
 //
 #pragma once
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QJsonArray>
+#include <QUrl>
+#include <QVariantList>
 #include <optional>
 
 namespace MusicPlayer::Util {
@@ -12,23 +14,32 @@ namespace MusicPlayer::Util {
         return T::fromJsonValue(value);
     }
 
-
-
     template <> QString fromJsonValue(const QJsonValue& value);
 
     template <> int fromJsonValue(const QJsonValue& value);
     template <> long fromJsonValue(const QJsonValue& value);
 
-    template<> double fromJsonValue(const QJsonValue& value);
+    template <> QUrl fromJsonValue(const QJsonValue& value);
 
+    template <> double fromJsonValue(const QJsonValue& value);
 
-    template<> bool fromJsonValue(const QJsonValue& value);
+    template <> bool fromJsonValue(const QJsonValue& value);
 
     template <typename T> QVector<T> fromJsonArray(const QJsonValue& value) {
         auto array = value.toArray();
         QVector<T> result;
         for (const auto& v : array) {
             result.append(fromJsonValue<T>(v));
+        }
+        return result;
+    }
+
+    template <typename T>
+    QVariantList jsonArrayToVariantList(const QJsonValue& value) {
+        auto array = value.toArray();
+        QVariantList result;
+        for (const auto& v : array) {
+            result.append(QVariant::fromValue(fromJsonValue<T>(v)));
         }
         return result;
     }
@@ -41,4 +52,4 @@ namespace MusicPlayer::Util {
             return std::make_optional(fromJsonValue<T>(value));
         }
     }
-}
+} // namespace MusicPlayer::Util

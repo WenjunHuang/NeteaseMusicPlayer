@@ -3,6 +3,7 @@
 //
 #include <QtCore/QString>
 #include <QtCore/QJsonValue>
+#include <QUrl>
 #include "json.h"
 
 namespace MusicPlayer::Util {
@@ -20,6 +21,11 @@ namespace MusicPlayer::Util {
     long fromJsonValue(const QJsonValue &value) {
         return static_cast<long>(value.toDouble());
     }
+
+    template<> QUrl fromJsonValue(const QJsonValue& value) {
+        return QUrl(value.toString());
+    }
+
     template<>
     double fromJsonValue(const QJsonValue& value) {
       return value.toDouble();
