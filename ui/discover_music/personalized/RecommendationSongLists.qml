@@ -72,8 +72,7 @@ ColumnLayout {
             RoundCorner {
                 radius: Vars.border_radius
                 // 背景图
-                Layout.preferredWidth: (grid.width - (itemCountPerRow - 1)
-                                        * grid.columnSpacing) / itemCountPerRow
+                Layout.preferredWidth: (grid.width - (itemCountPerRow - 1) * grid.columnSpacing) / itemCountPerRow
                 Layout.preferredHeight: Layout.preferredWidth
 
                 Image {

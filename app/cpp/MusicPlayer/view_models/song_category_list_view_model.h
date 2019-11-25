@@ -7,6 +7,18 @@
 #include <QtQml/QQmlParserStatus>
 
 namespace MusicPlayer::ViewModels {
+    struct SongSubCategory {
+        Q_GADGET
+        Q_PROPERTY(QString name MEMBER name)
+      public:
+        QString name;
+    };
+    struct SongCategory {
+      public:
+        QString name;
+        QVector<SongSubCategory> subCategories;
+    };
+
     class SongCategoryListViewModel : public QObject, public QQmlParserStatus {
         Q_OBJECT
         Q_INTERFACES(QQmlParserStatus)
@@ -16,5 +28,6 @@ namespace MusicPlayer::ViewModels {
         ~SongCategoryListViewModel() = default;
         void classBegin() override {}
         void componentComplete() override {}
+      private:
     };
 } // namespace MusicPlayer::ViewModels

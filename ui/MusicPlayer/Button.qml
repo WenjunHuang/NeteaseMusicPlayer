@@ -18,8 +18,10 @@ T.Button {
 
     background: Rectangle {
         id: buttonBackground
+		
         implicitWidth: 100
-        implicitHeight: 40
+    
+		implicitHeight: 40
         color:(hovered && enabled)?StyleVariables.button_hover_background:StyleVariables.button_background
         border.color: StyleVariables.base_border_color
         border.width: StyleVariables.base_border_width

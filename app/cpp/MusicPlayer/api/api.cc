@@ -175,4 +175,9 @@ namespace MusicPlayer::API {
             .future();
     }
 
+    void MusicAPI::registerTypes() {
+//        qRegisterMetaType<MusicPlayer::API::APIBannerData>();
+
+    }
+
 } // namespace MusicPlayer::API

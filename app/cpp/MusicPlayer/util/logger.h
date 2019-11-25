@@ -5,7 +5,7 @@
 #pragma once
 
 #include <QObject>
-#include <boost/circular_buffer.hpp>
+//#include <boost/circular_buffer.hpp>
 #include <QReadWriteLock>
 
 namespace MusicPlayer::Util {
@@ -46,7 +46,7 @@ namespace MusicPlayer::Util {
         void newLogMessage(const Msg &message);
 
     private:
-        boost::circular_buffer_space_optimized<Msg> _messages;
+//        boost::circular_buffer_space_optimized<Msg> _messages;
         int _msgCounter = 0;
         mutable QReadWriteLock _lock;
         static Logger *_instance;

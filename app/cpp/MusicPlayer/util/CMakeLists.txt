@@ -3,6 +3,6 @@ add_library(util STATIC
         logger.cc
         misc.cc
         )
-target_include_directories(util PUBLIC ${Boost_INCLUDE_DIRS})
+#target_include_directories(util PUBLIC ${Boost_INCLUDE_DIRS})
 target_link_libraries(util PUBLIC Qt5::Core)
 

@@ -11,6 +11,8 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <vector>
+#include <optional>
+#include <variant>
 
 namespace MusicPlayer::API {
     enum class HttpMethod{
