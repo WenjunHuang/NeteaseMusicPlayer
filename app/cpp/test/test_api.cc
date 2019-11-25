@@ -25,6 +25,9 @@ TEST_CASE("djBanner", "[MusicAPI]") {
       std::visit([](const auto &v) {
           if constexpr (std::is_convertible_v<decltype(v), APIDJBannersData>) {
             qDebug() << v.data.size();
+            for (const auto& data : v.data) {
+                qDebug() << data.url;
+            }
           } else {
             std::visit([](const auto &error) {
                 qDebug() << "error";
