@@ -3,8 +3,13 @@
 //
 
 #pragma once
-#include <QtCore/QObject>
+#include "../api/api.h"
 #include "../api/data/playlist_catlist.h"
+#include "../asyncfuture.h"
+#include <QtCore>
+#include <optional>
+#include <type_traits>
+#include <variant>
 
 namespace MusicPlayer::Repository {
     using namespace MusicPlayer::API;
@@ -15,6 +20,7 @@ namespace MusicPlayer::Repository {
         SongCategoryRepository() {}
 
       public:
+      public:
         static void initInstance();
 
         static void freeInstance();
@@ -22,7 +28,57 @@ namespace MusicPlayer::Repository {
         static SongCategoryRepository* instance();
 
       private:
-        APIPlaylistCatListData _categoryData;
+        QFuture<Response<APIPlaylistCatListData>>
+        asyncGetPlaylistCatListData() {
+            QFutureInterface<Response<APIPlaylistCatListData>> promise;
+            if (_categoryData) {
+                // 已经有缓存了
+                Response<APIPlaylistCatListData> r = _categoryData.value();
+                promise.reportFinished(&r);
+                return promise.future();
+            } else {
+                // 没有缓存
+                // 看看有没正在执行的api调用
+                if (_loading) {
+                    // 有，那么等它完成
+                    return AsyncFuture::observe(_loading.value())
+                        .subscribe(
+                            [](Response<APIPlaylistCatListData> response) {
+                                return response;
+                            })
+                        .future();
+                } else {
+                    // 还没有，那么我们创建它
+                    MusicAPI api;
+                    _loading = AsyncFuture::observe(api.playlistCatlist())
+                            .subscribe(
+                                [this](
+                                    Response<APIPlaylistCatListData> response) {
+                                    std::visit(
+                                        [this](const auto& var) {
+                                            if constexpr (
+                                                std::is_convertible_v<
+                                                    decltype(var),
+                                                    APIPlaylistCatListData>) {
+                                                _categoryData = var;
+                                            } else {
+                                                //todo 记录日志
+                                            }
+
+                                            return var;
+                                        },
+                                        response);
+                                    return response;
+                                })
+                            .future();
+                }
+            }
+        }
+
+        std::optional<APIPlaylistCatListData> _categoryData;
+
+        // if is loading
+        std::optional<APIResponse<APIPlaylistCatListData>> _loading;
 
         static SongCategoryRepository* _instance;
     };
