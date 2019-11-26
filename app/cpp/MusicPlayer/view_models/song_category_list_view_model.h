@@ -66,7 +66,7 @@ namespace MusicPlayer::ViewModels {
             AsyncFuture::observe(f).subscribe([this](const Response<APIPlaylistCatListData> &reply) {
               std::visit([=](const auto &value) {
                 if constexpr (std::is_convertible_v<decltype(value), APIPlaylistCatListData>) {
-                    _songsModel->setRecommendationSongListsData(value);
+//                    _songsModel->setRecommendationSongListsData(value);
                 } else {
                     // errors
                 }

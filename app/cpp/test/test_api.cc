@@ -9,15 +9,17 @@
 #include "./catch2/catch.hpp"
 #include "../MusicPlayer/api/crypto.h"
 #include "../MusicPlayer/api/api.h"
+#include "../MusicPlayer/api/data/data.h"
 #include "../MusicPlayer/asyncfuture.h"
 
 using namespace AsyncFuture;
+using namespace MusicPlayer::API;
 
 TEST_CASE("djBanner", "[MusicAPI]") {
-  using namespace MusicPlayer::API;
   char *argv[] = {"test"};
   int argc = 1;
   QGuiApplication app{argc, argv};
+  registerMetaTypes();
   HttpWorker::initInstance();
   MusicAPI api;
   auto f = api.djBanner();
@@ -26,7 +28,7 @@ TEST_CASE("djBanner", "[MusicAPI]") {
           if constexpr (std::is_convertible_v<decltype(v), APIDJBannersData>) {
             qDebug() << v.data.size();
             for (const auto& data : v.data) {
-                qDebug() << data.url;
+                qDebug() << data.value<APIDJBannerData>().url;
             }
           } else {
             std::visit([](const auto &error) {
@@ -54,7 +56,7 @@ TEST_CASE("djCategoryExcludeHot", "[MusicAPI]") {
           if constexpr (std::is_convertible_v<decltype(v), APIDJCategoryExcludeHotData>) {
             qDebug() << v.data.size();
             for (const auto &item : v.data) {
-              qDebug() << item.name;
+              qDebug() << item.value<APIDJCategoryItemData>().name;
             }
           } else {
             std::visit([](const auto &error) {
@@ -80,7 +82,7 @@ TEST_CASE("banner", "[MusicAPI]") {
           if constexpr (std::is_convertible_v<decltype(v), APIBannersData>) {
             qDebug() << v.banners.size();
             for (const auto &item : v.banners) {
-              qDebug() << item.imageUrl;
+              qDebug() << item.value<APIBannerData>().imageUrl;
             }
           } else {
             std::visit([](const auto &error) {
@@ -106,7 +108,7 @@ TEST_CASE("personalized_newsong", "[MusicAPI]") {
           if constexpr (std::is_convertible_v<decltype(v), APIPersonalizedNewSongData>) {
             qDebug() << v.result.size();
             for (const auto &item : v.result) {
-              qDebug() << item.name;
+              qDebug() << item.value<APIPersonalizedNewSongResultData>().name;
             }
           } else {
             std::visit([](const auto &error) {
@@ -132,7 +134,7 @@ TEST_CASE("djCategoryRecommend", "[MusicAPI]") {
           if constexpr (std::is_convertible_v<decltype(v), APIDJCategoryRecommendData>) {
             qDebug() << v.data.size();
             for (const auto &item : v.data) {
-              qDebug() << item.categoryName;
+              qDebug() << item.value<APIDJCategoryRecommendItemData>().categoryName;
             }
           } else {
             std::visit([](const auto &error) {
@@ -158,7 +160,8 @@ TEST_CASE("personalized", "[MusicAPI]") {
           if constexpr (std::is_convertible_v<decltype(v), APIPersonalizedData>) {
             qDebug() << v.result.size();
             for (const auto &item : v.result) {
-              qDebug() << item.name << " " << item.picUrl;
+                auto value = item.value<APIPersonalizedItemData>();
+              qDebug() << value.name << " " << value.picUrl;
             }
           } else {
             std::visit([](const auto &error) {

@@ -44,10 +44,12 @@ namespace MusicPlayer::ViewModels {
         void setRecommendationSongListsData(const APIPersonalizedData& data) {
             beginResetModel();
             _songsList.clear();
-            _songsList.append(
-                EveryDayRecommendation{data.result.last().picUrl});
-            std::copy(data.result.cbegin(), data.result.cend() - 1,
-                      std::back_inserter(_songsList));
+            _songsList.append(EveryDayRecommendation{
+                data.result.last().value<APIPersonalizedItemData>().picUrl});
+            std::transform(data.result.cbegin(), data.result.cend() - 1,
+                           std::back_inserter(_songsList), [](const auto& var) {
+                               return var.value<APIPersonalizedItemData>();
+                           });
             endResetModel();
         }
 

@@ -3,6 +3,8 @@
 //
 #pragma once
 #include <QtCore>
+#include <optional>
+#include <variant>
 
 namespace MusicPlayer::API {
 

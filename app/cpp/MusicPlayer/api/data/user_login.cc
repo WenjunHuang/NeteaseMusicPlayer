@@ -50,6 +50,33 @@ namespace MusicPlayer::API {
         };
     }
 
+    bool APIUserProfileData::operator==(const APIUserProfileData& other) {
+        return userId==other.userId &&
+               vipType == other.vipType &&
+               gender == other.gender &&
+               avatarImgId == other.avatarImgId &&
+               birthday == other.birthday &&
+               city == other.city &&
+               accountStatus == other.accountStatus &&
+               nickname == other.nickname &&
+               followed == other.followed &&
+               description == other.description &&
+               detailDescription == other.detailDescription &&
+               djStatus == other.djStatus &&
+               userType == other.userType &&
+               defaultAvatar == other.defaultAvatar &&
+               avatarUrl == other.avatarUrl &&
+               backgroundUrl == other.backgroundUrl &&
+               followeds == other.followeds &&
+               follows == other.follows &&
+               eventCount == other.eventCount &&
+               playlistCount == other.playlistCount &&
+               playlistBeSubscribedCount == other.playlistBeSubscribedCount;
+    }
+    bool APIUserProfileData::operator!=(const APIUserProfileData& other) {
+        return !operator==(other);
+    }
+
     APIUserLoginData APIUserLoginData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
@@ -58,5 +85,29 @@ namespace MusicPlayer::API {
             Util::fromJsonValue<APIUserProfileData>(object.value(QLatin1Literal("profile"))),
             std::nullopt,
         };
+    }
+
+    bool APIUserLoginData::operator==(const APIUserLoginData& other) {
+        return loginType == other.loginType && account == other.account &&
+               profile == other.profile;
+    }
+
+    bool APIUserLoginData::operator!=(const APIUserLoginData& other) {
+        return !operator==(other);
+    }
+
+    bool APIUserAccountData::operator==(
+        const MusicPlayer::API::APIUserAccountData& other) {
+        return id == other.id &&
+               userName == other.userName &&
+               type == other.type &&
+               status == other.status &&
+               createTime == other.createTime &&
+               salt == other.salt &&
+               vipType == other.vipType &&
+               viptypeVersion == other.viptypeVersion;
+    }
+    bool APIUserAccountData::operator!=(const APIUserAccountData& other) {
+        return !operator==(other);
     }
 }

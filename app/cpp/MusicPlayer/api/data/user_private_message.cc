@@ -41,6 +41,33 @@ namespace MusicPlayer::API {
         };
     }
 
+    bool APIUserPrivateMessageUserData::operator==(
+        const APIUserPrivateMessageUserData& other) {
+        return userId == other.userId &&
+               nickname == other.nickname &&
+               avatarImgId == other.avatarImgId &&
+               userType == other.userType &&
+               vipType == other.vipType &&
+               birthday == other.birthday &&
+               avatarUrl == other.avatarUrl &&
+               backgroundUrl == other.backgroundUrl &&
+               gender == other.gender &&
+               accountStatus == other.accountStatus &&
+               city == other.city &&
+               authStatus == other.authStatus &&
+               detailDescription == other.detailDescription &&
+               defaultAvatar == other.defaultAvatar &&
+               djStatus == other.djStatus &&
+               followed == other.followed &&
+               description == other.description &&
+               signature == other.signature;
+    }
+
+    bool APIUserPrivateMessageUserData::operator!=(
+        const APIUserPrivateMessageUserData& other) {
+        return !operator==(other);
+    }
+
     APIUserPrivateMessageData
     APIUserPrivateMessageData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
@@ -56,6 +83,19 @@ namespace MusicPlayer::API {
             Util::fromJsonValue<APIUserPrivateMessageUserData>(
                 object.value(QLatin1Literal("toUser"))),
         };
+    }
+
+    bool APIUserPrivateMessageData::operator==(
+        const APIUserPrivateMessageData& other) {
+        return noticeAccountFlag == other.noticeAccountFlag &&
+               lastMsgTime == other.lastMsgTime &&
+               lastMsg == other.lastMsg &&
+               fromUser == other.fromUser &&
+               toUser == other.toUser;
+    }
+    bool APIUserPrivateMessageData::operator!=(
+        const APIUserPrivateMessageData& other) {
+        return !operator==(other);
     }
 
     APIUserPrivateMessagesData

@@ -15,7 +15,7 @@ namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
 
     struct EveryDayRecommendation {
-        QString imageUrl;
+        QUrl imageUrl;
         QString name = "每日歌曲推荐";
         QString tips = "根据您的音乐口味生成每日更新";
         QDateTime today = QDateTime::currentDateTime();

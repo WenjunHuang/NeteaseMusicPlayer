@@ -46,6 +46,10 @@ namespace MusicPlayer::API {
         QString description;
         QString signature;
 
+        bool operator==(const APIUserPrivateMessageUserData& other);
+
+        bool operator!=(const APIUserPrivateMessageUserData& other);
+
         static APIUserPrivateMessageUserData
         fromJsonValue(const QJsonValue& json);
     };
@@ -63,6 +67,10 @@ namespace MusicPlayer::API {
         QString lastMsg;
         APIUserPrivateMessageUserData fromUser;
         APIUserPrivateMessageUserData toUser;
+
+        bool operator==(const APIUserPrivateMessageData& other);
+
+        bool operator!=(const APIUserPrivateMessageData& other);
 
         static APIUserPrivateMessageData fromJsonValue(const QJsonValue& json);
     };
