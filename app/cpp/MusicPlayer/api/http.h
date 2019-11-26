@@ -4,12 +4,8 @@
 
 #pragma once
 
-#include <QFutureInterface>
-#include <QThread>
-#include <QtCore/QFuture>
-#include <QtCore/QObject>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
+#include <QtCore>
+#include <QtNetwork>
 #include <vector>
 #include <optional>
 #include <variant>

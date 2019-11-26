@@ -30,6 +30,9 @@ namespace MusicPlayer::API {
         QString alg;
         QString lastProgramName;
 
+        bool operator==(const APIDJCategoryRecommendItemRadioData& other);
+        bool operator!=(const APIDJCategoryRecommendItemRadioData& other);
+
         static APIDJCategoryRecommendItemRadioData
         fromJsonValue(const QJsonValue& json);
     };
@@ -45,6 +48,10 @@ namespace MusicPlayer::API {
         //        QVector<APIDJCategoryRecommendItemRadioData> radios;
         QVariantList radios;
 
+        bool operator==(const APIDJCategoryRecommendItemData& other);
+
+        bool operator!=(const APIDJCategoryRecommendItemData& other);
+
         static APIDJCategoryRecommendItemData
         fromJsonValue(const QJsonValue& json);
     };
@@ -53,8 +60,11 @@ namespace MusicPlayer::API {
         Q_GADGET
         Q_PROPERTY(QVariantList data MEMBER data)
       public:
-//        QVector<APIDJCategoryRecommendItemData> data;
         QVariantList data;
+
+        bool operator==(const APIDJCategoryRecommendData& other);
+
+        bool operator!=(const APIDJCategoryRecommendData& other);
 
         static APIDJCategoryRecommendData fromJsonValue(const QJsonValue& json);
     };

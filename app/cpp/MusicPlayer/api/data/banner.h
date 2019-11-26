@@ -3,8 +3,6 @@
 #include <QtCore>
 
 namespace MusicPlayer::API {
-    using namespace MusicPlayer::Util;
-
     struct APIBannerData {
         Q_GADGET
         Q_PROPERTY(QUrl imageUrl MEMBER imageUrl)

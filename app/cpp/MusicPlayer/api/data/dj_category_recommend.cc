@@ -27,6 +27,23 @@ namespace MusicPlayer::API {
                 object.value(QLatin1Literal("lastProgramName")))};
     }
 
+    bool APIDJCategoryRecommendItemRadioData::operator==(const APIDJCategoryRecommendItemRadioData& other) {
+        return id == other.id &&
+               name == other.name &&
+               rcmdText == other.rcmdText &&
+               radioFeeType == other.radioFeeType &&
+               feeScope == other.feeScope &&
+               picUrl == other.picUrl &&
+               programCount == other.programCount &&
+               alg == other.alg &&
+               playCount == other.playCount &&
+               lastProgramName == other.lastProgramName;
+    }
+
+    bool APIDJCategoryRecommendItemRadioData::operator!=(const APIDJCategoryRecommendItemRadioData& other) {
+        return !operator==(other);
+    }
+
     APIDJCategoryRecommendItemData
     APIDJCategoryRecommendItemData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
@@ -37,11 +54,31 @@ namespace MusicPlayer::API {
         };
     }
 
+    bool APIDJCategoryRecommendItemData::operator==(const APIDJCategoryRecommendItemData& other) {
+        return categoryId == other.categoryId &&
+               categoryName == other.categoryName && radios == other.radios;
+    }
+
+    bool APIDJCategoryRecommendItemData::operator!=(
+        const APIDJCategoryRecommendItemData& other) {
+        return !operator==(other);
+    }
+
     APIDJCategoryRecommendData
     APIDJCategoryRecommendData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
             Util::jsonArrayToVariantList<APIDJCategoryRecommendItemData>(object.value(QLatin1Literal("data")))
         };
+    }
+
+    bool APIDJCategoryRecommendData::operator==(
+        const APIDJCategoryRecommendData& other) {
+        return data == other.data;
+    }
+
+    bool APIDJCategoryRecommendData::operator!=(
+        const APIDJCategoryRecommendData& other) {
+        return !operator==(other);
     }
 }

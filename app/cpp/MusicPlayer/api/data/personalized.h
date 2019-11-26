@@ -1,18 +1,28 @@
 #pragma once
 
-#include <QString>
-#include <QVector>
-#include "../../util/json.h"
+#include <QtCore>
 
 namespace MusicPlayer::API {
-    using namespace MusicPlayer::Util;
 
     struct APIPersonalizedItemData {
+        Q_GADGET
+        Q_PROPERTY(int id MEMBER id)
+        Q_PROPERTY(int type MEMBER type)
+        Q_PROPERTY(QString name MEMBER name)
+        Q_PROPERTY(QString copywriter MEMBER copywriter)
+        Q_PROPERTY(QUrl picUrl MEMBER picUrl)
+        Q_PROPERTY(bool canDislike MEMBER canDislike)
+        Q_PROPERTY(int trackNumberUpdateTime MEMBER trackNumberUpdateTime)
+        Q_PROPERTY(double playCount MEMBER playCount)
+        Q_PROPERTY(int trackCount MEMBER trackCount)
+        Q_PROPERTY(bool highQuality MEMBER highQuality)
+        Q_PROPERTY(QString alg MEMBER alg)
+      public:
         int id;
         int type;
         QString name;
         QString copywriter;
-        QString picUrl;
+        QUrl picUrl;
         bool canDislike;
         int trackNumberUpdateTime;
         double playCount;
@@ -20,37 +30,28 @@ namespace MusicPlayer::API {
         bool highQuality;
         QString alg;
 
-        static APIPersonalizedItemData fromJsonValue(const QJsonValue &json) {
-          auto object = json.toObject();
-          return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("type"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("copywriter"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("picUrl"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("canDislike"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("trackNumberUpdateTime"))),
-            Util::fromJsonValue<double>(object.value(QLatin1Literal("playCount"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("trackCount"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("highQuality"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("alg"))),
-          };
-        }
+        bool operator==(const APIPersonalizedItemData& other);
+        bool operator!=(const APIPersonalizedItemData& other);
+
+        static APIPersonalizedItemData fromJsonValue(const QJsonValue& json);
     };
 
     struct APIPersonalizedData {
+        Q_GADGET
+        Q_PROPERTY(bool hasTaste MEMBER hasTaste)
+        Q_PROPERTY(int category MEMBER category)
+        Q_PROPERTY(QVariantList result MEMBER result)
+      public:
         bool hasTaste;
         int category;
-        QVector<APIPersonalizedItemData> result;
+        //        QVector<APIPersonalizedItemData> result;
+        QVariantList result;
 
-        static APIPersonalizedData fromJsonValue(const QJsonValue &json) {
-          auto object = json.toObject();
-          return {
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("hasTaste"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("category"))),
-            Util::fromJsonArray<APIPersonalizedItemData>(object.value(QLatin1Literal("result"))),
-          };
-        }
+        bool operator==(const APIPersonalizedData& other);
+        bool operator!=(const APIPersonalizedData& other);
 
+        static APIPersonalizedData fromJsonValue(const QJsonValue& json);
     };
-}
+} // namespace MusicPlayer::API
+Q_DECLARE_METATYPE(MusicPlayer::API::APIPersonalizedItemData)
+Q_DECLARE_METATYPE(MusicPlayer::API::APIPersonalizedData)

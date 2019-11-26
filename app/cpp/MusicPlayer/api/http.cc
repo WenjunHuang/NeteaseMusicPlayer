@@ -1,10 +1,6 @@
 //
 // Created by rick on 2019/11/9.
 //
-#include <QRandomGenerator>
-#include <QNetworkCookie>
-#include <QtCore/QUrlQuery>
-#include <QtNetwork/QNetworkProxy>
 #include "http.h"
 #include "crypto.h"
 

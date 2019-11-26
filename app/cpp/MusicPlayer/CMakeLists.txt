@@ -17,7 +17,7 @@ if (WIN32)
 else ()
     find_package(PkgConfig)
     find_package(Boost REQUIRED COMPONENTS container)
-    pkg_search_module(cryptopp REQUIRED libcrypto++ IMPORTED_TARGET)
+    pkg_search_module(cryptopp REQUIRED libcryptopp IMPORTED_TARGET)
     set(cryptopp PkgConfig::cryptopp)
 endif ()
 

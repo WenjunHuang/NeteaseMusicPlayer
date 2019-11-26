@@ -5,25 +5,12 @@
 #include <QtCore>
 
 namespace MusicPlayer::API {
-    class APIErrorKind: public QObject {
-        Q_OBJECT
-      public:
-        enum class Kind {
-            ErrorResponseError,
-            NetworkError,
-            JsonFormatError,
-        };
-    };
-    struct APIError {
-        Q_GADGET
-        Q_PROPERTY(int code MEMBER code)
-        Q_PROPERTY(QVariant message MEMBER message)
-      public:
-        int code;
-        QVariant message;
-//        std::optional<QString> message;
 
-        static APIError fromJsonValue(const QJsonValue& value);
+    struct ErrorResponseError {
+        int code;
+        std::optional<QString> message;
+
+        static ErrorResponseError fromJsonValue(const QJsonValue& value);
     };
 
     struct NetworkError {
@@ -34,5 +21,6 @@ namespace MusicPlayer::API {
         QJsonParseError parseError;
     };
 
-    using Error = std::variant<APIError, NetworkError, JsonFormatError>;
-} // namespace MusicPlayer::MusicAPI
+    using Error =
+        std::variant<ErrorResponseError, NetworkError, JsonFormatError>;
+} // namespace MusicPlayer::API

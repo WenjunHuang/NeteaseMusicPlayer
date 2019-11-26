@@ -5,7 +5,8 @@
 #include "../../util/json.h"
 
 namespace MusicPlayer::API {
-    APIError APIError::fromJsonValue(const QJsonValue& value) {
+    ErrorResponseError
+    ErrorResponseError::fromJsonValue(const QJsonValue& value) {
         auto object = value.toObject();
 
         return {

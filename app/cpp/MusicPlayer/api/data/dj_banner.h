@@ -40,3 +40,5 @@ namespace MusicPlayer::API {
         static APIDJBannersData fromJsonValue(const QJsonValue& value);
     };
 }
+Q_DECLARE_METATYPE(MusicPlayer::API::APIDJBannerData)
+Q_DECLARE_METATYPE(MusicPlayer::API::APIDJBannersData)

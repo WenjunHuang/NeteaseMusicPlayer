@@ -2,6 +2,7 @@
 // Created by rick on 2019/11/25.
 //
 #include "dj_category_excludehot.h"
+#include "../../util/json.h"
 
 namespace MusicPlayer::API {
 

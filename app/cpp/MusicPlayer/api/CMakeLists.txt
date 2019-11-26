@@ -5,6 +5,7 @@ add_library(api STATIC
         api.cc
         crypto.h
         crypto.cc
+        data/data.h
         data/error.h
         data/dj_banner.h
         data/dj_category_excludehot.h
@@ -16,6 +17,13 @@ add_library(api STATIC
         data/dj_banner.cc
         data/dj_category_excludehot.cc
         data/dj_category_recommend.cc
+        data/personalized.cc
+        data/personalized_newsong.cc
+        data/playlist_catlist.cc
+        data/song_privilege.cc
+        data/user_login.cc
+        data/user_private_message.cc
+        data/data.cc
         data/error.cc
         data/user_private_message.h
         data/playlist_catlist.h)

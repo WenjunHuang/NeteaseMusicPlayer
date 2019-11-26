@@ -1,11 +1,26 @@
 #pragma once
-#include <QJsonValue>
-#include <QJsonObject>
-#include "../../util/json.h"
+#include <QtCore>
 
 namespace MusicPlayer::API {
-    using namespace MusicPlayer::Util;
     struct APISongPrivilegeData {
+        Q_GADGET
+        Q_PROPERTY(int id MEMBER id)
+        Q_PROPERTY(int fee MEMBER fee)
+        Q_PROPERTY(int payed MEMBER payed)
+        Q_PROPERTY(int st MEMBER st)
+        Q_PROPERTY(int pl MEMBER pl)
+        Q_PROPERTY(int dl MEMBER dl)
+        Q_PROPERTY(int sp MEMBER sp)
+        Q_PROPERTY(int cp MEMBER cp)
+        Q_PROPERTY(int subp MEMBER subp)
+        Q_PROPERTY(bool cs MEMBER cs)
+        Q_PROPERTY(int maxbr MEMBER maxbr)
+        Q_PROPERTY(int fl MEMBER fl)
+        Q_PROPERTY(bool toast MEMBER toast)
+        Q_PROPERTY(int flag MEMBER flag)
+        Q_PROPERTY(bool preSell MEMBER preSell)
+
+      public:
         int id;
         int fee;
         int payed;
@@ -22,25 +37,10 @@ namespace MusicPlayer::API {
         int flag;
         bool preSell;
 
-        static APISongPrivilegeData fromJsonValue(const QJsonValue& json) {
-          auto object = json.toObject();
-          return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("fee"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("payed"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("st"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("pl"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("dl"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("sp"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("cp"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("subp"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("cs"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("maxbr"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("fl"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("toast"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("flag"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("preSell"))),
-          };
-        }
+        bool operator==(const APISongPrivilegeData& other);
+        bool operator!=(const APISongPrivilegeData& other);
+
+        static APISongPrivilegeData fromJsonValue(const QJsonValue& json);
     };
 }
+Q_DECLARE_METATYPE(MusicPlayer::API::APISongPrivilegeData)
