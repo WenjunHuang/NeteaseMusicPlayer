@@ -18,9 +18,7 @@ namespace MusicPlayer::Repository {
         }
     }
 
-    SongCategoryRepository* SongCategoryRepository::instance() {
-        return _instance;
-    }
+    SongCategoryRepository* SongCategoryRepository::instance() { return _instance; }
 
     folly::SemiFuture<Response<APIPlaylistCatListData>> SongCategoryRepository::getPlaylistCatListData() {
         folly::Promise<Response<APIPlaylistCatListData>> promise;
@@ -30,30 +28,32 @@ namespace MusicPlayer::Repository {
             promise.setValue(_categoryData.value());
         } else {
             // 没有缓存
-            // 看看有没正在执行的api调用
-            if (_loading) {
-                // 有，那么等它完成
+            if (_loading && !_loading->isReady()) {
                 _waitings.push_back(std::move(promise));
             } else {
-                // 还没有，那么我们创建它
                 MusicAPI api;
                 _waitings.push_back(std::move(promise));
                 _loading = api.playlistCatlist()
-                    .via(AppExecutor::instance()->getMainExecutor().get())
-                    .thenValue([this](Response<APIPlaylistCatListData> response) {
-                      std::visit([this](auto& var) {
-                            if constexpr (std::is_convertible_v<decltype(var), APIPlaylistCatListData>) {
-                                //_categoryData = var;
-                            } else {
-                                // todo 记录日志
-                            }
+                               .via(AppExecutor::instance()->getMainExecutor().get())
+                               .thenValue([this](Response<APIPlaylistCatListData>&& response) {
+                                   std::visit(
+                                       [this](auto& var) {
+                                           if constexpr (std::is_convertible_v<decltype(var), APIPlaylistCatListData>) {
+                                               _categoryData = var;
+                                           } else {
+                                               // todo 记录日志
+                                           }
+                                       },
+                                       response);
 
-//                            return var;
-                          },
-                          response);
-                    });
+                                   std::for_each(
+                                       _waitings.begin(), _waitings.end(), [&](auto& promise) { promise.setValue(response); });
+                                   _waitings.clear();
+
+                                   return response;
+                               });
             }
         }
         return result;
     }
-}
+} // namespace MusicPlayer::Repository

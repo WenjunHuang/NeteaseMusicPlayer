@@ -16,9 +16,9 @@
 // using namespace AsyncFuture;
 using namespace MusicPlayer::API;
 using namespace MusicPlayer::Util;
-
+std::string testName = "test";
 TEST_CASE("djBanner", "[MusicAPI]") {
-    char* argv[] = {"test"};
+    char* argv[] = {testName.data()};
     int argc     = 1;
     QGuiApplication app{argc, argv};
     registerMetaTypes();
@@ -51,7 +51,7 @@ TEST_CASE("djBanner", "[MusicAPI]") {
 
 TEST_CASE("djCategoryExcludeHot", "[MusicAPI]") {
     using namespace MusicPlayer::API;
-    char* argv[] = {"test"};
+    char* argv[] = {testName.data()};
     int argc     = 1;
     QGuiApplication app{argc, argv};
     registerMetaTypes();

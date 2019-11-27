@@ -3,10 +3,11 @@
 //
 
 #include "personalized_new_song_view_model.h"
+#include "../util/executor.h"
 
 namespace MusicPlayer::ViewModels {
-    PersonalizedNewSongListModel::PersonalizedNewSongListModel(QObject* parent)
-        : QAbstractListModel{parent} {}
+    using namespace Util;
+    PersonalizedNewSongListModel::PersonalizedNewSongListModel(QObject* parent) : QAbstractListModel{parent} {}
 
     QHash<int, QByteArray> PersonalizedNewSongListModel::roleNames() const {
         QHash<int, QByteArray> names;
@@ -22,12 +23,9 @@ namespace MusicPlayer::ViewModels {
         return names;
     }
 
-    int PersonalizedNewSongListModel::rowCount(const QModelIndex& index) const {
-        return _data.size();
-    }
+    int PersonalizedNewSongListModel::rowCount(const QModelIndex& index) const { return _data.size(); }
 
-    QVariant PersonalizedNewSongListModel::data(const QModelIndex& index,
-                                                int role) const {
+    QVariant PersonalizedNewSongListModel::data(const QModelIndex& index, int role) const {
         const auto& item = _data[index.row()];
         if (role == Roles::ImageUrl) {
             return item.song.album.picUrl;
@@ -41,11 +39,8 @@ namespace MusicPlayer::ViewModels {
         if (role == Roles::Artists) {
             QStringList artistNames;
             std::transform(
-                item.song.artists.cbegin(), item.song.artists.cend(),
-                std::back_inserter(artistNames), [](const auto& artist) {
-                    return artist
-                        .template value<APIPersonalizedNewSongResultSongArtistData>()
-                        .name;
+                item.song.artists.cbegin(), item.song.artists.cend(), std::back_inserter(artistNames), [](const auto& artist) {
+                    return artist.template value<APIPersonalizedNewSongResultSongArtistData>().name;
                 });
             return artistNames.join(" / ");
         }
@@ -61,43 +56,38 @@ namespace MusicPlayer::ViewModels {
         return {};
     }
 
-    void PersonalizedNewSongListModel::setPersonalizedNewSongData(
-        const APIPersonalizedNewSongData& data) {
+    void PersonalizedNewSongListModel::setPersonalizedNewSongData(const APIPersonalizedNewSongData& data) {
         beginResetModel();
         _data.clear();
-        std::transform(data.result.cbegin(), data.result.cend(),
-                       std::back_inserter(_data), [](const auto& var) {
-                           return var.template value<APIPersonalizedNewSongResultData>();
-                       });
+        std::transform(data.result.cbegin(), data.result.cend(), std::back_inserter(_data), [](const auto& var) {
+            return var.template value<APIPersonalizedNewSongResultData>();
+        });
         endResetModel();
     }
 
-    PersonalizedNewSongViewModel::PersonalizedNewSongViewModel(QObject* parent)
-        : QObject{parent} {
+    PersonalizedNewSongViewModel::PersonalizedNewSongViewModel(QObject* parent) : QObject{parent} {
         _newSongModel = new PersonalizedNewSongListModel(this);
     }
 
     void PersonalizedNewSongViewModel::loadData() {
+        if (_loading && !_loading->isReady())
+            return;
         MusicAPI api;
-        auto f = api.personalizedNewSong();
-
-        AsyncFuture::observe(f).subscribe(
-            [this](const Response<APIPersonalizedNewSongData>& reply) {
-                std::visit(
-                    [=](const auto& value) {
-                        if constexpr (std::is_convertible_v<
-                                          decltype(value),
-                                          APIPersonalizedNewSongData>) {
-                            _newSongModel->setPersonalizedNewSongData(value);
-                        } else {
-                            // errors
-                        }
-                    },
-                    reply);
-            });
+        _loading = api.personalizedNewSong()
+                       .via(AppExecutor::instance()->getMainExecutor().get())
+                       .thenValue([this](const Response<APIPersonalizedNewSongData>& reply) {
+                           std::visit(
+                               [=](const auto& value) {
+                                   if constexpr (std::is_convertible_v<decltype(value), APIPersonalizedNewSongData>) {
+                                       _newSongModel->setPersonalizedNewSongData(value);
+                                   } else {
+                                       // errors
+                                   }
+                               },
+                               reply);
+                           return true;
+                       });
     }
 
-    QAbstractListModel* PersonalizedNewSongViewModel::newSongListModel() const {
-        return _newSongModel;
-    }
+    QAbstractListModel* PersonalizedNewSongViewModel::newSongListModel() const { return _newSongModel; }
 } // namespace MusicPlayer::ViewModels

@@ -3,21 +3,16 @@
 //
 
 #include "banner_view_model.h"
+#include "../util/executor.h"
 
 namespace MusicPlayer::ViewModels {
+    using namespace MusicPlayer::Util;
 
     class BannerImageList : public QAbstractListModel {
         Q_OBJECT
 
       public:
-        enum Roles {
-            ImageUrl = Qt::UserRole + 1,
-            TargetId,
-            TargetType,
-            TitleColor,
-            TypeTitle,
-            EncodeId
-        };
+        enum Roles { ImageUrl = Qt::UserRole + 1, TargetId, TargetType, TitleColor, TypeTitle, EncodeId };
 
         BannerImageList(QObject* parent);
 
@@ -30,10 +25,10 @@ namespace MusicPlayer::ViewModels {
         void setBannersData(const APIBannersData& banners) {
             beginResetModel();
             _bannerData.clear();
-            std::transform(
-                banners.banners.cbegin(), banners.banners.cend(),
-                std::back_inserter(_bannerData),
-                [](const QVariant& var) { return var.value<APIBannerData>(); });
+            std::transform(banners.banners.cbegin(),
+                           banners.banners.cend(),
+                           std::back_inserter(_bannerData),
+                           [](const QVariant& var) { return var.value<APIBannerData>(); });
             endResetModel();
         }
 
@@ -41,9 +36,7 @@ namespace MusicPlayer::ViewModels {
         QVector<APIBannerData> _bannerData;
     };
 
-    int BannerImageList::rowCount(const QModelIndex& parent) const {
-        return _bannerData.size();
-    }
+    int BannerImageList::rowCount(const QModelIndex& parent) const { return _bannerData.size(); }
 
     QVariant BannerImageList::data(const QModelIndex& index, int role) const {
         if (role == Roles::ImageUrl) {
@@ -74,8 +67,7 @@ namespace MusicPlayer::ViewModels {
         return names;
     }
 
-    BannerImageList::BannerImageList(QObject* parent)
-        : QAbstractListModel(parent) {}
+    BannerImageList::BannerImageList(QObject* parent) : QAbstractListModel(parent) {}
 
     void BannerViewModel::componentComplete() {
         qDebug() << "complete";
@@ -84,31 +76,30 @@ namespace MusicPlayer::ViewModels {
 
     void BannerViewModel::classBegin() {}
 
-    BannerViewModel::BannerViewModel(QObject* parent) : QObject(parent) {
-        _bannerModel = new BannerImageList(this);
-    }
+    BannerViewModel::BannerViewModel(QObject* parent) : QObject(parent) { _bannerModel = new BannerImageList(this); }
 
-    int BannerViewModel::bannerCount() const {
-        return _bannerModel->rowCount(QModelIndex());
-    }
+    int BannerViewModel::bannerCount() const { return _bannerModel->rowCount(QModelIndex()); }
 
     void BannerViewModel::loadBannerData() {
+        if (_loading && !_loading->isReady())
+            return; // 还在加载中
+
         MusicAPI api;
-        auto f = api.banner();
-        AsyncFuture::observe(f).subscribe(
-            [this](const Response<APIBannersData>& reply) {
-                std::visit(
-                    [=](const auto& value) {
-                        if constexpr (std::is_convertible_v<decltype(value),
-                                                            APIBannersData>) {
-                            _bannerModel->setBannersData(value);
-                            bannerCountChanged();
-                        } else {
-                            // errors
-                        }
-                    },
-                    reply);
-            });
+        _loading = api.banner()
+                       .via(AppExecutor::instance()->getMainExecutor().get())
+                       .thenValue([this](Response<APIBannersData>&& reply) {
+                           std::visit(
+                               [=](const auto& value) {
+                                   if constexpr (std::is_convertible_v<decltype(value), APIBannersData>) {
+                                       _bannerModel->setBannersData(value);
+                                       bannerCountChanged();
+                                   } else {
+                                       // errors
+                                   }
+                               },
+                               reply);
+                           return true;
+                       });
     }
 
     QAbstractListModel* BannerViewModel::bannerModel() { return _bannerModel; }

@@ -28,13 +28,14 @@ namespace MusicPlayer::Repository {
 
         static SongCategoryRepository* instance();
 
-      private:
         folly::SemiFuture<Response<APIPlaylistCatListData>> getPlaylistCatListData();
+
+      private:
 
         std::optional<APIPlaylistCatListData> _categoryData;
 
         // if is loading
-        std::optional<folly::Future<void>> _loading;
+        std::optional<folly::Future<Response<APIPlaylistCatListData>>> _loading;
 
         std::vector<folly::Promise<Response<APIPlaylistCatListData>>> _waitings;
 

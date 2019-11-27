@@ -4,7 +4,6 @@
 
 #pragma once
 #include "../api/api.h"
-#include "../asyncfuture.h"
 #include <QVariantHash>
 #include <QtCore/QObject>
 #include <QtQml/QQmlParserStatus>

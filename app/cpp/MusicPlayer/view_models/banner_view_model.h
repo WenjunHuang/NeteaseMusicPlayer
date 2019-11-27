@@ -5,16 +5,14 @@
 #pragma once
 
 
-#include <QtCore/QObject>
-#include <QtQml/QQmlParserStatus>
-#include <QtCore/QAbstractListModel>
+#include <QtCore>
+#include <QtQml>
+#include <folly/futures/Future.h>
 #include "../api/data/banner.h"
 #include "../api/api.h"
-#include "../asyncfuture.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
-
 
     class BannerImageList;
 
@@ -41,11 +39,12 @@ namespace MusicPlayer::ViewModels {
         QAbstractListModel* bannerModel();
 
     signals:
-
         void bannerCountChanged();
 
     private:
         void loadBannerData();
+
+        std::optional<folly::Future<bool>> _loading;
 
         BannerImageList *_bannerModel;
     };

@@ -4,12 +4,11 @@
 
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtQml/QQmlParserStatus>
-#include <QtCore/QAbstractListModel>
-#include "../api/data/personalized_newsong.h"
+#include <QtCore>
+#include <QtQml>
+#include <optional>
+#include <folly/futures/Future.h>
 #include "../api/api.h"
-#include "../asyncfuture.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
@@ -61,6 +60,8 @@ namespace MusicPlayer::ViewModels {
 
     private:
         void loadData();
+
+        std::optional<folly::Future<bool>> _loading;
 
         PersonalizedNewSongListModel *_newSongModel;
     };
