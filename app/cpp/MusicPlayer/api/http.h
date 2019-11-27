@@ -6,38 +6,31 @@
 
 #include <QtCore>
 #include <QtNetwork>
-#include <vector>
+#include <folly/futures/Future.h>
 #include <optional>
 #include <variant>
+#include <vector>
 
 namespace MusicPlayer::API {
-    enum class HttpMethod{
+    enum class HttpMethod {
         GET,
         POST,
         PUT
 
     };
 
-    enum class CryptoType {
-        WEAPI,
-        LINUX_API,
-        EAPI
-    };
+    enum class CryptoType { WEAPI, LINUX_API, EAPI };
 
-    enum class UserAgentType {
-        Mobile,
-        PC
-    };
+    enum class UserAgentType { Mobile, PC };
 
     struct RequestOption {
         CryptoType cryptoType;
         std::optional<std::variant<QString, QHash<QString, QString>>> cookie = std::nullopt;
-        std::optional<UserAgentType> ua = std::nullopt;
+        std::optional<UserAgentType> ua                                      = std::nullopt;
     };
 
-
     class HttpWorker : public QObject {
-    Q_OBJECT
+        Q_OBJECT
 
         Q_DISABLE_COPY(HttpWorker)
 
@@ -45,33 +38,28 @@ namespace MusicPlayer::API {
 
         HttpWorker();
 
-    public:
-
+      public:
         static void initInstance();
 
         static void freeInstance();
 
-        static HttpWorker *instance();
+        static HttpWorker* instance();
 
-        QFuture<QNetworkReply *> post(QUrl url,
-                                      RequestOption option,
-                                      const QHash<QString, QVariant> &data);
+        folly::SemiFuture<QNetworkReply*> post(QUrl&& url, RequestOption&& option, QVariantHash&& data);
 
-    signals:
+        bool event(QEvent* ev) override;
 
-        // this signal is used internally
-        void _request(HttpMethod method,
-                      QUrl url,
-                      RequestOption option,
-                      QHash<QString, QVariant> data,
-                      QFutureInterface<QNetworkReply *> futureItr);
+      private:
+        void request(HttpMethod method,
+                     QUrl&& url,
+                     RequestOption&& option,
+                     QVariantHash&& data,
+                     folly::Promise<QNetworkReply*>&& promise);
 
-    private:
         static HttpWorker* _instance;
-        QThread *_worker;
-        QNetworkAccessManager *_network;
+        QNetworkAccessManager* _network;
     };
 
-}
+} // namespace MusicPlayer::API
 Q_DECLARE_METATYPE(MusicPlayer::API::HttpMethod)
-//Q_DECLARE_METATYPE(MusicPlayer::MusicAPI::HttpWorker)
+// Q_DECLARE_METATYPE(MusicPlayer::MusicAPI::HttpWorker)

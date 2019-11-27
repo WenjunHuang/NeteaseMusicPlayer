@@ -1,5 +1,7 @@
 set(CMAKE_CXX_STANDARD 17)
 file(GLOB_RECURSE SRCS *.cc)
+
+add_compile_definitions(QT_NO_FOREACH)
 set(TARGETS "")
 foreach (SRC_FILE IN LISTS SRCS)
     get_filename_component(FILE_NAME ${SRC_FILE} NAME_WE)

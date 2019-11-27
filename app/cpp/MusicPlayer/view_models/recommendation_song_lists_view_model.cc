@@ -48,7 +48,7 @@ namespace MusicPlayer::ViewModels {
                 data.result.last().value<APIPersonalizedItemData>().picUrl});
             std::transform(data.result.cbegin(), data.result.cend() - 1,
                            std::back_inserter(_songsList), [](const auto& var) {
-                               return var.value<APIPersonalizedItemData>();
+                               return var.template value<APIPersonalizedItemData>();
                            });
             endResetModel();
         }
@@ -71,12 +71,13 @@ namespace MusicPlayer::ViewModels {
                         return value.id;
                     if (role == Roles::Name)
                         return value.name;
-                    if (role == Roles::PlayCount)
+                    if (role == Roles::PlayCount) {
                         if (value.playCount > 10000)
                             return QString(QStringLiteral(u"%1万"))
                                 .arg(value.playCount / 10000);
                         else
                             return QString("%1").arg(value.playCount);
+                    }
                     if (role == Roles::Kind)
                         return RecommendationSongListsViewModel::Normal;
 

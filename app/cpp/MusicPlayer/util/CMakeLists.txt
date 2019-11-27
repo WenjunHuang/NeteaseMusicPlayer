@@ -2,7 +2,10 @@ add_library(util STATIC
         json.cc
         logger.cc
         misc.cc
+        executor.cc
+        executor.h
+        cpu_thread_pool_executor.cc
         )
 #target_include_directories(util PUBLIC ${Boost_INCLUDE_DIRS})
-target_link_libraries(util PUBLIC Qt5::Core)
+target_link_libraries(util PUBLIC Qt5::Core ${FOLLY})
 

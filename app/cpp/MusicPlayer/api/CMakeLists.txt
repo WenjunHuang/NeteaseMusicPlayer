@@ -27,5 +27,11 @@ add_library(api STATIC
         data/error.cc
         data/user_private_message.h
         data/playlist_catlist.h)
-target_link_libraries(api PUBLIC Qt5::Core Qt5::Network Qt5::Quick Qt5::Concurrent cryptopp-static util)
+#if (WIN32)
+    target_link_libraries(api PUBLIC util Qt5::Core Qt5::Network Qt5::Quick  ${CRYPTOPP} ${FOLLY} ${GLOG})
+#endif ()
+#
+#if (APPLE)
+#    target_link_libraries(api PUBLIC Qt5::Core Qt5::Network Qt5::Quick Qt5::Concurrent cryptopp util)
+#endif ()
 

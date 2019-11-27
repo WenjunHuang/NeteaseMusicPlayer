@@ -44,7 +44,7 @@ namespace MusicPlayer::ViewModels {
                 item.song.artists.cbegin(), item.song.artists.cend(),
                 std::back_inserter(artistNames), [](const auto& artist) {
                     return artist
-                        .value<APIPersonalizedNewSongResultSongArtistData>()
+                        .template value<APIPersonalizedNewSongResultSongArtistData>()
                         .name;
                 });
             return artistNames.join(" / ");
@@ -67,7 +67,7 @@ namespace MusicPlayer::ViewModels {
         _data.clear();
         std::transform(data.result.cbegin(), data.result.cend(),
                        std::back_inserter(_data), [](const auto& var) {
-                           return var.value<APIPersonalizedNewSongResultData>();
+                           return var.template value<APIPersonalizedNewSongResultData>();
                        });
         endResetModel();
     }
