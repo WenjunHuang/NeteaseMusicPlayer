@@ -30,8 +30,8 @@ namespace MusicPlayer::API {
         bool highQuality;
         QString alg;
 
-        bool operator==(const APIPersonalizedItemData& other);
-        bool operator!=(const APIPersonalizedItemData& other);
+        bool operator==(const APIPersonalizedItemData& other) const;
+        bool operator!=(const APIPersonalizedItemData& other) const;
 
         static APIPersonalizedItemData fromJsonValue(const QJsonValue& json);
     };
@@ -47,8 +47,8 @@ namespace MusicPlayer::API {
         //        QVector<APIPersonalizedItemData> result;
         QVariantList result;
 
-        bool operator==(const APIPersonalizedData& other);
-        bool operator!=(const APIPersonalizedData& other);
+        bool operator==(const APIPersonalizedData& other) const;
+        bool operator!=(const APIPersonalizedData& other) const;
 
         static APIPersonalizedData fromJsonValue(const QJsonValue& json);
     };

@@ -6,7 +6,7 @@
 
 
 #include <QtCore>
-#include <QtQml>
+#include <QtQml/QQmlParserStatus>
 #include <folly/futures/Future.h>
 #include "../api/data/banner.h"
 #include "../api/api.h"
@@ -17,7 +17,7 @@ namespace MusicPlayer::ViewModels {
     class BannerImageList;
 
     class BannerViewModel : public QObject, public QQmlParserStatus {
-    Q_OBJECT
+        Q_OBJECT
         Q_INTERFACES(QQmlParserStatus)
         Q_PROPERTY(int bannerCount
                      READ
@@ -44,11 +44,10 @@ namespace MusicPlayer::ViewModels {
     private:
         void loadBannerData();
 
-        std::optional<folly::Future<bool>> _loading;
+        std::optional<folly::Future<std::nullopt_t>> _loading;
 
         BannerImageList *_bannerModel;
     };
 }
-
 
 

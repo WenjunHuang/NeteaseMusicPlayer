@@ -37,8 +37,8 @@ namespace MusicPlayer::API {
         int flag;
         bool preSell;
 
-        bool operator==(const APISongPrivilegeData& other);
-        bool operator!=(const APISongPrivilegeData& other);
+        bool operator==(const APISongPrivilegeData& other) const;
+        bool operator!=(const APISongPrivilegeData& other) const;
 
         static APISongPrivilegeData fromJsonValue(const QJsonValue& json);
     };

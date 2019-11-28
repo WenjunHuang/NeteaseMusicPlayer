@@ -29,9 +29,9 @@ namespace MusicPlayer::API {
         int vipType;
         int viptypeVersion;
 
-        bool operator==(const APIUserAccountData& other);
+        bool operator==(const APIUserAccountData& other) const;
 
-        bool operator!=(const APIUserAccountData& other);
+        bool operator!=(const APIUserAccountData& other) const;
 
         static APIUserAccountData fromJsonValue(const QJsonValue& json);
     };
@@ -84,9 +84,9 @@ namespace MusicPlayer::API {
         int playlistCount;
         int playlistBeSubscribedCount;
 
-        bool operator==(const APIUserProfileData& other);
+        bool operator==(const APIUserProfileData& other) const;
 
-        bool operator!=(const APIUserProfileData& other);
+        bool operator!=(const APIUserProfileData& other) const;
 
         static APIUserProfileData fromJsonValue(const QJsonValue& json);
     };
@@ -103,9 +103,9 @@ namespace MusicPlayer::API {
         APIUserProfileData profile;
         std::optional<QString> cookieToken = std::nullopt;
 
-        bool operator==(const APIUserLoginData& other);
+        bool operator==(const APIUserLoginData& other) const;
 
-        bool operator!=(const APIUserLoginData& other);
+        bool operator!=(const APIUserLoginData& other) const;
 
         static APIUserLoginData fromJsonValue(const QJsonValue& json);
     };

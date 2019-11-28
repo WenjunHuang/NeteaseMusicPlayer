@@ -98,7 +98,7 @@ namespace MusicPlayer::ViewModels {
                                    }
                                },
                                reply);
-                           return true;
+                           return std::nullopt;
                        });
     }
 

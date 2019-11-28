@@ -19,8 +19,8 @@ namespace MusicPlayer::API {
         QUrl picUrl;
         QVector<QString> alias;
 
-        bool operator==(const APIPersonalizedNewSongResultSongAlbumData& other);
-        bool operator!=(const APIPersonalizedNewSongResultSongAlbumData& other);
+        bool operator==(const APIPersonalizedNewSongResultSongAlbumData& other) const;
+        bool operator!=(const APIPersonalizedNewSongResultSongAlbumData& other) const;
 
         static APIPersonalizedNewSongResultSongAlbumData
         fromJsonValue(const QJsonValue& json);
@@ -36,10 +36,8 @@ namespace MusicPlayer::API {
         QString name;
         QVector<QString> alias;
 
-        bool
-        operator==(const APIPersonalizedNewSongResultSongArtistData& other);
-        bool
-        operator!=(const APIPersonalizedNewSongResultSongArtistData& other);
+        bool operator==(const APIPersonalizedNewSongResultSongArtistData& other) const;
+        bool operator!=(const APIPersonalizedNewSongResultSongArtistData& other) const;
 
         static APIPersonalizedNewSongResultSongArtistData
         fromJsonValue(const QJsonValue& json);
@@ -63,8 +61,8 @@ namespace MusicPlayer::API {
         APIPersonalizedNewSongResultSongAlbumData album;
         APISongPrivilegeData privilege;
 
-        bool operator==(const APIPersonalizedNewSongResultSongData& other);
-        bool operator!=(const APIPersonalizedNewSongResultSongData& other);
+        bool operator==(const APIPersonalizedNewSongResultSongData& other) const;
+        bool operator!=(const APIPersonalizedNewSongResultSongData& other) const;
 
         static APIPersonalizedNewSongResultSongData
         fromJsonValue(const QJsonValue& json);
@@ -82,8 +80,11 @@ namespace MusicPlayer::API {
         QString name;
         APIPersonalizedNewSongResultSongData song;
 
-        static APIPersonalizedNewSongResultData
-        fromJsonValue(const QJsonValue& json);
+        bool operator==(const APIPersonalizedNewSongResultData& other) const;
+
+        bool operator!=(const APIPersonalizedNewSongResultData& other) const;
+
+        static APIPersonalizedNewSongResultData fromJsonValue(const QJsonValue& json);
     };
 
     struct APIPersonalizedNewSongData {
@@ -93,6 +94,10 @@ namespace MusicPlayer::API {
       public:
         int category;
         QVariantList result;
+
+        bool operator==(const APIPersonalizedNewSongData& other) const;
+
+        bool operator!=(const APIPersonalizedNewSongData& other) const;
 
         static APIPersonalizedNewSongData fromJsonValue(const QJsonValue& json);
     };

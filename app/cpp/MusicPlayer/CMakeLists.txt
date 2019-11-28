@@ -46,7 +46,7 @@ else ()
 endif ()
 
 add_executable(MusicPlayer main.cpp application.cc ${RESOURCES})
-target_link_libraries(MusicPlayer LINK_PRIVATE api util view_models
+target_link_libraries(MusicPlayer LINK_PRIVATE api util view_models repositories
         ${GLOG}
         Qt5::Core
         Qt5::Network

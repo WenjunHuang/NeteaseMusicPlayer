@@ -24,7 +24,7 @@
 #include <folly/futures/Future.h>
 
 namespace MusicPlayer::API {
-    template <typename T> using Response    = std::variant<Error, T>;
+    template <typename T> using Response    = std::variant<APIError, T>;
     template <typename T> using APIResponse = folly::SemiFuture<Response<T>>;
 
     class MusicAPI {

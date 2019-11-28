@@ -25,10 +25,10 @@ namespace MusicPlayer::API {
             Util::fromJsonValue<bool>(object.value(QLatin1Literal("preSell"))),
         };
     }
-    bool APISongPrivilegeData::operator==(const APISongPrivilegeData& other) {
+    bool APISongPrivilegeData::operator==(const APISongPrivilegeData& other) const {
         return memcmp(this,&other,sizeof(APISongPrivilegeData));
     }
-    bool APISongPrivilegeData::operator!=(const APISongPrivilegeData& other) {
+    bool APISongPrivilegeData::operator!=(const APISongPrivilegeData& other) const {
         return !operator==(other);
     }
 }

@@ -25,8 +25,8 @@ namespace MusicPlayer::API {
         bool hot;
         bool activity;
 
-        bool operator==(const APIPlaylistCatListItemData& second);
-        bool operator!=(const APIPlaylistCatListItemData& second);
+        bool operator==(const APIPlaylistCatListItemData& second) const;
+        bool operator!=(const APIPlaylistCatListItemData& second) const;
 
         static APIPlaylistCatListItemData fromJsonValue(const QJsonValue& json);
     };
@@ -38,16 +38,15 @@ namespace MusicPlayer::API {
         Q_PROPERTY(QVariantList sub MEMBER sub)
       public:
         APIPlaylistCatListItemData all;
-        QVariantList sub;
-        QVariantHash categories;
-        //        QVector<APIPlaylistCatListItemData> sub;
+        QVariantList sub; // APIPlaylistCatListItemData
+        QVariantHash categories; // QString->QString
 
-        bool operator==(const APIPlaylistCatListData& second);
-        bool operator!=(const APIPlaylistCatListData& other);
+        bool operator==(const APIPlaylistCatListData& second) const;
+        bool operator!=(const APIPlaylistCatListData& other) const;
 
         static APIPlaylistCatListData fromJsonValue(const QJsonValue& json);
     };
-
 } // namespace MusicPlayer::API
+
 Q_DECLARE_METATYPE(MusicPlayer::API::APIPlaylistCatListItemData)
 Q_DECLARE_METATYPE(MusicPlayer::API::APIPlaylistCatListData)

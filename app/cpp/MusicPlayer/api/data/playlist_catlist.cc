@@ -20,8 +20,7 @@ namespace MusicPlayer::API {
         };
     }
 
-    bool APIPlaylistCatListItemData::operator==(
-        const APIPlaylistCatListItemData& second) {
+    bool APIPlaylistCatListItemData::operator==(const APIPlaylistCatListItemData& second) const {
         return name == second.name &&
                resourceCount == second.resourceCount &&
                imgId == second.imgId &&
@@ -32,8 +31,7 @@ namespace MusicPlayer::API {
                activity == second.activity;
     }
 
-    bool APIPlaylistCatListItemData::operator!=(
-        const APIPlaylistCatListItemData& second) {
+    bool APIPlaylistCatListItemData::operator!=(const APIPlaylistCatListItemData& second) const {
         return !operator==(second);
     }
 
@@ -52,13 +50,13 @@ namespace MusicPlayer::API {
     }
 
     bool
-    APIPlaylistCatListData::operator==(const APIPlaylistCatListData& second) {
+    APIPlaylistCatListData::operator==(const APIPlaylistCatListData& second) const {
         return all == second.all && sub == second.sub &&
                categories == second.categories;
     }
 
     bool
-    APIPlaylistCatListData::operator!=(const APIPlaylistCatListData& other) {
+    APIPlaylistCatListData::operator!=(const APIPlaylistCatListData& other) const {
         return !operator==(other);
     }
 }

@@ -50,7 +50,7 @@ namespace MusicPlayer::API {
         };
     }
 
-    bool APIUserProfileData::operator==(const APIUserProfileData& other) {
+    bool APIUserProfileData::operator==(const APIUserProfileData& other) const{
         return userId==other.userId &&
                vipType == other.vipType &&
                gender == other.gender &&
@@ -73,7 +73,7 @@ namespace MusicPlayer::API {
                playlistCount == other.playlistCount &&
                playlistBeSubscribedCount == other.playlistBeSubscribedCount;
     }
-    bool APIUserProfileData::operator!=(const APIUserProfileData& other) {
+    bool APIUserProfileData::operator!=(const APIUserProfileData& other) const {
         return !operator==(other);
     }
 
@@ -87,17 +87,17 @@ namespace MusicPlayer::API {
         };
     }
 
-    bool APIUserLoginData::operator==(const APIUserLoginData& other) {
+    bool APIUserLoginData::operator==(const APIUserLoginData& other) const {
         return loginType == other.loginType && account == other.account &&
                profile == other.profile;
     }
 
-    bool APIUserLoginData::operator!=(const APIUserLoginData& other) {
+    bool APIUserLoginData::operator!=(const APIUserLoginData& other) const {
         return !operator==(other);
     }
 
     bool APIUserAccountData::operator==(
-        const MusicPlayer::API::APIUserAccountData& other) {
+        const MusicPlayer::API::APIUserAccountData& other) const {
         return id == other.id &&
                userName == other.userName &&
                type == other.type &&
@@ -107,7 +107,7 @@ namespace MusicPlayer::API {
                vipType == other.vipType &&
                viptypeVersion == other.viptypeVersion;
     }
-    bool APIUserAccountData::operator!=(const APIUserAccountData& other) {
+    bool APIUserAccountData::operator!=(const APIUserAccountData& other) const {
         return !operator==(other);
     }
 }

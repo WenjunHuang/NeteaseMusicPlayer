@@ -9,6 +9,7 @@
 #include <QtQml/QQmlParserStatus>
 #include <QtCore/QDateTime>
 #include <QAbstractListModel>
+#include <folly/futures/Future.h>
 #include "../api/data/personalized.h"
 
 namespace MusicPlayer::ViewModels {
@@ -43,6 +44,7 @@ namespace MusicPlayer::ViewModels {
     private:
         void loadData();
 
+        std::optional<folly::Future<std::nullopt_t>> _loading;
         RecommendationSongsListModel *_songsModel;
 
     };

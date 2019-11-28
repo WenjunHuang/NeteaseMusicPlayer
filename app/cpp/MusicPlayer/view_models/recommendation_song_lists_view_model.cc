@@ -4,34 +4,28 @@
 
 #include "recommendation_song_lists_view_model.h"
 #include "../api/api.h"
-#include "../asyncfuture.h"
-#include <QtCore/QAbstractListModel>
+#include "../util/util.h"
+#include <QtCore>
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
+    using namespace MusicPlayer::Util;
 
     static QString kWeekDays[] = {
-        QStringLiteral(u"星期一"), QStringLiteral(u"星期二"),
-        QStringLiteral(u"星期三"), QStringLiteral(u"星期四"),
-        QStringLiteral(u"星期五"), QStringLiteral(u"星期六"),
+        QStringLiteral(u"星期一"),
+        QStringLiteral(u"星期二"),
+        QStringLiteral(u"星期三"),
+        QStringLiteral(u"星期四"),
+        QStringLiteral(u"星期五"),
+        QStringLiteral(u"星期六"),
         QStringLiteral(u"星期日"),
     };
 
     class RecommendationSongsListModel : public QAbstractListModel {
         Q_OBJECT
       public:
-        using ModeItem =
-            std::variant<EveryDayRecommendation, APIPersonalizedItemData>;
-        enum Roles {
-            ImageUrl = Qt::UserRole + 1,
-            Id,
-            Name,
-            PlayCount,
-            Tips,
-            Today,
-            Weekday,
-            Kind
-        };
+        using ModeItem = std::variant<EveryDayRecommendation, APIPersonalizedItemData>;
+        enum Roles { ImageUrl = Qt::UserRole + 1, Id, Name, PlayCount, Tips, Today, Weekday, Kind };
 
         explicit RecommendationSongsListModel(QObject* parent = nullptr);
 
@@ -44,12 +38,10 @@ namespace MusicPlayer::ViewModels {
         void setRecommendationSongListsData(const APIPersonalizedData& data) {
             beginResetModel();
             _songsList.clear();
-            _songsList.append(EveryDayRecommendation{
-                data.result.last().value<APIPersonalizedItemData>().picUrl});
-            std::transform(data.result.cbegin(), data.result.cend() - 1,
-                           std::back_inserter(_songsList), [](const auto& var) {
-                               return var.template value<APIPersonalizedItemData>();
-                           });
+            _songsList.append(EveryDayRecommendation{data.result.last().value<APIPersonalizedItemData>().picUrl});
+            std::transform(data.result.cbegin(), data.result.cend() - 1, std::back_inserter(_songsList), [](const auto& var) {
+                return var.template value<APIPersonalizedItemData>();
+            });
             endResetModel();
         }
 
@@ -57,14 +49,12 @@ namespace MusicPlayer::ViewModels {
         QVector<ModeItem> _songsList;
     };
 
-    QVariant RecommendationSongsListModel::data(const QModelIndex& index,
-                                                int role) const {
+    QVariant RecommendationSongsListModel::data(const QModelIndex& index, int role) const {
         const auto& item = _songsList[index.row()];
 
         return std::visit(
             [=](const auto& value) -> QVariant {
-                if constexpr (std::is_convertible_v<decltype(value),
-                                                    APIPersonalizedItemData>) {
+                if constexpr (std::is_convertible_v<decltype(value), APIPersonalizedItemData>) {
                     if (role == Roles::ImageUrl)
                         return value.picUrl;
                     if (role == Roles::Id)
@@ -73,8 +63,7 @@ namespace MusicPlayer::ViewModels {
                         return value.name;
                     if (role == Roles::PlayCount) {
                         if (value.playCount > 10000)
-                            return QString(QStringLiteral(u"%1万"))
-                                .arg(value.playCount / 10000);
+                            return QString(QStringLiteral(u"%1万")).arg(value.playCount / 10000);
                         else
                             return QString("%1").arg(value.playCount);
                     }
@@ -123,38 +112,37 @@ namespace MusicPlayer::ViewModels {
         return c;
     }
 
-    RecommendationSongsListModel::RecommendationSongsListModel(QObject* parent)
-        : QAbstractListModel{parent} {}
+    RecommendationSongsListModel::RecommendationSongsListModel(QObject* parent) : QAbstractListModel{parent} {}
 
-    RecommendationSongListsViewModel::RecommendationSongListsViewModel(
-        QObject* parent)
-        : QObject{parent} {
+    RecommendationSongListsViewModel::RecommendationSongListsViewModel(QObject* parent) : QObject{parent} {
         _songsModel = new RecommendationSongsListModel(this);
     }
 
     void RecommendationSongListsViewModel::loadData() {
+        if (_loading && !_loading->isReady())
+            return;
+
         MusicAPI api;
-        auto f = api.personalized(10);
-        AsyncFuture::observe(f).subscribe([this](const Response<
-                                                 APIPersonalizedData>& reply) {
-            std::visit(
-                [=](const auto& value) {
-                    if constexpr (std::is_convertible_v<decltype(value),
-                                                        APIPersonalizedData>) {
-                        _songsModel->setRecommendationSongListsData(value);
-                    } else {
-                        // errors
-                    }
-                },
-                reply);
-        });
+        _loading = api.personalized(10)
+                       .via(AppExecutor::instance()->getMainExecutor().get())
+                       .thenValue([this](const Response<APIPersonalizedData>& reply) {
+                           std::visit(
+                               [=](const auto& value) {
+                                   if constexpr (std::is_convertible_v<decltype(value), APIPersonalizedData>) {
+                                       _songsModel->setRecommendationSongListsData(value);
+                                   } else {
+                                       // errors
+                                   }
+                               },
+                               reply);
+
+                           return std::nullopt;
+                       });
     }
 
     void RecommendationSongListsViewModel::componentComplete() { loadData(); }
 
-    QAbstractListModel* RecommendationSongListsViewModel::songLists() {
-        return _songsModel;
-    }
+    QAbstractListModel* RecommendationSongListsViewModel::songLists() { return _songsModel; }
 } // namespace MusicPlayer::ViewModels
 
 #include "recommendation_song_lists_view_model.moc"

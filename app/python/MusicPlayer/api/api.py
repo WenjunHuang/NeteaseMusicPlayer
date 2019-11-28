@@ -466,4 +466,4 @@ class API:
                                  {
                                  },
                                  RequestOption(crypto=CryptoType.WEAPI))
-        return await parse_response(response,APIPlaylistCatListData)
+        return await parse_response(response, APIPlaylistCatListData)

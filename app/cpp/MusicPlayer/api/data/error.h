@@ -23,6 +23,6 @@ namespace MusicPlayer::API {
         QJsonParseError parseError;
     };
 
-    using Error =
+    using APIError =
         std::variant<ErrorResponseError, NetworkError, JsonFormatError>;
 } // namespace MusicPlayer::API

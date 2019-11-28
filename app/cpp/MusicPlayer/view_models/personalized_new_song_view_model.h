@@ -5,7 +5,7 @@
 #pragma once
 
 #include <QtCore>
-#include <QtQml>
+#include <QtQml/QQmlParserStatus>
 #include <optional>
 #include <folly/futures/Future.h>
 #include "../api/api.h"
@@ -61,7 +61,7 @@ namespace MusicPlayer::ViewModels {
     private:
         void loadData();
 
-        std::optional<folly::Future<bool>> _loading;
+        std::optional<folly::Future<std::nullopt_t>> _loading;
 
         PersonalizedNewSongListModel *_newSongModel;
     };

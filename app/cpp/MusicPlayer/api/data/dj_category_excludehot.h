@@ -15,8 +15,8 @@ namespace MusicPlayer::API {
         int id;
         QString name;
 
-        bool operator==(const APIDJCategoryItemData& other);
-        bool operator!=(const APIDJCategoryItemData& other);
+        bool operator==(const APIDJCategoryItemData& other) const;
+        bool operator!=(const APIDJCategoryItemData& other) const;
 
         static APIDJCategoryItemData fromJsonValue(const QJsonValue& json);
     };
@@ -27,8 +27,8 @@ namespace MusicPlayer::API {
       public:
         QVariantList data;
 
-        bool operator==(const APIDJCategoryExcludeHotData& other);
-        bool operator!=(const APIDJCategoryExcludeHotData& other);
+        bool operator==(const APIDJCategoryExcludeHotData& other) const;
+        bool operator!=(const APIDJCategoryExcludeHotData& other) const;
 
         static APIDJCategoryExcludeHotData
         fromJsonValue(const QJsonValue& json);

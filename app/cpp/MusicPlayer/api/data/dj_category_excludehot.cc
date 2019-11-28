@@ -14,11 +14,11 @@ namespace MusicPlayer::API {
             Util::fromJsonValue<QString>(object.value(QLatin1Literal("name")))};
     }
 
-    bool APIDJCategoryItemData::operator==(const APIDJCategoryItemData& other) {
+    bool APIDJCategoryItemData::operator==(const APIDJCategoryItemData& other) const {
         return id == other.id && name == other.name;
     }
 
-    bool APIDJCategoryItemData::operator!=(const APIDJCategoryItemData& other) {
+    bool APIDJCategoryItemData::operator!=(const APIDJCategoryItemData& other) const {
         return !operator==(other);
     }
 
@@ -29,13 +29,11 @@ namespace MusicPlayer::API {
             object.value(QLatin1Literal("data")))};
     }
 
-    bool APIDJCategoryExcludeHotData::operator==(
-        const APIDJCategoryExcludeHotData& other) {
+    bool APIDJCategoryExcludeHotData::operator==(const APIDJCategoryExcludeHotData& other) const {
         return data==other.data;
     }
 
-    bool APIDJCategoryExcludeHotData::operator!=(
-        const APIDJCategoryExcludeHotData& other) {
+    bool APIDJCategoryExcludeHotData::operator!=(const APIDJCategoryExcludeHotData& other) const {
         return !operator==(other);
     }
 } // namespace MusicPlayer::API
