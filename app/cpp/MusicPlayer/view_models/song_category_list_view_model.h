@@ -14,7 +14,21 @@ namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::Repository;
     using namespace MusicPlayer::Util;
 
-    enum class StateKind { Loading, Ready, Error };
+    enum class StateKind { UnInit, Loading, Ready, Error };
+
+    struct UnInitState {
+        Q_GADGET
+      public:
+        StateKind kind() const { return StateKind::UnInit; }
+
+        inline bool operator==(const UnInitState& other) const {
+            return true;
+        }
+
+        inline bool operator!=(const UnInitState& other) const {
+            return false;
+        }
+    };
 
     struct LoadingState {
         Q_GADGET
@@ -69,7 +83,7 @@ namespace MusicPlayer::ViewModels {
         bool operator!=(const ReadyState& other) const;
     };
 
-    using State = std::variant<LoadingState, ErrorState, ReadyState>;
+    using State = std::variant<UnInitState, LoadingState, ErrorState, ReadyState>;
 
     class SongCategoryListViewModel : public QObject, public QQmlParserStatus {
         Q_OBJECT
@@ -77,7 +91,7 @@ namespace MusicPlayer::ViewModels {
         Q_ENUM(StateKind)
         Q_PROPERTY(QVariant state READ state NOTIFY stateChanged)
       public:
-        explicit SongCategoryListViewModel(QObject* parent = nullptr) : QObject(parent), _state{LoadingState()} {}
+        explicit SongCategoryListViewModel(QObject* parent = nullptr) : QObject(parent) {}
 
         QVariant state() const { return QVariant::fromStdVariant(_state); }
 
@@ -99,3 +113,4 @@ Q_DECLARE_METATYPE(MusicPlayer::ViewModels::LoadingState)
 Q_DECLARE_METATYPE(MusicPlayer::ViewModels::ErrorState)
 Q_DECLARE_METATYPE(MusicPlayer::ViewModels::ReadyStateItem)
 Q_DECLARE_METATYPE(MusicPlayer::ViewModels::ReadyState)
+Q_DECLARE_METATYPE(MusicPlayer::ViewModels::UnInitState)

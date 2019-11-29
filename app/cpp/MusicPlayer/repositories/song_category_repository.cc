@@ -50,7 +50,7 @@ namespace MusicPlayer::Repository {
                                        _waitings.begin(), _waitings.end(), [&](auto& promise) { promise.setValue(response); });
                                    _waitings.clear();
 
-                                   return response;
+                                   return std::nullopt;
                                });
             }
         }

@@ -20,8 +20,8 @@
 #include <QJsonDocument>
 #include <QtConcurrent/QtConcurrent>
 #include <exception>
-#include <variant>
 #include <folly/futures/Future.h>
+#include <variant>
 
 namespace MusicPlayer::API {
     template <typename T> using Response    = std::variant<APIError, T>;
@@ -34,18 +34,16 @@ namespace MusicPlayer::API {
         APIResponse<APIDJCategoryExcludeHotData> djCategoryExcludeHot();
 
         APIResponse<APIDJCategoryRecommendData> djCategoryRecommend();
+
         APIResponse<APIBannersData> banner();
 
         APIResponse<APIPersonalizedNewSongData> personalizedNewSong();
 
         APIResponse<APIPersonalizedData> personalized(int limit = 30);
 
-        APIResponse<APIUserLoginData> loginCellphone(const QString& cellphone,
-                                                     const QString& password);
+        APIResponse<APIUserLoginData> loginCellphone(const QString& cellphone, const QString& password);
 
-        APIResponse<APIUserPrivateMessagesData>
-        userPrivateMessages(const QString& cookieToken, int limit = 30,
-                            int offset = 0);
+        APIResponse<APIUserPrivateMessagesData> userPrivateMessages(const QString& cookieToken, int limit = 30, int offset = 0);
 
         APIResponse<APIPlaylistCatListData> playlistCatlist();
 

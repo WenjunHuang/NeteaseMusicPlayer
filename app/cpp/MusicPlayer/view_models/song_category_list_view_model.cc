@@ -24,12 +24,18 @@ namespace MusicPlayer::ViewModels {
     bool ReadyState::operator!=(const ReadyState& other) const { return !operator==(other); }
 
     void SongCategoryListViewModel::reload() {
+        if (std::get_if<LoadingState>(&_state)) {
+            // 正在加载中....
+            return;
+        }
+
+        setState(LoadingState{});
         SongCategoryRepository::instance()
             ->getPlaylistCatListData()
-            .via(AppExecutor::instance()->getMainExecutor().get())
+            .via(mainExecutor())
             .thenValue([this](const Response<APIPlaylistCatListData>& reply) {
                 std::visit(
-                    [this](const auto& value) {
+                    [this](auto& value) {
                         if constexpr (std::is_convertible_v<decltype(value), APIPlaylistCatListData>) {
                             QString allName = value.all.name;
 

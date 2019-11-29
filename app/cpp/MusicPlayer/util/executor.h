@@ -5,8 +5,8 @@
 #pragma once
 
 #include <QtCore>
-#include <memory>
 #include <folly/Executor.h>
+#include <memory>
 namespace MusicPlayer::Util {
     class AppExecutor : public QObject {
         Q_OBJECT
@@ -37,15 +37,21 @@ namespace MusicPlayer::Util {
         std::shared_ptr<folly::Executor> _ioExecutor;
         std::shared_ptr<folly::Executor> _mainExecutor;
 
-        QThread *_ioThread;
-        QThread *_mainThread;
+        QThread* _ioThread;
+        QThread* _mainThread;
     };
 
+    inline folly::Executor* mainExecutor() { return AppExecutor::instance()->getMainExecutor().get(); }
 
-    class QtExecutorEventWorker: public QObject {
-      Q_OBJECT
+    inline folly::Executor* ioExecutor() { return AppExecutor::instance()->getIOExecutor().get(); }
+
+    inline folly::Executor* cpuExecutor() { return AppExecutor::instance()->getCPUExecutor().get(); }
+
+    class QtExecutorEventWorker : public QObject {
+        Q_OBJECT
       public:
         QtExecutorEventWorker();
+
       protected:
         bool event(QEvent* ev) override;
     };

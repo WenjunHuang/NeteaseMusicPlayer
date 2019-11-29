@@ -35,7 +35,7 @@ namespace MusicPlayer::Repository {
         std::optional<APIPlaylistCatListData> _categoryData;
 
         // if is loading
-        std::optional<folly::Future<Response<APIPlaylistCatListData>>> _loading;
+        std::optional<folly::Future<std::nullopt_t>> _loading;
 
         std::vector<folly::Promise<Response<APIPlaylistCatListData>>> _waitings;
 

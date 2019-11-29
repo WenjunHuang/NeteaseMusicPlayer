@@ -2,28 +2,22 @@
 // Created by rick on 2019/11/9.
 //
 
-#define CATCH_CONFIG_MAIN
-
 #include "../MusicPlayer/api/api.h"
 #include "../MusicPlayer/api/crypto.h"
 #include "../MusicPlayer/api/data/data.h"
 #include "../MusicPlayer/util/executor.h"
+#include "set_up.h"
 #include "./catch2/catch.hpp"
 #include <QtCore>
 #include <QtGui/QGuiApplication>
-//#include "../MusicPlayer/asyncfuture.h"
+#include <iostream>
 
-// using namespace AsyncFuture;
 using namespace MusicPlayer::API;
 using namespace MusicPlayer::Util;
-std::string testName = "test";
+
 TEST_CASE("djBanner", "[MusicAPI]") {
-    char* argv[] = {testName.data()};
-    int argc     = 1;
-    QGuiApplication app{argc, argv};
-    registerMetaTypes();
-    AppExecutor::initInstance();
-    HttpWorker::initInstance();
+    auto app = setUp();
+
     MusicAPI api;
     auto f = api.djBanner();
     std::move(f).via(AppExecutor::instance()->getMainExecutor().get()).thenValue([](Response<APIDJBannersData> value) {
@@ -46,17 +40,11 @@ TEST_CASE("djBanner", "[MusicAPI]") {
         qDebug() << "success";
     });
 
-    app.exec();
+    app->exec();
 }
 
 TEST_CASE("djCategoryExcludeHot", "[MusicAPI]") {
-    using namespace MusicPlayer::API;
-    char* argv[] = {testName.data()};
-    int argc     = 1;
-    QGuiApplication app{argc, argv};
-    registerMetaTypes();
-    AppExecutor::initInstance();
-    HttpWorker::initInstance();
+    auto app = setUp();
     MusicAPI api;
     auto f = api.djCategoryExcludeHot();
     std::move(f)
@@ -76,113 +64,93 @@ TEST_CASE("djCategoryExcludeHot", "[MusicAPI]") {
                 },
                 value);
         });
-    app.exec();
+    app->exec();
+}
+
+TEST_CASE("banner", "[MusicAPI]") {
+    auto app = setUp();
+    MusicAPI api;
+    api.banner().via(mainExecutor()).thenValue([](const Response<APIBannersData>& value) {
+        std::visit(
+            [](const auto& v) {
+                if constexpr (std::is_convertible_v<decltype(v), APIBannersData>) {
+                    qDebug() << v.banners.size();
+                    for (const auto& item : v.banners) {
+                        qDebug() << item.template value<APIBannerData>().imageUrl;
+                    }
+                } else {
+                    std::visit([](const auto& error) { qDebug() << "error"; }, v);
+                }
+                qApp->quit();
+            },
+            value);
+    });
+    app->exec();
 }
 //
-// TEST_CASE("banner", "[MusicAPI]") {
-//  using namespace MusicPlayer::API;
-//  char *argv[] = {"test"};
-//  int argc = 1;
-//  QGuiApplication app{argc, argv};
-//  HttpWorker::initInstance();
-//  MusicAPI api;
-//  auto f = api.banner();
-//  observe(f).subscribe([](Response<APIBannersData> value) {
-//      std::visit([](const auto &v) {
-//          if constexpr (std::is_convertible_v<decltype(v), APIBannersData>) {
-//            qDebug() << v.banners.size();
-//            for (const auto &item : v.banners) {
-//              qDebug() << item.value<APIBannerData>().imageUrl;
-//            }
-//          } else {
-//            std::visit([](const auto &error) {
-//                qDebug() << "error";
-//            }, v);
-//          }
-//          qApp->quit();
-//      }, value);
-//  });
-//  app.exec();
-//}
+TEST_CASE("personalized_newsong", "[MusicAPI]") {
+    auto app = setUp();
+    MusicAPI api;
+    api.personalizedNewSong().via(mainExecutor()).thenValue([](const Response<APIPersonalizedNewSongData>& value) {
+        std::visit(
+            [](const auto& v) {
+                if constexpr (std::is_convertible_v<decltype(v), APIPersonalizedNewSongData>) {
+                    qDebug() << v.result.size();
+                    for (const auto& item : v.result) {
+                        qDebug() << item.template value<APIPersonalizedNewSongResultData>().name;
+                    }
+                } else {
+                    std::visit([](const auto& error) { qDebug() << "error"; }, v);
+                }
+                qApp->quit();
+            },
+            value);
+    });
+    app->exec();
+}
+
+TEST_CASE("djCategoryRecommend", "[MusicAPI]") {
+    auto app = setUp();
+    MusicAPI api;
+    api.djCategoryRecommend().via(mainExecutor()).thenValue([](const Response<APIDJCategoryRecommendData>& value) {
+        std::visit(
+            [](const auto& v) {
+                if constexpr (std::is_convertible_v<decltype(v), APIDJCategoryRecommendData>) {
+                    qDebug() << v.data.size();
+                    for (const auto& item : v.data) {
+                        qDebug() << item.template value<APIDJCategoryRecommendItemData>().categoryName;
+                    }
+                } else {
+                    std::visit([](const auto& error) { qDebug() << "error"; }, v);
+                }
+                qApp->quit();
+            },
+            value);
+    });
+    app->exec();
+}
 //
-// TEST_CASE("personalized_newsong", "[MusicAPI]") {
-//  using namespace MusicPlayer::API;
-//  char *argv[] = {"test"};
-//  int argc = 1;
-//  QGuiApplication app{argc, argv};
-//  HttpWorker::initInstance();
-//  MusicAPI api;
-//  auto f = api.personalizedNewSong();
-//  observe(f).subscribe([](Response<APIPersonalizedNewSongData> value) {
-//      std::visit([](const auto &v) {
-//          if constexpr (std::is_convertible_v<decltype(v), APIPersonalizedNewSongData>) {
-//            qDebug() << v.result.size();
-//            for (const auto &item : v.result) {
-//              qDebug() << item.value<APIPersonalizedNewSongResultData>().name;
-//            }
-//          } else {
-//            std::visit([](const auto &error) {
-//                qDebug() << "error";
-//            }, v);
-//          }
-//          qApp->quit();
-//      }, value);
-//  });
-//  app.exec();
-//}
-//
-// TEST_CASE("djCategoryRecommend", "[MusicAPI]") {
-//  using namespace MusicPlayer::API;
-//  char *argv[] = {"test"};
-//  int argc = 1;
-//  QGuiApplication app{argc, argv};
-//  HttpWorker::initInstance();
-//  MusicAPI api;
-//  auto f = api.djCategoryRecommend();
-//  observe(f).subscribe([](Response<APIDJCategoryRecommendData> value) {
-//      std::visit([](const auto &v) {
-//          if constexpr (std::is_convertible_v<decltype(v), APIDJCategoryRecommendData>) {
-//            qDebug() << v.data.size();
-//            for (const auto &item : v.data) {
-//              qDebug() << item.value<APIDJCategoryRecommendItemData>().categoryName;
-//            }
-//          } else {
-//            std::visit([](const auto &error) {
-//                qDebug() << "error";
-//            }, v);
-//          }
-//          qApp->quit();
-//      }, value);
-//  });
-//  app.exec();
-//}
-//
-// TEST_CASE("personalized", "[MusicAPI]") {
-//  using namespace MusicPlayer::API;
-//  char *argv[] = {"test"};
-//  int argc = 1;
-//  QGuiApplication app{argc, argv};
-//  HttpWorker::initInstance();
-//  MusicAPI api;
-//  auto f = api.personalized();
-//  observe(f).subscribe([](Response<APIPersonalizedData> value) {
-//      std::visit([](const auto &v) {
-//          if constexpr (std::is_convertible_v<decltype(v), APIPersonalizedData>) {
-//            qDebug() << v.result.size();
-//            for (const auto &item : v.result) {
-//                auto value = item.value<APIPersonalizedItemData>();
-//              qDebug() << value.name << " " << value.picUrl;
-//            }
-//          } else {
-//            std::visit([](const auto &error) {
-//                qDebug() << "error";
-//            }, v);
-//          }
-//          qApp->quit();
-//      }, value);
-//  });
-//  app.exec();
-//}
+TEST_CASE("personalized", "[MusicAPI]") {
+    auto app = setUp();
+    MusicAPI api;
+    api.personalized().via(mainExecutor()).thenValue([](const Response<APIPersonalizedData>& value) {
+        std::visit(
+            [](const auto& v) {
+                if constexpr (std::is_convertible_v<decltype(v), APIPersonalizedData>) {
+                    qDebug() << v.result.size();
+                    for (const auto& item : v.result) {
+                        auto value = item.template value<APIPersonalizedItemData>();
+                        qDebug() << value.name << " " << value.picUrl;
+                    }
+                } else {
+                    std::visit([](const auto& error) { qDebug() << "error"; }, v);
+                }
+                qApp->quit();
+            },
+            value);
+    });
+    app->exec();
+}
 //
 // TEST_CASE("loginCellphone", "[MusicAPI]") {
 //    using namespace MusicPlayer::API;
@@ -232,27 +200,34 @@ TEST_CASE("djCategoryExcludeHot", "[MusicAPI]") {
 //    app.exec();
 //}
 //
-// TEST_CASE("playlistCatlist", "[MusicAPI]") {
-//    using namespace MusicPlayer::API;
-//    char *argv[] = {"test"};
-//    int argc = 1;
-//    QGuiApplication app{argc, argv};
-//    HttpWorker::initInstance();
-//    MusicAPI api;
-//    auto f = api.playlistCatlist();
-//    observe(f).subscribe([](Response<APIPlaylistCatListData> value) {
-//      std::visit([](const auto &v) {
-//        if constexpr (std::is_convertible_v<decltype(v), APIPlaylistCatListData>) {
-//            qDebug() << v.all.name;
-//            qDebug() << v.sub.size();
-//        } else {
-//            std::visit([](const auto &error) {
-//              qDebug() << "error";
-//            }, v);
-//        }
-//        qApp->quit();
-//      }, value);
-//    });
-//    app.exec();
-//}
+TEST_CASE("playlistCatlist", "[MusicAPI]") {
+    auto app = setUp();
+    MusicAPI api;
+    api.playlistCatlist().via(mainExecutor()).thenValue([](const Response<APIPlaylistCatListData>& value) {
+        std::visit(
+            [](const auto& v) {
+                if constexpr (std::is_convertible_v<decltype(v), APIPlaylistCatListData>) {
+                    qDebug() << v.all.name;
+
+                    for (auto itr = v.categories.cbegin(); itr != v.categories.cend(); itr++) {
+                        auto key   = itr.key();
+                        auto value = itr.value().toString();
+                        qDebug() << key << ":" << value;
+                    }
+
+                    // items
+                    qDebug() << "sub count:" << v.sub.size();
+                    for (auto itr = v.sub.cbegin(); itr != v.sub.cend(); itr++) {
+                        auto subItem = (*itr).template value<APIPlaylistCatListItemData>();
+                        qDebug() << subItem.category << ":" << subItem.name;
+                    }
+                } else {
+                    std::visit([](const auto& error) { qDebug() << "error"; }, v);
+                }
+                qApp->quit();
+            },
+            value);
+    });
+    app->exec();
+}
 ////}

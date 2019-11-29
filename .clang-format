@@ -9,10 +9,10 @@ AlignEscapedNewlines: Right
 AlignTrailingComments: true
 BinPackArguments: false
 BinPackParameters: false
-#AllowAllArgumentsOnNextLine: true
-#AllowAllConstructorInitializersOnNextLine: true
-#AllowAllParametersOfDeclarationOnNextLine: true
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: true
 NamespaceIndentation: All
-#AllowShortLambdasOnASingleLine: true
+AllowShortLambdasOnASingleLine: true

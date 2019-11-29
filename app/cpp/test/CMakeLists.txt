@@ -1,4 +1,4 @@
-file(GLOB_RECURSE SRCS *.cc)
+file(GLOB_RECURSE SRCS test_*.cc)
 
 add_compile_definitions(QT_NO_FOREACH)
 set(TARGETS "")
@@ -19,8 +19,8 @@ foreach (SRC_FILE IN LISTS SRCS)
 endforeach ()
 
 foreach (TARGET IN LISTS TARGETS)
-    add_executable(${TARGET} ${${TARGET}_files})
-    target_link_libraries(${TARGET} PRIVATE api)
+    add_executable(${TARGET} main.cc ${${TARGET}_files})
+    target_link_libraries(${TARGET} PRIVATE api view_models)
     if (WIN32)
         if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         target_link_options(${TARGET} PRIVATE "/DEBUG:FASTLINK")
