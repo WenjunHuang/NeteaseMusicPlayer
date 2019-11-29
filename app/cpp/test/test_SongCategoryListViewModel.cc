@@ -56,5 +56,5 @@ TEST_CASE("song_category_list_view_model", "[ViewModels]") {
     viewModel->reload();
     viewModel->reload();
 
-    app->exec();
+    app->run();
 }

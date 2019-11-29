@@ -5,23 +5,39 @@
 #include "application.h"
 #include "api/data/data.h"
 #include "view_models/view_models.h"
+#include "repositories/repositories.h"
 #include <QQuickStyle>
 #include <QtQml/QQmlApplicationEngine>
 
 namespace MusicPlayer {
-    int Application::exec(const QStringList& params) {
+    int Application::run(const QStringList& params) {
         QQmlApplicationEngine engine;
-        // 注册api的metatype
-        API::registerMetaTypes();
-
-        // 注册Viewmodel的metatype
-        ViewModels::registerMetaTypes();
 
         engine.addImportPath(":/ui");
         for (const auto& path : engine.importPathList())
             qDebug() << path;
 
         engine.load("qrc:/ui/main.qml");
-        return QGuiApplication::exec();
+        return exec();
+    }
+
+    Application::Application(const QString& id, int& argc, char** argv) : QGuiApplication(argc, argv) {
+        Util::Logger::initInstance();
+        Util::AppExecutor::initInstance();
+        API::HttpWorker::initInstance();
+        Repository::SongCategoryRepository::initInstance();
+
+        // 注册api的metatype
+        API::registerMetaTypes();
+
+        // 注册Viewmodel的metatype
+        ViewModels::registerMetaTypes();
+
+        qmlRegisterType<ViewModels::BannerViewModel>("MusicPlayer", 1, 0, "BannerViewModel");
+        qmlRegisterType<ViewModels::PersonalizedNewSongViewModel>("MusicPlayer", 1, 0, "PersonalizedNewSongViewModel");
+        qmlRegisterType<ViewModels::RecommendationSongListsViewModel>("MusicPlayer", 1, 0, "RecommendationSongListsViewModel");
+        qmlRegisterType<ViewModels::SongCategoryListViewModel>("MusicPlayer",1,0,"SongCategoryListViewModel");
+
+        //          connect(this,&QGuiApplication::aboutToQuit,this,&Application::cleanup);
     }
 } // namespace MusicPlayer

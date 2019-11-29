@@ -25,7 +25,7 @@ if (WIN32)
 endif ()
 if (APPLE)
     find_package(PkgConfig)
-#    find_package(Boost REQUIRED COMPONENTS container)
+    #    find_package(Boost REQUIRED COMPONENTS container)
     pkg_search_module(cryptopp REQUIRED libcryptopp IMPORTED_TARGET)
     pkg_search_module(folly REQUIRED libfolly IMPORTED_TARGET)
     pkg_search_module(glog REQUIRED libglog IMPORTED_TARGET)
@@ -45,11 +45,13 @@ else ()
     set(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
 endif ()
 
-add_executable(MusicPlayer main.cpp application.cc ${RESOURCES})
-target_link_libraries(MusicPlayer LINK_PRIVATE api util view_models repositories
-        ${GLOG}
+add_library(application STATIC application.cc application.h )
+target_link_libraries(application PUBLIC api util view_models repositories ${GLOG}
         Qt5::Core
         Qt5::Network
         Qt5::Quick
         Qt5::QuickControls2)
+
+add_executable(MusicPlayer main.cpp ${RESOURCES})
+target_link_libraries(MusicPlayer LINK_PRIVATE application)
 

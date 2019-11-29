@@ -230,4 +230,3 @@ TEST_CASE("playlistCatlist", "[MusicAPI]") {
     });
     app->exec();
 }
-////}

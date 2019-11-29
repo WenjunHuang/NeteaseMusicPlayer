@@ -7,6 +7,8 @@
         <file>ui/discover_music/personalized/PersonalizedNewSongs.qml</file>
         <file>ui/discover_music/personalized/RecommendationSongLists.qml</file>
         <file>ui/song_list/SongList.qml</file>
+        <file>ui/song_list/SongCategoryPane.qml</file>
+        <file>ui/song_list/SongCategoryList.qml</file>
         <file>ui/MusicPlayer/Button.qml</file>
         <file>ui/MusicPlayer/Pane.qml</file>
         <file>ui/MusicPlayer/TabBar.qml</file>
@@ -207,6 +209,5 @@
         <file>ui/octicons/chevron-left.svg</file>
         <file>ui/octicons/paintcan.svg</file>
         <file>ui/octicons/heart.svg</file>
-        <file>ui/song_list/SongCategoryPane.qml</file>
     </qresource>
 </RCC>

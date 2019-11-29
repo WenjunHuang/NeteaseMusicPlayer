@@ -14,6 +14,6 @@ int main(int argc, char* argv[]) {
         //    QQuickStyle::setFallbackStyle("Fusion");
         std::unique_ptr<Application> application{
             std::make_unique<Application>(Util::getUserIDString(), argc, argv)};
-        application->exec(QStringList());
+        application->run(QStringList());
     } catch (...) {}
 }
