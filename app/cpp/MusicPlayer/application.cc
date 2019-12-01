@@ -11,12 +11,11 @@
 
 namespace MusicPlayer {
     int Application::run(const QStringList& params) {
+//        for (const auto& path : engine.importPathList())
+//            qDebug() << path;
+
         QQmlApplicationEngine engine;
-
-        engine.addImportPath(":/ui");
-        for (const auto& path : engine.importPathList())
-            qDebug() << path;
-
+        engine.addImportPath(":/ui/imports");
         engine.load("qrc:/ui/main.qml");
         return exec();
     }
@@ -37,6 +36,8 @@ namespace MusicPlayer {
         qmlRegisterType<ViewModels::PersonalizedNewSongViewModel>("MusicPlayer", 1, 0, "PersonalizedNewSongViewModel");
         qmlRegisterType<ViewModels::RecommendationSongListsViewModel>("MusicPlayer", 1, 0, "RecommendationSongListsViewModel");
         qmlRegisterType<ViewModels::SongCategoryListViewModel>("MusicPlayer",1,0,"SongCategoryListViewModel");
+
+        qmlRegisterUncreatableType<ViewModels::StateKinds>("MusicPlayer",1,0,"StateKinds","Uncreateable");
 
         //          connect(this,&QGuiApplication::aboutToQuit,this,&Application::cleanup);
     }

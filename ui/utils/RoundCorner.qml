@@ -4,6 +4,7 @@ import QtGraphicalEffects 1.13
 
 Item {
     id:root
+    clip:true
     property real radius
 
     Rectangle {

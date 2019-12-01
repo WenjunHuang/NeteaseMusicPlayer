@@ -9,10 +9,18 @@
 #include <QtCore>
 #include <QtGui/QGuiApplication>
 #include <iostream>
+#include <QQmlApplicationEngine>
 
 TEST_CASE("song_category_list", "[Views]") {
     auto app = setUp();
-    QQuickView view(QUrl("qrc:/ui/song_list/SongCategoryList.qml"));
+
+    QQuickView view;
+    view.setSource(QUrl("qrc:/ui/song_list/SongCategoryList.qml"));
+
+//    QQuickView view(QUrl("qrc:/ui/song_list/SongCategoryList.qml"));
+    view.show();
+//    QQmlApplicationEngine engine;
+//    engine.load("qrc:/ui/song_list/SongCategoryList.qml");
 
     app->exec();
 }

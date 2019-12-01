@@ -8,8 +8,9 @@ int main(int argc, char* argv[]) {
     using namespace MusicPlayer;
 
     try {
-        QQuickStyle::addStylePath(":/ui");
-        QQuickStyle::setStyle("MusicPlayer");
+//        QQuickStyle::addStylePath(":/ui");
+//        QQuickStyle::setStyle("MusicPlayer");
+//        QQuickStyle::setFallbackStyle("Material");
         //    QQuickStyle::setStyle("Material");
         //    QQuickStyle::setFallbackStyle("Fusion");
         std::unique_ptr<Application> application{

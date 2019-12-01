@@ -4,16 +4,7 @@
 
 #pragma once
 
-#include "data/banner.h"
-#include "data/dj_banner.h"
-#include "data/dj_category_excludehot.h"
-#include "data/dj_category_recommend.h"
-#include "data/error.h"
-#include "data/personalized.h"
-#include "data/personalized_newsong.h"
-#include "data/playlist_catlist.h"
-#include "data/user_login.h"
-#include "data/user_private_message.h"
+#include "data/data.h"
 #include "http.h"
 #include <QFuture>
 #include <QFutureWatcher>
@@ -46,6 +37,12 @@ namespace MusicPlayer::API {
         APIResponse<APIUserPrivateMessagesData> userPrivateMessages(const QString& cookieToken, int limit = 30, int offset = 0);
 
         APIResponse<APIPlaylistCatListData> playlistCatlist();
+
+        // 精品歌单
+        APIResponse<APITopPlayListHighQualityData> topPlaylistHighQuality(const QString& cat = "全部",int limit = 50,qint64 before = 0);
+
+        // 歌单详情
+        APIResponse<APIPlayListDetailData> playlistDetail(int playlistId);
 
       public:
         // 向meta type system注册，程序启动时必须调用

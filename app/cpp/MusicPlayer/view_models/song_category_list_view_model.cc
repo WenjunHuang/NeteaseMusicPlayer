@@ -81,4 +81,7 @@ namespace MusicPlayer::ViewModels {
         _state = state;
         emit stateChanged();
     }
+    void SongCategoryListViewModel::componentComplete() {
+        reload();
+    }
 } // namespace MusicPlayer::ViewModels

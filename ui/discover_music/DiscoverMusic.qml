@@ -24,21 +24,27 @@ Item {
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter
                 TabButton {
+                    width: implicitWidth
                     text: "个性推荐"
                 }
                 TabButton {
+                    width: implicitWidth
                     text: "歌单"
                 }
                 TabButton {
+                    width: implicitWidth
                     text: "主播电台"
                 }
                 TabButton {
                     text: "排行榜"
+                    width: implicitWidth
                 }
                 TabButton {
+                    width: implicitWidth
                     text: "歌手"
                 }
                 TabButton {
+                    width: implicitWidth
                     text: "最新音乐"
                 }
             }

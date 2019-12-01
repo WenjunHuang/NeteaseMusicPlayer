@@ -3,8 +3,8 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 import QtGraphicalEffects 1.13
 import MusicPlayer 1.0
+import FontAwesome 1.0
 import "../../styles/variables.mjs" as Vars
-import "../../octicons"
 import "../../utils"
 
 ColumnLayout {
@@ -72,7 +72,8 @@ ColumnLayout {
             RoundCorner {
                 radius: Vars.border_radius
                 // 背景图
-                Layout.preferredWidth: (grid.width - (itemCountPerRow - 1) * grid.columnSpacing) / itemCountPerRow
+                Layout.preferredWidth: (grid.width - (itemCountPerRow - 1)
+                                        * grid.columnSpacing) / itemCountPerRow
                 Layout.preferredHeight: Layout.preferredWidth
 
                 Image {
@@ -109,12 +110,9 @@ ColumnLayout {
                     mode: "darken"
                 }
 
-                Octicon {
-                    symbol: "eye"
-                    width: 16
-                    height: 16
+                FAIcon {
+                    icon: FAIcons.faEyeLight
                     color: "white"
-                    showColor: true
                     anchors.right: textPlayCount.left
                     anchors.rightMargin: Vars.spacing_third
                     anchors.verticalCenter: textPlayCount.verticalCenter
@@ -143,14 +141,12 @@ ColumnLayout {
                     }
                 }
 
-                Octicon {
-                    id: playIcon
-                    visible: false
-                    symbol: "play"
-                    width: 20
-                    height: 22
+                FAIcon {
+                    id:playIcon
+                    icon:FAIcons.faPlayCircleLight
+                    size: 20
                     color: "white"
-                    showColor: true
+                    visible:false
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
                     anchors.rightMargin: Vars.spacing
@@ -211,9 +207,9 @@ ColumnLayout {
                 text: modelName
                 font.pixelSize: Vars.font_size_md
             }
-//            Rectangle {
-//                Layout.fillHeight: true
-//            }
+            //            Rectangle {
+            //                Layout.fillHeight: true
+            //            }
         }
     }
 }

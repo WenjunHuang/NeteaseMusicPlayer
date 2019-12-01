@@ -7,7 +7,7 @@ import "./discover_music"
 import "./styles/variables.mjs" as StyleVariables
 
 
-Window {
+ApplicationWindow {
     visible: true
     minimumWidth: 1000
     minimumHeight: 670

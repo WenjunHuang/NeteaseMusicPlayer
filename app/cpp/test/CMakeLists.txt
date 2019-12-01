@@ -1,5 +1,11 @@
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
+list(APPEND CMAKE_PREFIX_PATH ${QT_CMAKE})
 add_compile_definitions(QT_NO_FOREACH)
+find_package(Qt5 REQUIRED Core Network Quick QuickControls2)
 
 function(create_test_targets)
     set(prefix ARG)
@@ -27,7 +33,7 @@ function(create_test_targets)
 
 
     foreach (TARGET IN LISTS TARGETS)
-        add_executable(${TARGET} main.cc ../MusicPlayer/application.cc ${${TARGET}_files} ${${prefix}_ADDITIONAL_FILES})
+        add_executable(${TARGET} main.cc ${${TARGET}_files}  ${${prefix}_ADDITIONAL_FILES})
         target_link_libraries(${TARGET} PRIVATE ${${prefix}_LIBRARIES})
         if (WIN32)
             if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")

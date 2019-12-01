@@ -1,5 +1,6 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
+import QtQuick.Controls.Material 2.13
 import QtQuick.Layouts 1.13
 import MusicPlayer 1.0
 import "../../utils"
@@ -52,6 +53,7 @@ ColumnLayout {
             RoundCorner {
                 Layout.preferredWidth: 62
                 Layout.preferredHeight: 62
+                Material.elevation: 6
                 radius: Vars.border_radius
                 Image {
                     source: imageUrl

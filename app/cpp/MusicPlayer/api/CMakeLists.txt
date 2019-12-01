@@ -26,7 +26,11 @@ add_library(api STATIC
         data/data.cc
         data/error.cc
         data/user_private_message.h
-        data/playlist_catlist.h)
+        data/playlist_catlist.h
+        data/top_playlist_highquality.cc
+        data/top_playlist_highquality.h
+        data/playlist_detail.h
+        data/playlist_detail.cc)
 #if (WIN32)
     target_link_libraries(api PUBLIC util Qt5::Core Qt5::Network Qt5::Quick  ${CRYPTOPP} ${FOLLY} ${GLOG})
 #endif ()

@@ -151,6 +151,49 @@ TEST_CASE("personalized", "[MusicAPI]") {
     });
     app->exec();
 }
+
+TEST_CASE("topPlaylistHighQuality", "[MusicAPI]") {
+    auto app = setUp();
+    MusicAPI api;
+    api.topPlaylistHighQuality("全部",1).via(mainExecutor()).thenValue([](const Response<APITopPlayListHighQualityData>& value) {
+      std::visit(
+          [](const auto& v) {
+            if constexpr (std::is_convertible_v<decltype(v), APITopPlayListHighQualityData>) {
+                qDebug() << "total:" << v.total;
+                qDebug() << v.playlists.size();
+                if (v.playlists.length() > 0) {
+                    auto item = v.playlists.first().template value<APITopPlayListItemData>();
+                    qDebug() << item.id;
+                }
+
+            } else {
+                std::visit([](const auto& error) { qDebug() << "error"; }, v);
+            }
+            qApp->quit();
+          },
+          value);
+    });
+    app->exec();
+}
+
+TEST_CASE("playlistDetail", "[MusicAPI]") {
+    auto app = setUp();
+    MusicAPI api;
+    api.playlistDetail(1997190595).via(mainExecutor()).thenValue([](const Response<APIPlayListDetailData>& value) {
+      std::visit(
+          [](const auto& v) {
+            if constexpr (std::is_convertible_v<decltype(v), APIPlayListDetailData>) {
+                qDebug() << v.playlist.name;
+//                qDebug() << v;
+            } else {
+                std::visit([](const auto& error) { qDebug() << "error"; }, v);
+            }
+            qApp->quit();
+          },
+          value);
+    });
+    app->exec();
+}
 //
 // TEST_CASE("loginCellphone", "[MusicAPI]") {
 //    using namespace MusicPlayer::API;

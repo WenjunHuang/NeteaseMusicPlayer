@@ -14,12 +14,18 @@ namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::Repository;
     using namespace MusicPlayer::Util;
 
-    enum class StateKind { UnInit, Loading, Ready, Error };
+    class StateKinds: public QObject {
+        Q_OBJECT
+      public:
+        enum class Kind { UnInit, Loading, Ready, Error };
+        Q_ENUM(Kind)
+    };
 
     struct UnInitState {
         Q_GADGET
+        Q_PROPERTY(MusicPlayer::ViewModels::StateKinds::Kind kind READ kind)
       public:
-        StateKind kind() const { return StateKind::UnInit; }
+        StateKinds::Kind kind() const { return StateKinds::Kind::UnInit; }
 
         inline bool operator==(const UnInitState& other) const {
             return true;
@@ -32,9 +38,9 @@ namespace MusicPlayer::ViewModels {
 
     struct LoadingState {
         Q_GADGET
-        Q_PROPERTY(StateKind kind READ kind)
+        Q_PROPERTY(MusicPlayer::ViewModels::StateKinds::Kind kind READ kind)
       public:
-        StateKind kind() const { return StateKind::Loading; }
+        StateKinds::Kind kind() const { return StateKinds::Kind::Loading; }
 
         bool operator==(const LoadingState& other) const;
 
@@ -43,11 +49,11 @@ namespace MusicPlayer::ViewModels {
 
     struct ErrorState {
         Q_GADGET
-        Q_PROPERTY(StateKind kind READ kind)
+        Q_PROPERTY(MusicPlayer::ViewModels::StateKinds::Kind kind READ kind)
         Q_PROPERTY(QString message MEMBER message)
       public:
         QString message;
-        StateKind kind() const { return StateKind::Error; }
+        StateKinds::Kind kind() const { return StateKinds::Kind::Error; }
 
         bool operator==(const ErrorState& other) const;
         bool operator!=(const ErrorState& other) const;
@@ -70,13 +76,13 @@ namespace MusicPlayer::ViewModels {
 
     struct ReadyState {
         Q_GADGET
-        Q_PROPERTY(StateKind kind READ kind)
+        Q_PROPERTY(MusicPlayer::ViewModels::StateKinds::Kind kind READ kind)
         Q_PROPERTY(QString allName MEMBER allName)
         Q_PROPERTY(QVariantList items MEMBER items)
       public:
         QString allName;
         QVariantList items;
-        StateKind kind() const { return StateKind::Ready; }
+        StateKinds::Kind kind() const { return StateKinds::Kind::Ready; }
 
         bool operator==(const ReadyState& other) const;
 
@@ -88,7 +94,6 @@ namespace MusicPlayer::ViewModels {
     class SongCategoryListViewModel : public QObject, public QQmlParserStatus {
         Q_OBJECT
         Q_INTERFACES(QQmlParserStatus)
-        Q_ENUM(StateKind)
         Q_PROPERTY(QVariant state READ state NOTIFY stateChanged)
       public:
         explicit SongCategoryListViewModel(QObject* parent = nullptr) : QObject(parent) {}
@@ -97,7 +102,7 @@ namespace MusicPlayer::ViewModels {
 
         void classBegin() override {}
 
-        void componentComplete() override { reload(); }
+        void componentComplete() override;
 
         Q_INVOKABLE void reload();
       signals:

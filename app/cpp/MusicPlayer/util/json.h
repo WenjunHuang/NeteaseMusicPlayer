@@ -17,7 +17,10 @@ namespace MusicPlayer::Util {
     template <> QString fromJsonValue(const QJsonValue& value);
 
     template <> int fromJsonValue(const QJsonValue& value);
+
     template <> long fromJsonValue(const QJsonValue& value);
+
+    template <> qint64 fromJsonValue(const QJsonValue& value);
 
     template <> QUrl fromJsonValue(const QJsonValue& value);
 

@@ -8,6 +8,7 @@
 #include "../MusicPlayer/util/executor.h"
 #include "../MusicPlayer/view_models/view_models.h"
 #include <QGuiApplication>
+#include <QQuickStyle>
 
 using namespace MusicPlayer::API;
 using namespace MusicPlayer::Util;
@@ -18,6 +19,9 @@ int argc             = 1;
 char* argv[]         = {testName.data()};
 
 Application* setUp() {
+    QQuickStyle::addStylePath(":/ui");
+    QQuickStyle::setStyle("MusicPlayer");
+
     Application* app = new Application("test", argc, argv);
     return app;
 }

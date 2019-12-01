@@ -20,5 +20,6 @@ namespace MusicPlayer {
         Application(const QString& id, int& argc, char* argv[]);
 
         int run(const QStringList& params);
+      private:
     };
 } // namespace MusicPlayer
