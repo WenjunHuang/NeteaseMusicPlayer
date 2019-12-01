@@ -6,6 +6,7 @@
 #include "../api/api.h"
 #include "../repositories/repositories.h"
 #include "../util/util.h"
+#include "./states.h"
 #include <QtCore>
 #include <QtQml/QQmlParserStatus>
 
@@ -14,82 +15,46 @@ namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::Repository;
     using namespace MusicPlayer::Util;
 
-    class StateKinds: public QObject {
-        Q_OBJECT
-      public:
-        enum class Kind { UnInit, Loading, Ready, Error };
-        Q_ENUM(Kind)
-    };
-
-    struct UnInitState {
+    struct SongCategoryListViewModelReadyStateCategoryItem {
         Q_GADGET
-        Q_PROPERTY(MusicPlayer::ViewModels::StateKinds::Kind kind READ kind)
+        Q_PROPERTY(QString name MEMBER name)
+        Q_PROPERTY(bool hot MEMBER hot)
       public:
-        StateKinds::Kind kind() const { return StateKinds::Kind::UnInit; }
+        QString name;
+        bool hot;
 
-        inline bool operator==(const UnInitState& other) const {
-            return true;
-        }
+        bool operator==(const SongCategoryListViewModelReadyStateCategoryItem& other) const;
 
-        inline bool operator!=(const UnInitState& other) const {
-            return false;
-        }
+        bool operator!=(const SongCategoryListViewModelReadyStateCategoryItem& other) const;
     };
 
-    struct LoadingState {
-        Q_GADGET
-        Q_PROPERTY(MusicPlayer::ViewModels::StateKinds::Kind kind READ kind)
-      public:
-        StateKinds::Kind kind() const { return StateKinds::Kind::Loading; }
-
-        bool operator==(const LoadingState& other) const;
-
-        bool operator!=(const LoadingState& other) const;
-    };
-
-    struct ErrorState {
-        Q_GADGET
-        Q_PROPERTY(MusicPlayer::ViewModels::StateKinds::Kind kind READ kind)
-        Q_PROPERTY(QString message MEMBER message)
-      public:
-        QString message;
-        StateKinds::Kind kind() const { return StateKinds::Kind::Error; }
-
-        bool operator==(const ErrorState& other) const;
-        bool operator!=(const ErrorState& other) const;
-    };
-
-    struct ReadyStateItem {
+    struct SongCategoryListViewModelReadyStateCategory {
         Q_GADGET
         Q_PROPERTY(QString name MEMBER name)
         Q_PROPERTY(QString icon MEMBER icon)
-        Q_PROPERTY(QVariantList subCats MEMBER subCats)
+        Q_PROPERTY(QVariantList items MEMBER items)
       public:
         QString name;
         QString icon;
-        QVariantList subCats; // APIPlaylistCatListItemData
+        QVariantList items; // SongCategoryListViewModelReadyStateCategoryItem
 
-        bool operator==(const ReadyStateItem& other) const;
+        bool operator==(const SongCategoryListViewModelReadyStateCategory& other) const;
 
-        bool operator!=(const ReadyStateItem& other) const;
+        bool operator!=(const SongCategoryListViewModelReadyStateCategory& other) const;
     };
 
-    struct ReadyState {
+    struct SongCategoryListViewModelReadyState {
         Q_GADGET
-        Q_PROPERTY(MusicPlayer::ViewModels::StateKinds::Kind kind READ kind)
         Q_PROPERTY(QString allName MEMBER allName)
-        Q_PROPERTY(QVariantList items MEMBER items)
+        Q_PROPERTY(QVariantList categories MEMBER categories)
       public:
         QString allName;
-        QVariantList items;
-        StateKinds::Kind kind() const { return StateKinds::Kind::Ready; }
+        QVariantList categories; // SongCategoryListViewModelReadyStateCategory
 
-        bool operator==(const ReadyState& other) const;
+        bool operator==(const SongCategoryListViewModelReadyState& other) const;
 
-        bool operator!=(const ReadyState& other) const;
+        bool operator!=(const SongCategoryListViewModelReadyState& other) const;
     };
-
-    using State = std::variant<UnInitState, LoadingState, ErrorState, ReadyState>;
 
     class SongCategoryListViewModel : public QObject, public QQmlParserStatus {
         Q_OBJECT
@@ -105,17 +70,17 @@ namespace MusicPlayer::ViewModels {
         void componentComplete() override;
 
         Q_INVOKABLE void reload();
+
+        static void registerMetaTypes();
       signals:
         void stateChanged();
 
       private:
-        void setState(const State& state);
-        State _state;
+        void setState(const ViewModelState& state);
+        ViewModelState _state;
     };
 } // namespace MusicPlayer::ViewModels
 
-Q_DECLARE_METATYPE(MusicPlayer::ViewModels::LoadingState)
-Q_DECLARE_METATYPE(MusicPlayer::ViewModels::ErrorState)
-Q_DECLARE_METATYPE(MusicPlayer::ViewModels::ReadyStateItem)
-Q_DECLARE_METATYPE(MusicPlayer::ViewModels::ReadyState)
-Q_DECLARE_METATYPE(MusicPlayer::ViewModels::UnInitState)
+Q_DECLARE_METATYPE(MusicPlayer::ViewModels::SongCategoryListViewModelReadyStateCategory)
+Q_DECLARE_METATYPE(MusicPlayer::ViewModels::SongCategoryListViewModelReadyState)
+Q_DECLARE_METATYPE(MusicPlayer::ViewModels::SongCategoryListViewModelReadyStateCategoryItem)

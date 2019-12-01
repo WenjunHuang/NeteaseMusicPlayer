@@ -7,9 +7,11 @@
         <file>ui/discover_music/personalized/Personalized.qml</file>
         <file>ui/discover_music/personalized/PersonalizedNewSongs.qml</file>
         <file>ui/discover_music/personalized/RecommendationSongLists.qml</file>
-        <file>ui/song_list/SongList.qml</file>
-        <file>ui/song_list/SongCategoryPane.qml</file>
-        <file>ui/song_list/SongCategoryList.qml</file>
+        <file>ui/discover_music/song_list/SongList.qml</file>
+        <file>ui/discover_music/song_list/SongCategoryPane.qml</file>
+        <file>ui/discover_music/song_list/SongCategoryMenu.qml</file>
+        <file>ui/discover_music/song_list/HighQuality.qml</file>
+        <file>ui/discover_music/song_list/SongCategorySelector.qml</file>
         <file>ui/utils/Border.qml</file>
         <file>ui/utils/RoundCorner.qml</file>
         <file>ui/styles/color_system.mjs</file>

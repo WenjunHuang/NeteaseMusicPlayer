@@ -190,3 +190,16 @@ class TestTopList(unittest.TestCase):
     def test_playlist_catlist(self):
         result = self.loop.run_until_complete(self.api.playlist_catlist())
         print(result)
+
+    def test_playlist_hot(self):
+        result = self.loop.run_until_complete(self.api.playlist_hot())
+        print(result)
+        text = self.loop.run_until_complete(result.text())
+        print(result.status)
+        print(text)
+    def test_top_playlist_highquality(self):
+        result = self.loop.run_until_complete(self.api.top_playlist_highquality("全部",1))
+        print(result)
+        text = self.loop.run_until_complete(result.text())
+        print(result.status)
+        print(text)

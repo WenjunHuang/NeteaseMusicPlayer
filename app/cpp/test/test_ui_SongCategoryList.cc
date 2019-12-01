@@ -15,7 +15,7 @@ TEST_CASE("song_category_list", "[Views]") {
     auto app = setUp();
 
     QQuickView view;
-    view.setSource(QUrl("qrc:/ui/song_list/SongCategoryList.qml"));
+    view.setSource(QUrl("qrc:/ui/discover_music/song_list/SongCategoryMenu.qml"));
 
 //    QQuickView view(QUrl("qrc:/ui/song_list/SongCategoryList.qml"));
     view.show();

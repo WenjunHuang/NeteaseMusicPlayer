@@ -7,10 +7,9 @@
 
 namespace MusicPlayer::ViewModels{
     void registerMetaTypes(){
-        qRegisterMetaType<UnInitState>();
-        qRegisterMetaType<LoadingState>();
-        qRegisterMetaType<ErrorState>();
-        qRegisterMetaType<ReadyStateItem>();
-        qRegisterMetaType<ReadyState>();
+        StateKinds::registerMetaTypes();
+        SongCategoryListViewModel::registerMetaTypes();
+        SongListHighQualityViewModel::registerMetaTypes();
+
     }
 }

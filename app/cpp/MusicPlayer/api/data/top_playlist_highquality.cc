@@ -19,6 +19,7 @@ namespace MusicPlayer::API {
             Util::fromJsonValue<int>(jsonObject.value(QLatin1String("commentCount"))),
             Util::fromJsonValue<QString>(jsonObject.value(QLatin1String("copywriter"))),
             Util::fromJsonValue<QString>(jsonObject.value(QLatin1String("tag"))),
+            Util::fromJsonValue<QUrl>(jsonObject.value(QLatin1String("coverImgUrl"))),
         };
     }
 
@@ -28,6 +29,6 @@ namespace MusicPlayer::API {
                 Util::fromJsonValue<long>(jsonObject.value(QLatin1Literal("lasttime"))),
                 Util::fromJsonValue<bool>(jsonObject.value(QLatin1String("more"))),
                 Util::fromJsonValue<int>(jsonObject.value(QLatin1String("code"))),
-                Util::jsonArrayToVariantList<APITopPlayListItemData>(jsonObject.value(QLatin1String("playlists")))};
+                Util::fromJsonArray<APITopPlayListItemData>(jsonObject.value(QLatin1String("playlists")))};
     }
-}
+} // namespace MusicPlayer::API

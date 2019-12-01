@@ -23,15 +23,16 @@ TEST_CASE("song_category_list_view_model", "[ViewModels]") {
                 qDebug() << "ready";
 
                 auto ready = viewModel->state().value<ReadyState>();
+                auto state = ready.data.template value<SongCategoryListViewModelReadyState>();
 
-                qDebug() << ready.allName;
+                qDebug() << state.allName;
 
-                for (const auto& itr : ready.items) {
-                    auto item = itr.value<ReadyStateItem>();
+                for (const auto& itr : state.categories) {
+                    auto item = itr.value<SongCategoryListViewModelReadyStateCategory>();
                     qDebug() << "  " << item.name;
                     QStringList subNames;
-                    for (const auto& subItr : item.subCats) {
-                        auto subItem = subItr.value<APIPlaylistCatListItemData>();
+                    for (const auto& subItr : item.items) {
+                        auto subItem = subItr.value<SongCategoryListViewModelReadyStateCategoryItem>();
                         subNames.append(subItem.name);
                     }
                     qDebug() << "    " << subNames.join(',');
@@ -56,5 +57,5 @@ TEST_CASE("song_category_list_view_model", "[ViewModels]") {
     viewModel->reload();
     viewModel->reload();
 
-    app->run();
+    app->exec();
 }

@@ -89,6 +89,7 @@ export const spacing_half = spacing / 2
 export const spacing_third = spacing / 3
 
 export const border_radius = 7
+export const border_radius_large = 14
 export const base_border_width = 1
 export const base_border_color = box_border_color
 

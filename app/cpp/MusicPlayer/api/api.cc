@@ -134,7 +134,6 @@ namespace MusicPlayer::API {
                                             {{"cat",cat},{"limit",limit},{"lasttime",before},{"total",true}})
                                             .via(Util::cpuExecutor())
                                             .thenValue([](QNetworkReply* reply){
-//                                                reply->deleteLater();
                                                 return parseResponse<APITopPlayListHighQualityData>(reply);
                                             });
     }

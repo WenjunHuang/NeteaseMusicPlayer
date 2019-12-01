@@ -467,3 +467,27 @@ class API:
                                  },
                                  RequestOption(crypto=CryptoType.WEAPI))
         return await parse_response(response, APIPlaylistCatListData)
+
+    async def playlist_hot(self):
+        # 热门歌单分类
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/playlist/hottags",
+                                 {
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return response
+
+    async def top_playlist_highquality(self, cat: str, limit: int = 30, lasttime: int = 0):
+        # 精品歌单
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/playlist/highquality/list",
+                                 {
+                                     "cat": cat,
+                                     "limit": limit,
+                                     "lasttime": lasttime,
+                                     "total": True
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return response

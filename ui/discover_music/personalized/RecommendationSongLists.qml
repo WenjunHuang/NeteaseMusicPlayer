@@ -178,11 +178,10 @@ ColumnLayout {
                     source: modelImageUrl
                     visible: false
                 }
-                GaussianBlur {
+                FastBlur {
                     anchors.fill: image
                     source: image
-                    radius: 10
-                    samples: 20
+                    radius: 64
                 }
                 Text {
                     text: modelWeekday

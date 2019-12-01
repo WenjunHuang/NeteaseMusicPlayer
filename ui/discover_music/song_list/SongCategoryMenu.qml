@@ -3,8 +3,8 @@ import QtQuick.Layouts 1.13
 import QtQuick.Controls 2.13
 import QtGraphicalEffects 1.13
 import MusicPlayer 1.0
-import "../utils"
-import "../styles/variables.mjs" as Vars
+import "../../utils"
+import "../../styles/variables.mjs" as Vars
 
 Pane {
     id: root
@@ -19,13 +19,15 @@ Pane {
         id: viewModel
         onStateChanged: {
             console.log(viewModel.state.kind)
-            if (state.kind === StateKinds.Loading) {
+            if (state.kind === StateKinds.UnInit
+                    || state.kind === StateKinds.Loading) {
                 // show loading
                 content.sourceComponent = loading
             }
             if (state.kind === StateKinds.Ready) {
                 // show ready
                 content.sourceComponent = ready
+                console.log(viewModel.state)
             }
             if (state.kind === StateKinds.Error) {
 
@@ -36,17 +38,17 @@ Pane {
 
     contentItem: Loader {
         id: content
-        Behavior on width {
-            NumberAnimation {
-                duration: 200
-            }
-        }
+        //        Behavior on width {
+        //            NumberAnimation {
+        //                duration: 200
+        //            }
+        //        }
 
-        Behavior on height {
-            NumberAnimation {
-                duration: 200
-            }
-        }
+        //        Behavior on height {
+        //            NumberAnimation {
+        //                duration: 200
+        //            }
+        //        }
     }
 
     Component {
@@ -64,9 +66,10 @@ Pane {
         ColumnLayout {
             spacing: Vars.spacingX4
             Repeater {
-                model: viewModel.state.items
+                model: viewModel.state.data.categories
                 RowLayout {
-                    spacing:Vars.spacingX5
+                    spacing: Vars.spacingX5
+
                     Text {
                         //Layout.preferredWidth: 100
                         Layout.alignment: Qt.AlignTop
@@ -78,11 +81,15 @@ Pane {
                         columnSpacing: Vars.spacingX2
                         rowSpacing: Vars.spacingX2
                         Repeater {
-                            model: modelData.subCats
-                            Text {
+                            model: modelData.items
+                            Control {
                                 Layout.preferredWidth: 60
-                                id: item
-                                text: modelData.name
+                                Text {
+                                    id: item
+                                    text: modelData.name
+                                    color: hovered? Material.primaryColor:Material.foreground
+                                }
+                                hoverEnabled: true
                             }
                         }
                     }

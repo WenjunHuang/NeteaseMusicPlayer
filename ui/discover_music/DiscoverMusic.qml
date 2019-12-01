@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.13
 import "../utils"
 import "../styles/variables.mjs" as Vars
 import "./personalized"
+import "./song_list"
 
 Item {
     ColumnLayout {
@@ -70,6 +71,9 @@ Item {
             currentIndex: tabBar.currentIndex
             Personalized {
                 id: banner
+            }
+            SongList{
+                id: songList
             }
         }
     }

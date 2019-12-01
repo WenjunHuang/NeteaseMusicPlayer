@@ -53,7 +53,6 @@ ColumnLayout {
             RoundCorner {
                 Layout.preferredWidth: 62
                 Layout.preferredHeight: 62
-                Material.elevation: 6
                 radius: Vars.border_radius
                 Image {
                     source: imageUrl

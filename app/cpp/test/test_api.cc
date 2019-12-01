@@ -162,7 +162,7 @@ TEST_CASE("topPlaylistHighQuality", "[MusicAPI]") {
                 qDebug() << "total:" << v.total;
                 qDebug() << v.playlists.size();
                 if (v.playlists.length() > 0) {
-                    auto item = v.playlists.first().template value<APITopPlayListItemData>();
+                    auto item = v.playlists.first();
                     qDebug() << item.id;
                 }
 
@@ -184,6 +184,7 @@ TEST_CASE("playlistDetail", "[MusicAPI]") {
           [](const auto& v) {
             if constexpr (std::is_convertible_v<decltype(v), APIPlayListDetailData>) {
                 qDebug() << v.playlist.name;
+                qDebug() << v.playlist.description;
 //                qDebug() << v;
             } else {
                 std::visit([](const auto& error) { qDebug() << "error"; }, v);

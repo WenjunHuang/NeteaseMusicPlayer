@@ -4,15 +4,15 @@
 
 #include "application.h"
 #include "api/data/data.h"
-#include "view_models/view_models.h"
 #include "repositories/repositories.h"
+#include "view_models/view_models.h"
 #include <QQuickStyle>
 #include <QtQml/QQmlApplicationEngine>
 
 namespace MusicPlayer {
     int Application::run(const QStringList& params) {
-//        for (const auto& path : engine.importPathList())
-//            qDebug() << path;
+        //        for (const auto& path : engine.importPathList())
+        //            qDebug() << path;
 
         QQmlApplicationEngine engine;
         engine.addImportPath(":/ui/imports");
@@ -32,12 +32,13 @@ namespace MusicPlayer {
         // 注册Viewmodel的metatype
         ViewModels::registerMetaTypes();
 
+        qmlRegisterUncreatableType<ViewModels::StateKinds>("MusicPlayer", 1, 0, "StateKinds", "Uncreateable");
         qmlRegisterType<ViewModels::BannerViewModel>("MusicPlayer", 1, 0, "BannerViewModel");
         qmlRegisterType<ViewModels::PersonalizedNewSongViewModel>("MusicPlayer", 1, 0, "PersonalizedNewSongViewModel");
         qmlRegisterType<ViewModels::RecommendationSongListsViewModel>("MusicPlayer", 1, 0, "RecommendationSongListsViewModel");
-        qmlRegisterType<ViewModels::SongCategoryListViewModel>("MusicPlayer",1,0,"SongCategoryListViewModel");
+        qmlRegisterType<ViewModels::SongCategoryListViewModel>("MusicPlayer", 1, 0, "SongCategoryListViewModel");
+        qmlRegisterType<ViewModels::SongListHighQualityViewModel>("MusicPlayer", 1, 0, "SongListHighQualityViewModel");
 
-        qmlRegisterUncreatableType<ViewModels::StateKinds>("MusicPlayer",1,0,"StateKinds","Uncreateable");
 
         //          connect(this,&QGuiApplication::aboutToQuit,this,&Application::cleanup);
     }

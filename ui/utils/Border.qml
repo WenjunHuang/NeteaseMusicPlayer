@@ -13,7 +13,7 @@ Rectangle {
 
     z: -1
 
-    property string borderColor: "transparent"
+    property color borderColor: "transparent"
 
     color: borderColor
 
