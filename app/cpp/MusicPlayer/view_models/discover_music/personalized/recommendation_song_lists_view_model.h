@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <variant>
+#include "../../../api/data/personalized.h"
+#include <QAbstractListModel>
+#include <QtCore/QDateTime>
 #include <QtCore/QObject>
 #include <QtQml/QQmlParserStatus>
-#include <QtCore/QDateTime>
-#include <QAbstractListModel>
 #include <folly/futures/Future.h>
-#include "../api/data/personalized.h"
+#include <variant>
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;

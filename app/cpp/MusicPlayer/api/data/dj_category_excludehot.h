@@ -8,10 +8,6 @@
 
 namespace MusicPlayer::API {
     struct APIDJCategoryItemData {
-        Q_GADGET
-        Q_PROPERTY(int id MEMBER id)
-        Q_PROPERTY(QString name MEMBER name)
-      public:
         int id;
         QString name;
 
@@ -22,10 +18,7 @@ namespace MusicPlayer::API {
     };
 
     struct APIDJCategoryExcludeHotData {
-        Q_GADGET
-        Q_PROPERTY(QVariantList data MEMBER data)
-      public:
-        QVariantList data;
+        QVector<APIDJCategoryItemData> data;
 
         bool operator==(const APIDJCategoryExcludeHotData& other) const;
         bool operator!=(const APIDJCategoryExcludeHotData& other) const;
@@ -35,5 +28,3 @@ namespace MusicPlayer::API {
     };
 }
 
-Q_DECLARE_METATYPE(MusicPlayer::API::APIDJCategoryExcludeHotData)
-Q_DECLARE_METATYPE(MusicPlayer::API::APIDJCategoryItemData)

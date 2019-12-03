@@ -7,208 +7,225 @@ import FontAwesome 1.0
 import "../../styles/variables.mjs" as Vars
 import "../../utils"
 
-ColumnLayout {
+Item {
     id: root
-    spacing: Vars.spacing
+    implicitHeight: layout.implicitHeight
     property int itemCountPerRow: 5
-
-    RecommendationSongListsViewModel {
-        id: viewModel
-    }
-
-    Text {
-        text: "推荐歌单 >"
-        font.pixelSize: Vars.font_size_lg
-        font.weight: Font.Bold
-        Layout.fillWidth: true
-    }
-
-    GridLayout {
-        id: grid
-        //Layout.fillHeight: false
+    ColumnLayout {
+        id: layout
+        spacing: Vars.spacing
         anchors.left: parent.left
         anchors.right: parent.right
 
-        columns: itemCountPerRow
-        columnSpacing: Vars.spacingX2
-        rowSpacing: Vars.spacingX2
-
-        Repeater {
-            model: viewModel.songLists
-            delegate: delegate
+        RecommendationSongListsViewModel {
+            id: viewModel
         }
-    }
 
-    //    Rectangle {
-    //        Layout.fillHeight: true
-    //    }
-    Component {
-        id: delegate
-        ColumnLayout {
-            spacing: 0
-            Loader {
-                id: loader
-                property var modelImageUrl: imageUrl
-                property var modelPlayCount: playCount
-                property var modelName: name
-                property var modelWeekday: weekday
-                property var modelToday: today
-                Layout.preferredWidth: (grid.width - (itemCountPerRow - 1)
-                                        * grid.columnSpacing) / itemCountPerRow
-                sourceComponent: kind == RecommendationSongListsViewModel.Normal ? normalDelegate : todayDelegate
-            }
-            Rectangle {
-                Layout.fillHeight: true
-            }
-        }
-    }
-
-    Component {
-        id: normalDelegate
-        ColumnLayout {
-            id: content
+        RowLayout {
             spacing: Vars.spacing
-
-            RoundCorner {
-                radius: Vars.border_radius
-                // 背景图
-                Layout.preferredWidth: (grid.width - (itemCountPerRow - 1)
-                                        * grid.columnSpacing) / itemCountPerRow
-                Layout.preferredHeight: Layout.preferredWidth
-
-                Image {
-                    id: image
-                    anchors.fill: parent
-                    fillMode: Image.PreserveAspectFit
-                    source: modelImageUrl
-                    visible: false
-                }
-
-                LinearGradient {
-                    id: gradient
-                    anchors.fill: parent
-                    start: Qt.point(0, 0)
-                    end: Qt.point(0, 300)
-                    gradient: Gradient {
-                        GradientStop {
-                            position: 0.0
-                            color: Vars.box_selected_border_color
-                        }
-                        GradientStop {
-                            position: 0.3
-                            color: "white"
-                        }
-                    }
-                    visible: false
-                }
-
-                Blend {
-                    // 加入一点颜色混合，使得"播放数"文字能比较突出
-                    anchors.fill: image
-                    source: image
-                    foregroundSource: gradient
-                    mode: "darken"
-                }
-
-                FAIcon {
-                    icon: FAIcons.faEyeLight
-                    color: "white"
-                    anchors.right: textPlayCount.left
-                    anchors.rightMargin: Vars.spacing_third
-                    anchors.verticalCenter: textPlayCount.verticalCenter
-                }
-
-                Text {
-                    // 播放数
-                    id: textPlayCount
-                    font.pixelSize: Vars.font_size
-                    color: "white"
-                    text: modelPlayCount
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.rightMargin: Vars.spacing_half
-                    anchors.topMargin: Vars.spacing_half
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onEntered: {
-                        playIcon.visible = true
-                    }
-                    onExited: {
-                        playIcon.visible = false
-                    }
-                }
-
-                FAIcon {
-                    id:playIcon
-                    icon:FAIcons.faPlayCircleLight
-                    size: 20
-                    color: "white"
-                    visible:false
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: Vars.spacing
-                    anchors.bottomMargin: Vars.spacing
-                }
-            }
             Text {
-                id: nameText
-                Layout.fillWidth: true
-                wrapMode: Text.WordWrap
-                text: modelName
-                font.pixelSize: Vars.font_size_md
+                Layout.alignment: Qt.AlignJustify
+                text: "推荐歌单"
+                font.pixelSize: Vars.font_size_lg
+                font.weight: Font.Bold
+            }
+            FAIcon {
+                Layout.alignment: Qt.AlignJustify
+                icon: FAIcons.faAngleRightLight
+                size:Vars.font_size_lg
             }
         }
-    }
 
-    Component {
-        id: todayDelegate
-        ColumnLayout {
-            RoundCorner {
-                radius: Vars.border_radius
-                Layout.preferredWidth: (grid.width - (itemCountPerRow - 1)
-                                        * grid.columnSpacing) / itemCountPerRow
-                Layout.preferredHeight: Layout.preferredWidth
-                Image {
-                    id: image
-                    anchors.fill: parent
-                    fillMode: Image.PreserveAspectFit
-                    source: modelImageUrl
-                    visible: false
-                }
-                FastBlur {
-                    anchors.fill: image
-                    source: image
-                    radius: 64
-                }
-                Text {
-                    text: modelWeekday
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: Vars.spacing_half
-                }
-                Text {
-                    text: modelToday
-                    anchors.centerIn: parent
-                }
+        GridLayout {
+            id: grid
+            Layout.fillWidth: true
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                }
+            columns: itemCountPerRow
+            columnSpacing: Vars.spacingX2
+            rowSpacing: Vars.spacingX2
+
+            Repeater {
+                model: viewModel.songLists
+                delegate: gridDelegate
             }
-            Text {
-                id: nameText
+        }
+
+        Component {
+            id: gridDelegate
+            ColumnLayout {
+                spacing: 0
+                Layout.preferredWidth: 1
                 Layout.fillWidth: true
-                wrapMode: Text.WordWrap
-                text: modelName
-                font.pixelSize: Vars.font_size_md
+                Loader {
+                    id: loader
+                    property var modelImageUrl: imageUrl
+                    property var modelPlayCount: playCount
+                    property var modelName: name
+                    property var modelWeekday: weekday
+                    property var modelToday: today
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1
+                    sourceComponent: kind == RecommendationSongListsViewModel.Normal ? normalDelegate : todayDelegate
+                }
+                Rectangle {
+                    Layout.fillHeight: true
+                }
             }
-            //            Rectangle {
-            //                Layout.fillHeight: true
-            //            }
+        }
+
+        Component {
+            id: normalDelegate
+            ColumnLayout {
+                id: content
+                spacing: Vars.spacing
+
+                RoundCorner {
+                    // 背景图
+                    Layout.fillWidth: true
+                    radius: Vars.border_radius
+                    implicitHeight: width
+
+//                    Image {
+//                        id: image
+//                        anchors.fill: parent
+//                        fillMode: Image.PreserveAspectFit
+//                        source: modelImageUrl
+//                        visible: false
+//                    }
+                    FadeInImage{
+                        id:image
+                        anchors.fill: parent
+                        source: modelImageUrl
+                        visible: false
+                    }
+
+                    LinearGradient {
+                        id: gradient
+                        anchors.fill: parent
+                        start: Qt.point(0, 0)
+                        end: Qt.point(0, 300)
+                        gradient: Gradient {
+                            GradientStop {
+                                position: 0.0
+                                color: Vars.box_selected_border_color
+                            }
+                            GradientStop {
+                                position: 0.3
+                                color: "white"
+                            }
+                        }
+                        visible: false
+                    }
+
+                    Blend {
+                        // 加入一点颜色混合，使得"播放数"文字能比较突出
+                        anchors.fill: image
+                        source: image
+                        foregroundSource: gradient
+                        mode: "darken"
+                    }
+
+                    FAIcon {
+                        icon: FAIcons.faEyeLight
+                        color: "white"
+                        anchors.right: textPlayCount.left
+                        anchors.rightMargin: Vars.spacing_third
+                        anchors.verticalCenter: textPlayCount.verticalCenter
+                    }
+
+                    Text {
+                        // 播放数
+                        id: textPlayCount
+                        font.pixelSize: Vars.font_size
+                        color: "white"
+                        text: modelPlayCount
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.rightMargin: Vars.spacing_half
+                        anchors.topMargin: Vars.spacing_half
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: {
+                            playIcon.visible = true
+                        }
+                        onExited: {
+                            playIcon.visible = false
+                        }
+                    }
+
+                    FAIcon {
+                        id: playIcon
+                        icon: FAIcons.faPlayCircleLight
+                        size: 20
+                        color: "white"
+                        visible: false
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        anchors.rightMargin: Vars.spacing
+                        anchors.bottomMargin: Vars.spacing
+                    }
+                }
+                Text {
+                    id: nameText
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
+                    text: modelName
+                    font.pixelSize: Vars.font_size_md
+                }
+            }
+        }
+
+        Component {
+            id: todayDelegate
+            ColumnLayout {
+                id: content
+                spacing: Vars.spacing
+                RoundCorner {
+                    radius: Vars.border_radius
+                    Layout.fillWidth: true
+                    implicitHeight: width
+                    Image {
+                        id: image
+                        anchors.fill: parent
+                        fillMode: Image.PreserveAspectFit
+                        source: modelImageUrl
+                        visible: false
+                    }
+                    FastBlur {
+                        anchors.fill: image
+                        source: image
+                        radius: 64
+                    }
+                    Text {
+                        text: modelWeekday
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        anchors.topMargin: Vars.spacing_half
+                    }
+                    Text {
+                        text: modelToday
+                        anchors.centerIn: parent
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                    }
+                }
+                Text {
+                    id: nameText
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
+                    text: modelName
+                    font.pixelSize: Vars.font_size_md
+                }
+                //            Rectangle {
+                //                Layout.fillHeight: true
+                //            }
+            }
         }
     }
 }

@@ -3,7 +3,7 @@
 //
 
 #include "view_models.h"
-#include "song_category_list_view_model.h"
+#include "discover_music/song_list/song_category_list_view_model.h"
 
 namespace MusicPlayer::ViewModels{
     void registerMetaTypes(){

@@ -70,9 +70,13 @@ Item {
             Layout.fillHeight: true
             currentIndex: tabBar.currentIndex
             Personalized {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 id: banner
             }
             SongList{
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 id: songList
             }
         }

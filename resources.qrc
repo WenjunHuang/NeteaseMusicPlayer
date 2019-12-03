@@ -29,5 +29,6 @@
         <file>ui/imports/FontAwesome/FAFonts.qml</file>
         <file>ui/imports/FontAwesome/FAIcons.qml</file>
         <file>ui/imports/FontAwesome/FAIcon.qml</file>
+        <file>ui/utils/FadeInImage.qml</file>
     </qresource>
 </RCC>

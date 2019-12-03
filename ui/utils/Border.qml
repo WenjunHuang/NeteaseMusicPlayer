@@ -1,6 +1,7 @@
 import QtQuick 2.12
 
 Rectangle {
+    property Item target:parent
 
     property bool commonBorder: true
 
@@ -18,10 +19,10 @@ Rectangle {
     color: borderColor
 
     anchors {
-        left: parent.left
-        right: parent.right
-        top: parent.top
-        bottom: parent.bottom
+        left: target.left
+        right: target.right
+        top: target.top
+        bottom: target.bottom
 
         topMargin: commonBorder ? -commonBorderWidth : -tBorderwidth
         bottomMargin: commonBorder ? -commonBorderWidth : -bBorderwidth

@@ -3,7 +3,7 @@
 //
 
 #include "personalized_new_song_view_model.h"
-#include "../util/executor.h"
+#include "../../../util/executor.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace Util;
@@ -40,7 +40,7 @@ namespace MusicPlayer::ViewModels {
             QStringList artistNames;
             std::transform(
                 item.song.artists.cbegin(), item.song.artists.cend(), std::back_inserter(artistNames), [](const auto& artist) {
-                    return artist.template value<APIPersonalizedNewSongResultSongArtistData>().name;
+                    return artist.name;
                 });
             return artistNames.join(" / ");
         }
@@ -59,9 +59,7 @@ namespace MusicPlayer::ViewModels {
     void PersonalizedNewSongListModel::setPersonalizedNewSongData(const APIPersonalizedNewSongData& data) {
         beginResetModel();
         _data.clear();
-        std::transform(data.result.cbegin(), data.result.cend(), std::back_inserter(_data), [](const auto& var) {
-            return var.template value<APIPersonalizedNewSongResultData>();
-        });
+        _data.append(data.result);
         endResetModel();
     }
 

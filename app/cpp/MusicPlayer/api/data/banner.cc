@@ -29,10 +29,10 @@ namespace MusicPlayer::API {
     APIBannersData APIBannersData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
 
-        return {Util::jsonArrayToVariantList<APIBannerData>(object.value(QLatin1Literal("banners")))};
+        return {Util::fromJsonArray<APIBannerData>(object.value(QLatin1Literal("banners")))};
     }
 
     bool APIBannersData::operator==(const APIBannersData& other) const { return banners == other.banners; }
 
-    bool APIBannersData::operator!=(const APIBannersData& other) const { return !((*this) == other); }
+    bool APIBannersData::operator!=(const APIBannersData& other) const { return !operator==(other); }
 } // namespace MusicPlayer::API

@@ -37,7 +37,7 @@ namespace MusicPlayer::API {
         return {
             Util::fromJsonValue<bool>(object.value(QLatin1Literal("hasTaste"))),
             Util::fromJsonValue<int>(object.value(QLatin1Literal("category"))),
-            Util::jsonArrayToVariantList<APIPersonalizedItemData>(object.value(QLatin1Literal("result"))),
+            Util::fromJsonArray<APIPersonalizedItemData>(object.value(QLatin1Literal("result"))),
         };
     }
 

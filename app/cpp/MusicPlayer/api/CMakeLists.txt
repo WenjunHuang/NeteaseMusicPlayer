@@ -23,7 +23,6 @@ add_library(api STATIC
         data/song_privilege.cc
         data/user_login.cc
         data/user_private_message.cc
-        data/data.cc
         data/error.cc
         data/user_private_message.h
         data/playlist_catlist.h
@@ -31,11 +30,5 @@ add_library(api STATIC
         data/top_playlist_highquality.h
         data/playlist_detail.h
         data/playlist_detail.cc)
-#if (WIN32)
-    target_link_libraries(api PUBLIC util Qt5::Core Qt5::Network Qt5::Quick  ${CRYPTOPP} ${FOLLY} ${GLOG})
-#endif ()
-#
-#if (APPLE)
-#    target_link_libraries(api PUBLIC Qt5::Core Qt5::Network Qt5::Quick Qt5::Concurrent cryptopp util)
-#endif ()
+target_link_libraries(api PUBLIC util Qt5::Core Qt5::Network Qt5::Quick ${CRYPTOPP} ${FOLLY} ${GLOG})
 

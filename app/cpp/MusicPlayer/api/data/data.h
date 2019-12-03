@@ -15,8 +15,3 @@
 #include "user_private_message.h"
 #include "top_playlist_highquality.h"
 #include "playlist_detail.h"
-
-namespace MusicPlayer::API {
-    void registerMetaTypes();
-}
-

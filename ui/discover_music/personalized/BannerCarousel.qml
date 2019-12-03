@@ -3,9 +3,11 @@ import QtQuick.Controls 2.13
 import QtGraphicalEffects 1.13
 import MusicPlayer 1.0
 import "../../styles/variables.mjs" as Vars
+import "../../utils"
 
 Item {
     id: root
+    implicitHeight: view.implicitHeight
 
     BannerViewModel{
         id: viewModel
@@ -38,7 +40,7 @@ Item {
                 layer.effect: OpacityMask {
                     maskSource: mask
                 }
-                Image {
+                FadeInImage {
                     width: 540
                     height: 200
                     id: myIcon

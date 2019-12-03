@@ -25,7 +25,7 @@ namespace MusicPlayer::API {
     APIDJCategoryExcludeHotData
     APIDJCategoryExcludeHotData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
-        return {Util::jsonArrayToVariantList<APIDJCategoryItemData>(
+        return {Util::fromJsonArray<APIDJCategoryItemData>(
             object.value(QLatin1Literal("data")))};
     }
 

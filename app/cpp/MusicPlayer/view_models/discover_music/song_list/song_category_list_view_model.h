@@ -3,10 +3,10 @@
 //
 
 #pragma once
-#include "../api/api.h"
-#include "../repositories/repositories.h"
-#include "../util/util.h"
-#include "./states.h"
+#include "../../../api/api.h"
+#include "../../../repositories/repositories.h"
+#include "../../../util/util.h"
+#include "../../states.h"
 #include <QtCore>
 #include <QtQml/QQmlParserStatus>
 
@@ -31,11 +31,11 @@ namespace MusicPlayer::ViewModels {
     struct SongCategoryListViewModelReadyStateCategory {
         Q_GADGET
         Q_PROPERTY(QString name MEMBER name)
-        Q_PROPERTY(QString icon MEMBER icon)
+        Q_PROPERTY(int category MEMBER category)
         Q_PROPERTY(QVariantList items MEMBER items)
       public:
         QString name;
-        QString icon;
+        int category;
         QVariantList items; // SongCategoryListViewModelReadyStateCategoryItem
 
         bool operator==(const SongCategoryListViewModelReadyStateCategory& other) const;

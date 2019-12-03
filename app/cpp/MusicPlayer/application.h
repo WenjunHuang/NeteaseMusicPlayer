@@ -8,9 +8,9 @@
 #include "api/http.h"
 #include "util/executor.h"
 #include "util/logger.h"
-#include "view_models/banner_view_model.h"
-#include "view_models/personalized_new_song_view_model.h"
-#include "view_models/recommendation_song_lists_view_model.h"
+#include "view_models/discover_music/personalized/banner_view_model.h"
+#include "view_models/discover_music/personalized/personalized_new_song_view_model.h"
+#include "view_models/discover_music/personalized/recommendation_song_lists_view_model.h"
 #include <QtGui/QGuiApplication>
 #include <QtQml/qqml.h>
 

@@ -4,12 +4,11 @@
 
 #pragma once
 
-
+#include "../../../api/api.h"
+#include "../../../api/data/banner.h"
 #include <QtCore>
 #include <QtQml/QQmlParserStatus>
 #include <folly/futures/Future.h>
-#include "../api/data/banner.h"
-#include "../api/api.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;

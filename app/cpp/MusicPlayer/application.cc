@@ -26,9 +26,6 @@ namespace MusicPlayer {
         API::HttpWorker::initInstance();
         Repository::SongCategoryRepository::initInstance();
 
-        // 注册api的metatype
-        API::registerMetaTypes();
-
         // 注册Viewmodel的metatype
         ViewModels::registerMetaTypes();
 

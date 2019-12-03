@@ -3,8 +3,8 @@
 //
 
 #include "song_list_high_quality_view_model.h"
-#include "../api/api.h"
-#include "../util/util.h"
+#include "../../../api/api.h"
+#include "../../../util/util.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;

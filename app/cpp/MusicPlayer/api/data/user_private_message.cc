@@ -64,7 +64,7 @@ namespace MusicPlayer::API {
         return {
             Util::fromJsonValue<bool>(object.value(QLatin1Literal("more"))),
             Util::fromJsonValue<int>(object.value(QLatin1Literal("newMsgCount"))),
-            Util::jsonArrayToVariantList<APIUserPrivateMessageData>(object.value(QLatin1Literal("msgs"))),
+            Util::fromJsonArray<APIUserPrivateMessageData>(object.value(QLatin1Literal("msgs"))),
         };
     }
     bool APIUserPrivateMessagesData::operator==(const APIUserPrivateMessagesData& other) const {

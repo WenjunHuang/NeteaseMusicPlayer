@@ -3,7 +3,7 @@
 //
 
 #include "banner_view_model.h"
-#include "../util/executor.h"
+#include "../../../util/executor.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::Util;
@@ -25,10 +25,7 @@ namespace MusicPlayer::ViewModels {
         void setBannersData(const APIBannersData& banners) {
             beginResetModel();
             _bannerData.clear();
-            std::transform(banners.banners.cbegin(),
-                           banners.banners.cend(),
-                           std::back_inserter(_bannerData),
-                           [](const QVariant& var) { return var.value<APIBannerData>(); });
+            _bannerData.append(banners.banners);
             endResetModel();
         }
 

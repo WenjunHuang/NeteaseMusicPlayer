@@ -49,7 +49,7 @@ namespace MusicPlayer::API {
             Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
             Util::fromJsonArray<QString>(object.value(QLatin1Literal("alias"))),
             Util::fromJsonValue<int>(object.value(QLatin1Literal("mvid"))),
-            Util::jsonArrayToVariantList<APIPersonalizedNewSongResultSongArtistData>(object.value(QLatin1Literal("artists"))),
+            Util::fromJsonArray<APIPersonalizedNewSongResultSongArtistData>(object.value(QLatin1Literal("artists"))),
             Util::fromJsonValue<APIPersonalizedNewSongResultSongAlbumData>(object.value(QLatin1Literal("album"))),
             Util::fromJsonValue<APISongPrivilegeData>(object.value(QLatin1Literal("privilege"))),
         };
@@ -66,7 +66,7 @@ namespace MusicPlayer::API {
         auto object = json.toObject();
         return {
             Util::fromJsonValue<int>(object.value(QLatin1Literal("category"))),
-            Util::jsonArrayToVariantList<APIPersonalizedNewSongResultData>(object.value(QLatin1Literal("result"))),
+            Util::fromJsonArray<APIPersonalizedNewSongResultData>(object.value(QLatin1Literal("result"))),
         };
     }
 

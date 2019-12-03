@@ -4,46 +4,68 @@ import QtQuick.Layouts 1.13
 import QtQuick.Controls.Material 2.13
 import FontAwesome 1.0
 import "../../styles/variables.mjs" as Vars
+import "../../utils"
 
-RowLayout {
-    spacing: 0
+Item {
+    id: root
     property string currentCategoryName: "全部"
-    RoundButton {
-        id: selectorButton
-        Layout.fillWidth: false
-        radius: height / 2
-        leftPadding: height
-        rightPadding: height
-        text: currentCategoryName
-        Material.elevation: 1
+    height: layout.implicitHeight
+    RowLayout {
+        id: layout
+        anchors.left: parent.left
+        anchors.right: parent.right
+        spacing: 0
+        RoundButton {
+            id: selectorButton
+            Layout.fillWidth: false
+            radius: height / 2
+            leftPadding: height
+            rightPadding: height
+            text: currentCategoryName
+            Material.elevation: 0
+            Component.onCompleted: {
+                console.log(Material.buttonColor)
+                background.border.width = 1
+                background.border.color = Material.frameColor
+            }
 
-        FAIcon {
-            icon: FAIcons.faAngleRightLight
-            font.pixelSize: parent.font.pixelSize
-            anchors.left: parent.contentItem.right
-            anchors.leftMargin: Vars.spacing_third
-            anchors.verticalCenter: parent.verticalCenter
-        }
+            //            Border {
+            //                target: selectorButton.background
+            //                radius: selectorButton.radius
+            //                commonBorderWidth: 1
+            //                color: Material.frameColor
+            //            }
+            FAIcon {
+                icon: FAIcons.faAngleRightLight
+                font.pixelSize: parent.font.pixelSize
+                anchors.left: parent.contentItem.right
+                anchors.leftMargin: Vars.spacing_third
+                anchors.verticalCenter: parent.verticalCenter
+            }
 
-        onClicked: {
-            popup.open()
-        }
+            onClicked: {
+                popup.open()
+            }
 
-        Behavior on width {
-            NumberAnimation {
-                duration: 200
+            Behavior on implicitWidth {
+                NumberAnimation {
+                    duration: 200
+                }
+            }
+
+            SongCategoryMenu {
+                x: leftInset
+                y: parent.height
+                id: popup
+                currentSelectedCategoryName: currentCategoryName
+                onCurrentSelectedCategoryNameChanged: {
+                    root.currentCategoryName = currentSelectedCategoryName
+                }
             }
         }
 
-        Popup {
-            x: leftInset
-            y: parent.height
-            id: popup
-            SongCategoryMenu {}
+        Rectangle {
+            Layout.fillWidth: true
         }
-    }
-
-    Rectangle {
-        Layout.fillWidth: true
     }
 }
