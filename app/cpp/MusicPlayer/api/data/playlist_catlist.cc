@@ -11,8 +11,9 @@ namespace MusicPlayer::API {
             Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
             Util::fromJsonValue<int>(object.value(QLatin1Literal("resourceCount"))),
             Util::fromJsonValue<int>(object.value(QLatin1Literal("imgId"))),
+            Util::fromJsonValue<int>(object.value(QLatin1Literal("type"))),
             Util::fromJsonValue<int>(object.value(QLatin1Literal("category"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("category"))),
+            Util::fromJsonValue<int>(object.value(QLatin1Literal("resourceType"))),
             Util::fromJsonValue<bool>(object.value(QLatin1Literal("hot"))),
             Util::fromJsonValue<bool>(object.value(QLatin1Literal("activity"))),
         };

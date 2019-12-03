@@ -1,0 +1,6 @@
+"vipType": 11 // 黑胶VIP
+userType: 2 // 网易官方?
+userType: 4 // 网易音乐人
+userType: 0 // 普通
+
+"gender": 1 // 女

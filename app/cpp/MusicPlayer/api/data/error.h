@@ -25,4 +25,6 @@ namespace MusicPlayer::API {
 
     using APIError =
         std::variant<ErrorResponseError, NetworkError, JsonFormatError>;
+
+    QString apiErrorMessage(const APIError& error);
 } // namespace MusicPlayer::API

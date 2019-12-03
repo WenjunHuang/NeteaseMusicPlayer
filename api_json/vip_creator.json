@@ -1,0 +1,32 @@
+{
+  "defaultAvatar": false,
+  "province": 510000,
+  "authStatus": 1,
+  "followed": false,
+  "avatarUrl": "http://p1.music.126.net/cEGXUl0j4giL9f9WMK2Q3Q==/109951164350287133.jpg",
+  "accountStatus": 0,
+  "gender": 1,
+  "city": 510100,
+  "birthday": 808848000000,
+  "userId": 1597884573,
+  "userType": 4,
+  "nickname": "曲投投音乐",
+  "signature": "让音乐更有价值\n抖音:曲投投音乐",
+  "description": "",
+  "detailDescription": "",
+  "avatarImgId": 109951164350287133,
+  "backgroundImgId": 109951164350280798,
+  "backgroundUrl": "http://p1.music.126.net/pg96Q0GZHIvwQa3Ih5qZsw==/109951164350280798.jpg",
+  "authority": 0,
+  "mutual": false,
+  "expertTags": null,
+  "experts": {
+    "1": "音乐视频达人"
+  },
+  "djStatus": 10,
+  "vipType": 11,
+  "remarkName": null,
+  "avatarImgIdStr": "109951164350287133",
+  "backgroundImgIdStr": "109951164350280798",
+  "avatarImgId_str": "109951164350287133"
+}

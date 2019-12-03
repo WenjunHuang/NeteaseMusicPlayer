@@ -431,7 +431,8 @@ class API:
                                      "type": "recommend"
                                  },
                                  RequestOption(crypto=CryptoType.WEAPI))
-        return await parse_response(response, APIPersonalizedNewSongData)
+        return response
+        # return await parse_response(response, APIPersonalizedNewSongData)
 
     async def personalized_mv(self):
         # 推荐mv
@@ -455,8 +456,8 @@ class API:
                                      "beforeTime": before_time
                                  },
                                  RequestOption(crypto=CryptoType.WEAPI))
-        return response
-        # return await parse_response(response, APIPersonalizedData)
+        # return response
+        return await parse_response(response, APIPersonalizedData)
 
     async def playlist_catlist(self):
         # 全部歌单分类
@@ -466,7 +467,8 @@ class API:
                                  {
                                  },
                                  RequestOption(crypto=CryptoType.WEAPI))
-        return await parse_response(response, APIPlaylistCatListData)
+        # return await parse_response(response, APIPlaylistCatListData)
+        return response
 
     async def playlist_hot(self):
         # 热门歌单分类
@@ -489,5 +491,29 @@ class API:
                                      "lasttime": lasttime,
                                      "total": True
                                  },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return response
+
+    async def top_playlist(self, cat: str, limit: int = 30, offset: int = 0):
+        # 分类歌单
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/playlist/list",
+                                 {
+                                     "cat": cat,
+                                     "limit": limit,
+                                     "offset": offset,
+                                     "order": "hot",
+                                     "total": True
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return response
+
+    async def user_detail(self, uid: int):
+        # 用户详情
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/v1/user/detail/${uid}",
+                                 {},
                                  RequestOption(crypto=CryptoType.WEAPI))
         return response

@@ -93,7 +93,8 @@ namespace MusicPlayer::API {
         md5.addData(password.toUtf8());
         QString hashedPassword{md5.result().toHex()};
 
-        return HttpWorker::instance()->post(QUrl("https://music.163.com/weapi/login/cellphone"),
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/login/cellphone"),
                    {CryptoType::WEAPI, {}},
                    {{"phone", cellphone}, {"password", hashedPassword}, {"remberLogin", "true"}})
             .via(Util::AppExecutor::instance()->getCPUExecutor().get())
@@ -116,7 +117,8 @@ namespace MusicPlayer::API {
     }
 
     APIResponse<APIUserPrivateMessagesData> MusicAPI::userPrivateMessages(const QString& cookieToken, int limit, int offset) {
-        return HttpWorker::instance()->post(QUrl("https://music.163.com/weapi/msg/private/users"),
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/msg/private/users"),
                    {CryptoType::WEAPI, cookieToken},
                    {{"offset", offset}, {"limit", limit}, {"total", "true"}})
             .via(Util::AppExecutor::instance()->getCPUExecutor().get())
@@ -124,29 +126,39 @@ namespace MusicPlayer::API {
     }
 
     APIResponse<APIPlaylistCatListData> MusicAPI::playlistCatlist() {
-        return HttpWorker::instance()->post(QUrl("https://music.163.com/weapi/playlist/catalogue"), {CryptoType::WEAPI}, {})
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/playlist/catalogue"), {CryptoType::WEAPI}, {})
             .via(Util::AppExecutor::instance()->getCPUExecutor().get())
             .thenValue([](QNetworkReply* reply) { return parseResponse<APIPlaylistCatListData>(reply); });
     }
 
-    APIResponse<APITopPlayListHighQualityData> MusicAPI::topPlaylistHighQuality(const QString& cat,int limit,qint64 before) {
-        return HttpWorker::instance()->post(QUrl("https://music.163.com/weapi/playlist/highquality/list"),{CryptoType::WEAPI},
-                                            {{"cat",cat},{"limit",limit},{"lasttime",before},{"total",true}})
-                                            .via(Util::cpuExecutor())
-                                            .thenValue([](QNetworkReply* reply){
-                                                return parseResponse<APITopPlayListHighQualityData>(reply);
-                                            });
+    APIResponse<APITopPlayListData> MusicAPI::topPlaylistHighQuality(const QString& cat, int limit, qint64 before) {
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/playlist/highquality/list"),
+                   {CryptoType::WEAPI},
+                   {{"cat", cat}, {"limit", limit}, {"lasttime", before}, {"total", true}})
+            .via(Util::cpuExecutor())
+            .thenValue([](QNetworkReply* reply) { return parseResponse<APITopPlayListData>(reply); });
     }
 
     void MusicAPI::registerTypes() {
         //        qRegisterMetaType<MusicPlayer::API::APIBannerData>();
     }
     APIResponse<APIPlayListDetailData> MusicAPI::playlistDetail(int playlistId) {
-        return HttpWorker::instance()->post(QUrl("https://music.163.com/weapi/v3/playlist/detail"),{CryptoType::WEAPI},
-                                            {{"id",playlistId},{"n",100000},{"s",8}})
-                                            .via(Util::cpuExecutor())
-                                            .thenValue([](QNetworkReply* reply) {
-                                                return parseResponse<APIPlayListDetailData>(reply);
-                                            });
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/v3/playlist/detail"),
+                   {CryptoType::WEAPI},
+                   {{"id", playlistId}, {"n", 100000}, {"s", 8}})
+            .via(Util::cpuExecutor())
+            .thenValue([](QNetworkReply* reply) { return parseResponse<APIPlayListDetailData>(reply); });
+    }
+
+    APIResponse<APITopPlayListData> MusicAPI::topPlaylist(const QString& cat, int limit, int offset) {
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/playlist/list"),
+                   {CryptoType::WEAPI},
+                   {{"cat", cat}, {"limit", limit}, {"offset", offset}, {"order", "hot"}, {"total", true}})
+            .via(Util::cpuExecutor())
+            .thenValue([](QNetworkReply* reply) { return parseResponse<APITopPlayListData>(reply); });
     }
 } // namespace MusicPlayer::API

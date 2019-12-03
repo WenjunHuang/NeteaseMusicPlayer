@@ -2,14 +2,14 @@
 // Created by HUANG WEN JUN on 2019/12/1.
 //
 
-#include "song_list_high_quality_view_model.h"
+#include "song_list_high_quality_banner_view_model.h"
 #include "../../../api/api.h"
 #include "../../../util/util.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
     using namespace MusicPlayer::Util;
-    void SongListHighQualityViewModel::reload() {
+    void SongListHighQualityBannerViewModel::reload() {
         if (_loading && !_loading->isReady())
             return;
 
@@ -17,13 +17,13 @@ namespace MusicPlayer::ViewModels {
         MusicAPI api;
         _loading = api.topPlaylistHighQuality(_categoryName, 1)
                        .via(mainExecutor())
-                       .thenValue([this](Response<APITopPlayListHighQualityData>&& result) {
+                       .thenValue([this](Response<APITopPlayListData>&& result) {
                            std::visit(
                                [this](auto& v) {
-                                   if constexpr (std::is_convertible_v<decltype(v), APITopPlayListHighQualityData>) {
+                                   if constexpr (std::is_convertible_v<decltype(v), APITopPlayListData>) {
                                        if (v.playlists.length() > 0) {
                                            auto& first = v.playlists.first();
-                                           setState(ReadyState{QVariant::fromValue(SongListHighQualityReadyData{
+                                           setState(ReadyState{QVariant::fromValue(SongListHighQualityBannerReadyData{
                                                first.name,
                                                first.copywriter,
                                                first.coverImgUrl
@@ -41,15 +41,8 @@ namespace MusicPlayer::ViewModels {
                        });
     }
 
-    void SongListHighQualityViewModel::setState(ViewModelState state) {
-        if (state == _state)
-            return;
 
-        _state = state;
-        emit stateChanged();
-    }
-
-    void SongListHighQualityViewModel::registerMetaTypes() {
-        qRegisterMetaType<SongListHighQualityReadyData>();
+    void SongListHighQualityBannerViewModel::registerMetaTypes() {
+        qRegisterMetaType<SongListHighQualityBannerReadyData>();
     }
 } // namespace MusicPlayer::ViewModels

@@ -39,10 +39,13 @@ namespace MusicPlayer::API {
         APIResponse<APIPlaylistCatListData> playlistCatlist();
 
         // 精品歌单
-        APIResponse<APITopPlayListHighQualityData> topPlaylistHighQuality(const QString& cat = "全部",int limit = 50,qint64 before = 0);
+        APIResponse<APITopPlayListData> topPlaylistHighQuality(const QString& cat = "全部",int limit = 50,qint64 before = 0);
 
         // 歌单详情
         APIResponse<APIPlayListDetailData> playlistDetail(int playlistId);
+
+        // 分类歌单
+        APIResponse<APITopPlayListData> topPlaylist(const QString& cat,int limit = 50, int offset = 0);
 
       public:
         // 向meta type system注册，程序启动时必须调用

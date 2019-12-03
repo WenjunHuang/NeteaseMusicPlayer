@@ -5,6 +5,7 @@
 #pragma once
 #include "../../util/json.h"
 #include <QtCore>
+#include "playlist_detail.h"
 
 namespace MusicPlayer::API {
     using namespace MusicPlayer::Util;
@@ -22,17 +23,20 @@ namespace MusicPlayer::API {
         QString copywriter;
         QString tag;
         QUrl coverImgUrl;
+        APIPlayListDetailUser creator;
+        int playCount;
+
 
         static APITopPlayListItemData fromJsonValue(const QJsonValue& jsonValue);
     };
 
-    struct APITopPlayListHighQualityData {
+    struct APITopPlayListData {
         int total;
         long lasttime;
         bool more;
         int code;
         QVector<APITopPlayListItemData> playlists;
 
-        static APITopPlayListHighQualityData fromJsonValue(const QJsonValue& json);
+        static APITopPlayListData fromJsonValue(const QJsonValue& json);
     };
 } // namespace MusicPlayer::API

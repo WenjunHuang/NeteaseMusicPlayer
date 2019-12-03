@@ -3,13 +3,14 @@
 //
 
 #pragma once
-#include "../../states.h"
 #include <QtCore>
 #include <folly/futures/Future.h>
 #include <optional>
+#include "../../states.h"
+#include "../../base_state_view_model.h"
 
 namespace MusicPlayer::ViewModels {
-    struct SongListHighQualityReadyData {
+    struct SongListHighQualityBannerReadyData {
         Q_GADGET
         Q_PROPERTY(QString name MEMBER name)
         Q_PROPERTY(QString copywriter MEMBER copywriter)
@@ -20,16 +21,11 @@ namespace MusicPlayer::ViewModels {
         QUrl coverImgUrl;
     };
 
-    class SongListHighQualityViewModel: public QObject {
+    class SongListHighQualityBannerViewModel : public BaseStateViewModel {
         Q_OBJECT
-        Q_PROPERTY(QVariant state READ state NOTIFY stateChanged)
         Q_PROPERTY(QString categoryName READ categoryName WRITE setCategoryName)
       public:
-        explicit SongListHighQualityViewModel(QObject *parent = nullptr):QObject(parent){}
-
-        QVariant state() const {
-            return QVariant::fromStdVariant(_state);
-        }
+        explicit SongListHighQualityBannerViewModel(QObject *parent = nullptr):BaseStateViewModel(parent){}
 
         QString categoryName() const {
             return _categoryName;
@@ -45,18 +41,12 @@ namespace MusicPlayer::ViewModels {
 
         static void registerMetaTypes();
 
-      signals:
-        void stateChanged();
-
       private:
         QString _categoryName;
-        ViewModelState _state;
         std::optional<folly::Future<std::nullopt_t>> _loading;
 
         void reload();
-
-        void setState(ViewModelState state);
     };
 }
 
-Q_DECLARE_METATYPE(MusicPlayer::ViewModels::SongListHighQualityReadyData)
+Q_DECLARE_METATYPE(MusicPlayer::ViewModels::SongListHighQualityBannerReadyData)

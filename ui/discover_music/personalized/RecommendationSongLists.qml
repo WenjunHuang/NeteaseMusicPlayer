@@ -32,7 +32,7 @@ Item {
             FAIcon {
                 Layout.alignment: Qt.AlignJustify
                 icon: FAIcons.faAngleRightLight
-                size:Vars.font_size_lg
+                size: Vars.font_size_lg
             }
         }
 
@@ -84,45 +84,15 @@ Item {
                     Layout.fillWidth: true
                     radius: Vars.border_radius
                     implicitHeight: width
-
-//                    Image {
-//                        id: image
-//                        anchors.fill: parent
-//                        fillMode: Image.PreserveAspectFit
-//                        source: modelImageUrl
-//                        visible: false
-//                    }
-                    FadeInImage{
-                        id:image
+                    LinearGradientBlend {
+                        target: image
                         anchors.fill: parent
-                        source: modelImageUrl
-                        visible: false
-                    }
-
-                    LinearGradient {
-                        id: gradient
-                        anchors.fill: parent
-                        start: Qt.point(0, 0)
-                        end: Qt.point(0, 300)
-                        gradient: Gradient {
-                            GradientStop {
-                                position: 0.0
-                                color: Vars.box_selected_border_color
-                            }
-                            GradientStop {
-                                position: 0.3
-                                color: "white"
-                            }
+                        FadeInImage {
+                            id: image
+                            anchors.fill: parent
+                            source: modelImageUrl
+                            visible: false
                         }
-                        visible: false
-                    }
-
-                    Blend {
-                        // 加入一点颜色混合，使得"播放数"文字能比较突出
-                        anchors.fill: image
-                        source: image
-                        foregroundSource: gradient
-                        mode: "darken"
                     }
 
                     FAIcon {

@@ -26,8 +26,8 @@ add_library(api STATIC
         data/error.cc
         data/user_private_message.h
         data/playlist_catlist.h
-        data/top_playlist_highquality.cc
-        data/top_playlist_highquality.h
+        data/top_playlist.cc
+        data/top_playlist.h
         data/playlist_detail.h
         data/playlist_detail.cc)
 target_link_libraries(api PUBLIC util Qt5::Core Qt5::Network Qt5::Quick ${CRYPTOPP} ${FOLLY} ${GLOG})

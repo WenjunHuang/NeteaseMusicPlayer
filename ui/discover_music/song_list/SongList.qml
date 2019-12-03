@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.13
 import "../../styles/variables.mjs" as Vars
 
 Item {
-    id:root
-    property string currentCategoryName:"全部"
+    id: root
+    property string currentCategoryName: "全部"
     ScrollView {
         id: scroll
         clip: true
@@ -20,7 +20,7 @@ Item {
             Rectangle {
                 Layout.minimumWidth: Vars.spacingX2
             }
-            ColumnLayout{
+            ColumnLayout {
                 Layout.minimumWidth: Vars.content_minimum_width
                 spacing: Vars.spacingX3
                 Rectangle {
@@ -28,15 +28,20 @@ Item {
                     Layout.fillWidth: true
                 }
 
-                HighQuality {
+                HighQualityBanner {
+                    id: banner
                     Layout.fillWidth: true
                     Layout.preferredHeight: 170
-                    categoryName:currentCategoryName
+                    categoryName: currentCategoryName
                 }
 
-                SongCategorySelector{
+                SongCategorySelector {
+                    id: selector
                     Layout.fillWidth: true
-
+                    currentCategoryName: root.currentCategoryName
+                    onCurrentCategoryNameChanged: {
+                        root.currentCategoryName = selector.currentCategoryName
+                    }
                 }
             }
 
@@ -45,5 +50,4 @@ Item {
             }
         }
     }
-
 }

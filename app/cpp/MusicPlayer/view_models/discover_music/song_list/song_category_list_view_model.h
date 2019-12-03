@@ -7,6 +7,7 @@
 #include "../../../repositories/repositories.h"
 #include "../../../util/util.h"
 #include "../../states.h"
+#include "../../base_state_view_model.h"
 #include <QtCore>
 #include <QtQml/QQmlParserStatus>
 
@@ -47,23 +48,23 @@ namespace MusicPlayer::ViewModels {
         Q_GADGET
         Q_PROPERTY(QString allName MEMBER allName)
         Q_PROPERTY(QVariantList categories MEMBER categories)
+        Q_PROPERTY(QVector<QString> hotCategories MEMBER hotCategories)
       public:
         QString allName;
         QVariantList categories; // SongCategoryListViewModelReadyStateCategory
+        QVector<QString> hotCategories;
 
         bool operator==(const SongCategoryListViewModelReadyState& other) const;
 
         bool operator!=(const SongCategoryListViewModelReadyState& other) const;
     };
 
-    class SongCategoryListViewModel : public QObject, public QQmlParserStatus {
+    class SongCategoryListViewModel : public BaseStateViewModel, public QQmlParserStatus {
         Q_OBJECT
         Q_INTERFACES(QQmlParserStatus)
         Q_PROPERTY(QVariant state READ state NOTIFY stateChanged)
       public:
-        explicit SongCategoryListViewModel(QObject* parent = nullptr) : QObject(parent) {}
-
-        QVariant state() const { return QVariant::fromStdVariant(_state); }
+        explicit SongCategoryListViewModel(QObject* parent = nullptr) : BaseStateViewModel(parent) {}
 
         void classBegin() override {}
 
@@ -72,12 +73,6 @@ namespace MusicPlayer::ViewModels {
         Q_INVOKABLE void reload();
 
         static void registerMetaTypes();
-      signals:
-        void stateChanged();
-
-      private:
-        void setState(const ViewModelState& state);
-        ViewModelState _state;
     };
 } // namespace MusicPlayer::ViewModels
 

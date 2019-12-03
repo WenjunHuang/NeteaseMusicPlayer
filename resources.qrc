@@ -10,7 +10,7 @@
         <file>ui/discover_music/song_list/SongList.qml</file>
         <file>ui/discover_music/song_list/SongCategoryPane.qml</file>
         <file>ui/discover_music/song_list/SongCategoryMenu.qml</file>
-        <file>ui/discover_music/song_list/HighQuality.qml</file>
+        <file>ui/discover_music/song_list/HighQualityBanner.qml</file>
         <file>ui/discover_music/song_list/SongCategorySelector.qml</file>
         <file>ui/utils/Border.qml</file>
         <file>ui/utils/RoundCorner.qml</file>
@@ -30,5 +30,8 @@
         <file>ui/imports/FontAwesome/FAIcons.qml</file>
         <file>ui/imports/FontAwesome/FAIcon.qml</file>
         <file>ui/utils/FadeInImage.qml</file>
+        <file>ui/discover_music/song_list/SongCategoryPlayLists.qml</file>
+        <file>ui/utils/LinearGradientBlend.qml</file>
+        <file>ui/utils/PagingSelector.qml</file>
     </qresource>
 </RCC>

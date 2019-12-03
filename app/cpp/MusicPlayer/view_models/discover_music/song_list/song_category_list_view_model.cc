@@ -21,23 +21,33 @@ namespace MusicPlayer::ViewModels {
                     [this](auto& value) {
                         if constexpr (std::is_convertible_v<decltype(value), APIPlaylistCatListData>) {
                             QString allName = value.all.name;
+                            QVector<QString> hotCategories;
 
                             QMultiHash<int, QVariant> catItems;
                             for (const auto& sub : value.sub) {
                                 catItems.insert(
                                     sub.category,
                                     QVariant::fromValue(SongCategoryListViewModelReadyStateCategoryItem{sub.name, sub.hot}));
+
+                                if (sub.hot)
+                                    hotCategories.append(sub.name);
                             }
 
                             QVariantList readyStateItems;
-                            for (auto cat = value.categories.cbegin(); cat != value.categories.cend(); cat++) {
-                                int catCode     = cat.key();
-                                QString catName = cat.value();
+                            auto keys = value.categories.keys();
+                            std::sort(
+                                keys.begin(), keys.end(), [](const auto& first, const auto& second) { return first < second; });
 
-                                readyStateItems.append(QVariant::fromValue( SongCategoryListViewModelReadyStateCategory{catName, catCode, catItems.values(catCode)}));
+                            for (const auto& catCode : keys) {
+                                readyStateItems.append(QVariant::fromValue(SongCategoryListViewModelReadyStateCategory{
+                                    value.categories.value(catCode),
+                                    catCode,
+                                    catItems.values(catCode),
+                                }));
                             }
 
-                            setState( ReadyState{QVariant::fromValue(SongCategoryListViewModelReadyState{allName, readyStateItems})});
+                            setState(ReadyState{QVariant::fromValue(
+                                SongCategoryListViewModelReadyState{allName, readyStateItems, hotCategories})});
                         } else {
                             // errors
                             auto errorMessage = std::visit(
@@ -58,12 +68,6 @@ namespace MusicPlayer::ViewModels {
             });
     }
 
-    void SongCategoryListViewModel::setState(const ViewModelState& state) {
-        if (state == _state)
-            return;
-        _state = state;
-        emit stateChanged();
-    }
     void SongCategoryListViewModel::componentComplete() { reload(); }
 
     void SongCategoryListViewModel::registerMetaTypes() {

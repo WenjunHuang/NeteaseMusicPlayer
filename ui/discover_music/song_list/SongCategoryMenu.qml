@@ -10,6 +10,7 @@ import "../../styles/variables.mjs" as Vars
 
 Popup {
     id: root
+    property var modelData
     property string currentSelectedCategoryName
     function categoryImage(category) {
         if (category === 0)
@@ -28,87 +29,51 @@ Popup {
     Pane {
         padding: Vars.spacingX2
 
-        SongCategoryListViewModel {
-            id: viewModel
-            onStateChanged: {
-                if (state.kind === StateKinds.UnInit
-                        || state.kind === StateKinds.Loading) {
-                    // show loading
-                    content.sourceComponent = loading
-                }
-                if (state.kind === StateKinds.Ready) {
-                    // show ready
-                    content.sourceComponent = ready
-                }
-                if (state.kind === StateKinds.Error) {
+        contentItem: ColumnLayout {
+            spacing: Vars.spacingX4
+            Repeater {
+                model: viewModel.state.data.categories
+                RowLayout {
+                    spacing: Vars.spacingX5
 
-                    // show error
-                }
-            }
-        }
-
-        contentItem: Loader {
-            id: content
-        }
-
-        Component {
-            id: loading
-            ColumnLayout {
-                BusyIndicator {}
-                Text {
-                    text: "正在加载中"
-                }
-            }
-        }
-
-        Component {
-            id: ready
-            ColumnLayout {
-                spacing: Vars.spacingX4
-                Repeater {
-                    model: viewModel.state.data.categories
                     RowLayout {
-                        spacing: Vars.spacingX5
-
-                        RowLayout {
-                            Layout.fillWidth: false
-                            Layout.alignment: Qt.AlignTop
-                            spacing: Vars.spacing_third
-                            FAIcon {
-                                icon: categoryImage(modelData.category)
-                            }
-
-                            Text {
-                                //Layout.preferredWidth: 100
-                                Layout.alignment: Qt.AlignTop
-                                text: modelData.name
-                            }
+                        Layout.fillWidth: false
+                        Layout.alignment: Qt.AlignTop
+                        spacing: Vars.spacing_third
+                        FAIcon {
+                            icon: categoryImage(modelData.category)
                         }
 
-                        GridLayout {
+                        Text {
+                            //Layout.preferredWidth: 100
                             Layout.alignment: Qt.AlignTop
-                            columns: 6
-                            columnSpacing: Vars.spacingX2
-                            rowSpacing: Vars.spacingX2
-                            Repeater {
-                                model: modelData.items
-                                Container {
-                                    id: container
-                                    Layout.preferredWidth: 60
-                                    hoverEnabled: true
-                                    contentItem: Text {
-                                        id: item
-                                        text: modelData.name
-                                        color: modelData.name === currentSelectedCategoryName ? Material.accentColor : (container.hovered ? Material.accentColor : Material.primaryTextColor)
-                                    }
+                            text: modelData.name
+                        }
+                    }
 
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        cursorShape: Qt.PointingHandCursor
-                                        onClicked: {
-                                            currentSelectedCategoryName = modelData.name
-                                            root.close()
-                                        }
+                    GridLayout {
+                        Layout.alignment: Qt.AlignTop
+                        columns: 6
+                        columnSpacing: Vars.spacingX2
+                        rowSpacing: Vars.spacingX2
+                        Repeater {
+                            model: modelData.items
+                            Control {
+                                id: container
+                                Layout.preferredWidth: 60
+                                hoverEnabled: true
+                                contentItem: Text {
+                                    id: item
+                                    text: modelData.name
+                                    color: modelData.name === currentSelectedCategoryName ? Material.accentColor : (container.hovered ? Material.accentColor : Material.primaryTextColor)
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        currentSelectedCategoryName = modelData.name
+                                        root.close()
                                     }
                                 }
                             }
@@ -116,21 +81,6 @@ Popup {
                     }
                 }
             }
-        }
-
-        states: [
-            State {
-                name: "loadingState"
-                PropertyChanges {
-                    target: object
-                }
-            }
-        ]
-        background: Rectangle {
-            //anchors.fill: parent
-            id: body
-            radius: Vars.border_radius
-            //visible: false
         }
     }
 }

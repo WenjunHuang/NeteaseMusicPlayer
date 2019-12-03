@@ -155,10 +155,10 @@ TEST_CASE("personalized", "[MusicAPI]") {
 TEST_CASE("topPlaylistHighQuality", "[MusicAPI]") {
     auto app = setUp();
     MusicAPI api;
-    api.topPlaylistHighQuality("全部",1).via(mainExecutor()).thenValue([](const Response<APITopPlayListHighQualityData>& value) {
+    api.topPlaylistHighQuality("全部",1).via(mainExecutor()).thenValue([](const Response<APITopPlayListData>& value) {
       std::visit(
           [](const auto& v) {
-            if constexpr (std::is_convertible_v<decltype(v), APITopPlayListHighQualityData>) {
+            if constexpr (std::is_convertible_v<decltype(v), APITopPlayListData>) {
                 qDebug() << "total:" << v.total;
                 qDebug() << v.playlists.size();
                 if (v.playlists.length() > 0) {

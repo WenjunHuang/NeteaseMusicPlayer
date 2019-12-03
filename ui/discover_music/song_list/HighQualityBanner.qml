@@ -10,21 +10,22 @@ import "../../utils"
 Item {
     id: root
     property alias categoryName: viewModel.categoryName
-    SongListHighQualityViewModel {
+    visible: false
+    SongListHighQualityBannerViewModel {
         id: viewModel
         onStateChanged: {
-            console.log(state.kind)
-            if (state.kind === StateKinds.UnInit
-                    || state.kind === StateKinds.Loading) {
-                //loader.sourceComponent = loading
-                root.data = [loading.createObject(root)]
-            }
             if (state.kind === StateKinds.Ready) {
-                root.data = [ready.createObject(root, {
-                                                    "name": state.data.name,
-                                                    "copywriter": state.data.copywriter,
-                                                    "coverImgUrl": state.data.coverImgUrl
-                                                })]
+                if (state.data) {
+                    root.data = [ready.createObject(root, {
+                                                        "name": state.data.name,
+                                                        "copywriter": state.data.copywriter,
+                                                        "coverImgUrl": state.data.coverImgUrl
+                                                    })]
+                    console.log(state.data.coverImgUrl)
+                    root.visible = true
+                } else{
+                    root.visible = false
+                }
             }
         }
     }
@@ -32,17 +33,6 @@ Item {
     Loader {
         id: loader
         anchors.fill: parent
-    }
-
-    Component {
-        id: loading
-        ColumnLayout {
-            anchors.centerIn: parent
-            BusyIndicator {}
-            Text {
-                text: "加载中..."
-            }
-        }
     }
 
     Component {
@@ -73,12 +63,12 @@ Item {
                     anchors.fill: backgroundImage
                     source: backgroundImage
                     visible: false
-                    radius: 64
+                    radius: 128
                 }
                 BrightnessContrast {
                     anchors.fill: backgroundImage
                     source: backgroundImageBlur
-                    brightness: 0.1
+                    brightness: -0.5
                 }
             }
 
@@ -95,8 +85,18 @@ Item {
                 anchors.bottomMargin: 14
 
                 Image {
+                    id: image
                     anchors.fill: parent
                     source: coverImgUrl
+                    fillMode: Image.PreserveAspectFit
+                    smooth: true
+                    mipmap: true
+                    visible: false
+                }
+                BrightnessContrast {
+                    source:image
+                    anchors.fill: image
+                    contrast: 0.1
                 }
             }
 
@@ -109,14 +109,14 @@ Item {
                 height: highQualityName.height + 2 * Vars.spacing
                 width: highQualityName.width + height
                 radius: height / 2
-                color:"transparent"
+                color: "transparent"
                 border.color: "#E6A961"
                 border.width: 1
-//                Border {
-//                    commonBorderWidth: 1
-//                    borderColor: "#E6A961"
-//                    radius: height / 2
-//                }
+                //                Border {
+                //                    commonBorderWidth: 1
+                //                    borderColor: "#E6A961"
+                //                    radius: height / 2
+                //                }
                 RowLayout {
                     id: highQualityName
                     anchors.centerIn: parent
@@ -124,7 +124,7 @@ Item {
                     FAIcon {
                         Layout.alignment: Qt.AlignVCenter
                         icon: FAIcons.faCrownLight
-                        color:"#E6A961"
+                        color: "#E6A961"
                         size: 14
                     }
                     Text {
@@ -144,10 +144,10 @@ Item {
                 anchors.topMargin: Vars.spacingX2
                 text: name
                 font.pixelSize: 16
-                color:"white"
+                color: "white"
             }
 
-            Text{
+            Text {
                 id: highQualityCopywriterText
                 anchors.left: titleImage.right
                 anchors.leftMargin: Vars.spacing
@@ -155,9 +155,8 @@ Item {
                 anchors.topMargin: Vars.spacing_half
                 text: copywriter
                 font.pixelSize: 11
-                color: Qt.rgba(1,1,1,0.3)
+                color: Qt.rgba(1, 1, 1, 0.3)
             }
         }
-
     }
 }

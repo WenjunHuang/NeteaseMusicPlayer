@@ -9,7 +9,7 @@ namespace MusicPlayer::ViewModels{
     void registerMetaTypes(){
         StateKinds::registerMetaTypes();
         SongCategoryListViewModel::registerMetaTypes();
-        SongListHighQualityViewModel::registerMetaTypes();
-
+        SongListHighQualityBannerViewModel::registerMetaTypes();
+        SongCategoryPlayListsViewModel::registerMetaTypes();
     }
 }
