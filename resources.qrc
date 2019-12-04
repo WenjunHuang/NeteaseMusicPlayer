@@ -33,5 +33,6 @@
         <file>ui/discover_music/song_list/SongCategoryPlayLists.qml</file>
         <file>ui/utils/LinearGradientBlend.qml</file>
         <file>ui/utils/PagingSelector.qml</file>
+        <file>ui/utils/PagingSelector.js</file>
     </qresource>
 </RCC>

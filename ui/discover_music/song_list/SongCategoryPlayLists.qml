@@ -9,24 +9,21 @@ ColumnLayout {
         id: viewModel
     }
 
-//    GridLayout {
-//        columns: 5
-//        columnSpacing: Vars.spacing
-//        rowSpacing: Vars.spacingX2
-//        Repeater {
-//            model: viewModel.state.data.playlists
-//        }
-//    }
-
+    //    GridLayout {
+    //        columns: 5
+    //        columnSpacing: Vars.spacing
+    //        rowSpacing: Vars.spacingX2
+    //        Repeater {
+    //            model: viewModel.state.data.playlists
+    //        }
+    //    }
     PagingSelector {
         Layout.fillWidth: false
-        total: 100
+        total: 200
         limit: 10
         offset: 0
-        onPageChanged: {
-            console.log(xLimit," ",xOffset)
-           limit = xLimit
-            offset = xOffset
+        onOffsetChanged: {
+            console.log(offset)
         }
     }
 }
