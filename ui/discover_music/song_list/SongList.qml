@@ -43,6 +43,10 @@ Item {
                         root.currentCategoryName = selector.currentCategoryName
                     }
                 }
+
+                SongCategoryPlayLists{
+                    id: playLists
+                }
             }
 
             Rectangle {
