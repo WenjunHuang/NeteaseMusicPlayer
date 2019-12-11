@@ -3,7 +3,9 @@ import QtQuick.Controls.Material 2.13
 
 Item {
     id: root
-    property url source
+
+    property Item contentItem
+    signal contentLoaded()
 
     Rectangle {
         id: placeholder
@@ -12,28 +14,43 @@ Item {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: 2000
+                duration: 300
             }
         }
     }
 
-    Image {
-        id: image
-        source: root.source
+    Item {
+        id: content
         anchors.fill: parent
         opacity: 0
-        fillMode: Image.PreserveAspectFit
-        onStatusChanged: {
-            if (image.status === Image.Ready) {
-                placeholder.opacity = 0
-                image.opacity = 1
-            }
-        }
-
         Behavior on opacity {
             NumberAnimation {
-                duration: 2000
+                duration: 300
             }
         }
     }
+
+    onContentLoaded: {
+        placeholder.opacity = 0
+        content.opacity = 1
+    }
+
+    onContentItemChanged: {
+        content.data = [root.contentItem]
+    }
+
+//    Image {
+//        id: image
+//        source: root.source
+//        anchors.fill: parent
+//        opacity: 0
+//        fillMode: Image.PreserveAspectFit
+//        onStatusChanged: {
+//            if (image.status === Image.Ready) {
+//                placeholder.opacity = 0
+//                image.opacity = 1
+//            }
+//        }
+
+//    }
 }

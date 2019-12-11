@@ -7,7 +7,7 @@ namespace MusicPlayer::API {
     APIBannerData APIBannerData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<QUrl>(object.value(QLatin1Literal("imageUrl"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1Literal("imageUrl"))),
             Util::fromJsonValue<int>(object.value(QLatin1Literal("targetId"))),
             Util::fromJsonValue<int>(object.value(QLatin1Literal("targetType"))),
             Util::fromJsonValue<QString>(object.value(QLatin1Literal("titleColor"))),

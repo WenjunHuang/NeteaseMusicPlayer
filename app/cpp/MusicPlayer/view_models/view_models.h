@@ -9,6 +9,7 @@
 #include "discover_music/song_list/song_category_list_view_model.h"
 #include "discover_music/song_list/song_list_high_quality_banner_view_model.h"
 #include "discover_music/song_list/song_category_play_lists_view_model.h"
+#include "discover_music/dj/dj_banner_view_model.h"
 #include "states.h"
 
 namespace MusicPlayer::ViewModels {

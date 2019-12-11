@@ -2,6 +2,7 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 import "../../styles/variables.mjs" as Vars
+import "../../utils"
 
 Item {
     id: root
@@ -11,7 +12,9 @@ Item {
         clip: true
         anchors.fill: parent
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.vertical: FlatScrollBar{}
         contentHeight: layout.height
+
 
         RowLayout {
             id: layout
@@ -46,6 +49,8 @@ Item {
 
                 SongCategoryPlayLists{
                     id: playLists
+                    Layout.fillWidth: true
+                    currentCategoryName: root.currentCategoryName
                 }
             }
 

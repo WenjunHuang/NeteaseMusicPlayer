@@ -4,7 +4,7 @@
 
 namespace MusicPlayer::API {
     struct APIBannerData {
-        QUrl imageUrl;
+        QString imageUrl;
         int targetId;
         int targetType;
         QString titleColor;

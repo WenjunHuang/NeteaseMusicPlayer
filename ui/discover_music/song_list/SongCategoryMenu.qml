@@ -26,55 +26,54 @@ Popup {
 
         return FAIcons.faBusSchoolLight
     }
-    Pane {
-        padding: Vars.spacingX2
+    padding: Vars.spacingX2
 
-        contentItem: ColumnLayout {
-            spacing: Vars.spacingX4
-            Repeater {
-                model: viewModel.state.data.categories
+    ColumnLayout {
+        anchors.fill:parent
+        spacing: Vars.spacingX4
+        Repeater {
+            model: viewModel.state.data.categories
+            RowLayout {
+                spacing: Vars.spacingX5
+
                 RowLayout {
-                    spacing: Vars.spacingX5
-
-                    RowLayout {
-                        Layout.fillWidth: false
-                        Layout.alignment: Qt.AlignTop
-                        spacing: Vars.spacing_third
-                        FAIcon {
-                            icon: categoryImage(modelData.category)
-                        }
-
-                        Text {
-                            //Layout.preferredWidth: 100
-                            Layout.alignment: Qt.AlignTop
-                            text: modelData.name
-                        }
+                    Layout.fillWidth: false
+                    Layout.alignment: Qt.AlignTop
+                    spacing: Vars.spacing_third
+                    FAIcon {
+                        icon: categoryImage(modelData.category)
                     }
 
-                    GridLayout {
+                    Text {
+                        //Layout.preferredWidth: 100
                         Layout.alignment: Qt.AlignTop
-                        columns: 6
-                        columnSpacing: Vars.spacingX2
-                        rowSpacing: Vars.spacingX2
-                        Repeater {
-                            model: modelData.items
-                            Control {
-                                id: container
-                                Layout.preferredWidth: 60
-                                hoverEnabled: true
-                                contentItem: Text {
-                                    id: item
-                                    text: modelData.name
-                                    color: modelData.name === currentSelectedCategoryName ? Material.accentColor : (container.hovered ? Material.accentColor : Material.primaryTextColor)
-                                }
+                        text: modelData.name
+                    }
+                }
 
-                                MouseArea {
-                                    anchors.fill: parent
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: {
-                                        currentSelectedCategoryName = modelData.name
-                                        root.close()
-                                    }
+                GridLayout {
+                    Layout.alignment: Qt.AlignTop
+                    columns: 6
+                    columnSpacing: Vars.spacingX2
+                    rowSpacing: Vars.spacingX2
+                    Repeater {
+                        model: modelData.items
+                        Control {
+                            id: container
+                            Layout.preferredWidth: 60
+                            hoverEnabled: true
+                            contentItem: Text {
+                                id: item
+                                text: modelData.name
+                                color: modelData.name === currentSelectedCategoryName ? Material.accentColor : (container.hovered ? Material.accentColor : Material.primaryTextColor)
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    currentSelectedCategoryName = modelData.name
+                                    root.close()
                                 }
                             }
                         }

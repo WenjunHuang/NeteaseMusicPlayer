@@ -11,5 +11,7 @@ namespace MusicPlayer::ViewModels{
         SongCategoryListViewModel::registerMetaTypes();
         SongListHighQualityBannerViewModel::registerMetaTypes();
         SongCategoryPlayListsViewModel::registerMetaTypes();
+        DJBannerViewModel::registerMetaTypes();
+        BannerViewModel::registerMetaTypes();
     }
 }

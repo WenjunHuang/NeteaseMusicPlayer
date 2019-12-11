@@ -214,3 +214,17 @@ class TestTopList(unittest.TestCase):
         text = self.loop.run_until_complete(result.text())
         print(result.status)
         print(text)
+
+    def test_song_detail(self):
+        result = self.loop.run_until_complete(self.api.song_detail([347230, 347231]))
+        print(result)
+        text = self.loop.run_until_complete(result.text())
+        print(result.status)
+        print(text)
+
+    def test_lyric(self):
+        result = self.loop.run_until_complete(self.api.lyric(33894312))
+        print(result)
+        text = self.loop.run_until_complete(result.text())
+        print(result.status)
+        print(text)

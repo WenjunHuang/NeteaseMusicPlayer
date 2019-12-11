@@ -6,22 +6,6 @@
 
 namespace MusicPlayer::API {
 
-    APIDJCategoryItemData
-    API::APIDJCategoryItemData::fromJsonValue(const QJsonValue& json) {
-        auto object = json.toObject();
-        return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("name")))};
-    }
-
-    bool APIDJCategoryItemData::operator==(const APIDJCategoryItemData& other) const {
-        return id == other.id && name == other.name;
-    }
-
-    bool APIDJCategoryItemData::operator!=(const APIDJCategoryItemData& other) const {
-        return !operator==(other);
-    }
-
     APIDJCategoryExcludeHotData
     APIDJCategoryExcludeHotData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
@@ -29,11 +13,4 @@ namespace MusicPlayer::API {
             object.value(QLatin1Literal("data")))};
     }
 
-    bool APIDJCategoryExcludeHotData::operator==(const APIDJCategoryExcludeHotData& other) const {
-        return data==other.data;
-    }
-
-    bool APIDJCategoryExcludeHotData::operator!=(const APIDJCategoryExcludeHotData& other) const {
-        return !operator==(other);
-    }
 } // namespace MusicPlayer::API

@@ -43,7 +43,7 @@ namespace MusicPlayer::ViewModels {
         Q_PROPERTY(QString name MEMBER name)
         Q_PROPERTY(int playCount MEMBER playCount)
         Q_PROPERTY(QString creatorName MEMBER creatorName)
-        Q_PROPERTY(SongCategoryPlayListsViewModel::CreatorType creatorType MEMBER creatorType)
+        Q_PROPERTY(MusicPlayer::ViewModels::SongCategoryPlayListsViewModel::CreatorType creatorType MEMBER creatorType)
       public:
         int playlistId;
         QUrl coverImgUrl;

@@ -1,5 +1,5 @@
 import json
-from typing import Union, Optional
+from typing import Union, Optional, List, Iterable
 
 import aiohttp
 from typing_extensions import Literal
@@ -516,4 +516,29 @@ class API:
                                  f"https://music.163.com/weapi/v1/user/detail/${uid}",
                                  {},
                                  RequestOption(crypto=CryptoType.WEAPI))
+        return response
+
+    async def song_detail(self, sids: Iterable[int]):
+        # 歌曲详情
+        cstr = "[" + ",".join([f'{{"id": {sid}}}' for sid in sids]) + "]"
+        sid_str = "[" + ",".join([str(sid) for sid in sids]) + "]"
+
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/v3/song/detail",
+                                 {
+                                     "c": cstr,
+                                     "ids": sid_str
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return response
+
+    async def lyric(self, sid: int):
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/api/song/lyric?lv=-1&kv=-1&tv=-1",
+                                 {
+                                     "id":sid
+                                 },
+                                 RequestOption(crypto=CryptoType.LINUX_API))
         return response

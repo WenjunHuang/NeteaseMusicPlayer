@@ -94,6 +94,8 @@ QByteArray weapi(const QVariantHash& data) {
     QByteArray text{QJsonDocument(QJsonObject::fromVariantHash(data))
                         .toJson(QJsonDocument::Compact)};
 
+    qDebug() << QString(text);
+
     // 需要使用两次aes加密
     auto first     = aesEncryptCBC(text, kPresetKey, kIV).toBase64();
     auto params    = aesEncryptCBC(first, secretKey, kIV).toBase64();

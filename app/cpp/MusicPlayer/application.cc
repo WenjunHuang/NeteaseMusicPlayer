@@ -36,6 +36,7 @@ namespace MusicPlayer {
         qmlRegisterType<ViewModels::SongCategoryListViewModel>("MusicPlayer", 1, 0, "SongCategoryListViewModel");
         qmlRegisterType<ViewModels::SongListHighQualityBannerViewModel>("MusicPlayer", 1, 0, "SongListHighQualityBannerViewModel");
         qmlRegisterType<ViewModels::SongCategoryPlayListsViewModel>("MusicPlayer", 1, 0, "SongCategoryPlayListsViewModel");
+        qmlRegisterType<ViewModels::DJBannerViewModel>("MusicPlayer", 1, 0, "DJBannerViewModel");
 
 
         //          connect(this,&QGuiApplication::aboutToQuit,this,&Application::cleanup);

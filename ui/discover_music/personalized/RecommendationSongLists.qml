@@ -75,75 +75,88 @@ Item {
 
         Component {
             id: normalDelegate
-            ColumnLayout {
-                id: content
-                spacing: Vars.spacing
+            FadeInImage {
+                id: fadeInImage
+                Layout.preferredWidth: 1
+                Layout.fillWidth: true
+                implicitHeight: content.implicitHeight
+                contentItem: ColumnLayout {
+                    id: content
+                    spacing: Vars.spacing
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                RoundCorner {
-                    // 背景图
-                    Layout.fillWidth: true
-                    radius: Vars.border_radius
-                    implicitHeight: width
-                    LinearGradientBlend {
-                        target: image
-                        anchors.fill: parent
-                        FadeInImage {
-                            id: image
+                    RoundCorner {
+                        // 背景图
+                        Layout.fillWidth: true
+                        radius: Vars.border_radius
+                        implicitHeight: width
+                        LinearGradientBlend {
+                            target: image
                             anchors.fill: parent
-                            source: modelImageUrl
+                            Image {
+                                id:image
+                                source: modelImageUrl
+                                anchors.fill: parent
+                                fillMode: Image.PreserveAspectFit
+                                onStatusChanged: {
+                                    if (image.status === Image.Ready)
+                                        fadeInImage.contentLoaded()
+                                }
+                                visible: false
+                            }
+                        }
+
+                        FAIcon {
+                            icon: FAIcons.faEyeLight
+                            color: "white"
+                            anchors.right: textPlayCount.left
+                            anchors.rightMargin: Vars.spacing_third
+                            anchors.verticalCenter: textPlayCount.verticalCenter
+                        }
+
+                        Text {
+                            // 播放数
+                            id: textPlayCount
+                            font.pixelSize: Vars.font_size
+                            color: "white"
+                            text: modelPlayCount
+                            anchors.right: parent.right
+                            anchors.top: parent.top
+                            anchors.rightMargin: Vars.spacing_half
+                            anchors.topMargin: Vars.spacing_half
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: {
+                                playIcon.visible = true
+                            }
+                            onExited: {
+                                playIcon.visible = false
+                            }
+                        }
+
+                        FAIcon {
+                            id: playIcon
+                            icon: FAIcons.faPlayCircleLight
+                            size: 20
+                            color: "white"
                             visible: false
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.rightMargin: Vars.spacing
+                            anchors.bottomMargin: Vars.spacing
                         }
                     }
-
-                    FAIcon {
-                        icon: FAIcons.faEyeLight
-                        color: "white"
-                        anchors.right: textPlayCount.left
-                        anchors.rightMargin: Vars.spacing_third
-                        anchors.verticalCenter: textPlayCount.verticalCenter
-                    }
-
                     Text {
-                        // 播放数
-                        id: textPlayCount
-                        font.pixelSize: Vars.font_size
-                        color: "white"
-                        text: modelPlayCount
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.rightMargin: Vars.spacing_half
-                        anchors.topMargin: Vars.spacing_half
+                        id: nameText
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                        text: modelName
+                        font.pixelSize: Vars.font_size_md
                     }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onEntered: {
-                            playIcon.visible = true
-                        }
-                        onExited: {
-                            playIcon.visible = false
-                        }
-                    }
-
-                    FAIcon {
-                        id: playIcon
-                        icon: FAIcons.faPlayCircleLight
-                        size: 20
-                        color: "white"
-                        visible: false
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        anchors.rightMargin: Vars.spacing
-                        anchors.bottomMargin: Vars.spacing
-                    }
-                }
-                Text {
-                    id: nameText
-                    Layout.fillWidth: true
-                    wrapMode: Text.WordWrap
-                    text: modelName
-                    font.pixelSize: Vars.font_size_md
                 }
             }
         }

@@ -15,3 +15,4 @@
 #include "top_playlist.h"
 #include "user_login.h"
 #include "user_private_message.h"
+#include "dj_catlist.h"

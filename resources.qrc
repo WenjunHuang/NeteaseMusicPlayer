@@ -3,7 +3,7 @@
         <file>qtquickcontrols2.conf</file>
         <file>ui/main.qml</file>
         <file>ui/discover_music/DiscoverMusic.qml</file>
-        <file>ui/discover_music/personalized/BannerCarousel.qml</file>
+        <file>ui/discover_music/personalized/Banner.qml</file>
         <file>ui/discover_music/personalized/Personalized.qml</file>
         <file>ui/discover_music/personalized/PersonalizedNewSongs.qml</file>
         <file>ui/discover_music/personalized/RecommendationSongLists.qml</file>
@@ -12,14 +12,13 @@
         <file>ui/discover_music/song_list/SongCategoryMenu.qml</file>
         <file>ui/discover_music/song_list/HighQualityBanner.qml</file>
         <file>ui/discover_music/song_list/SongCategorySelector.qml</file>
+        <file>ui/discover_music/dj_radios/Banner.qml</file>
         <file>ui/utils/Border.qml</file>
         <file>ui/utils/RoundCorner.qml</file>
         <file>ui/styles/color_system.mjs</file>
         <file>ui/styles/variables.mjs</file>
-        <file>ui/imports/MusicPlayer/Button.qml</file>
-        <file>ui/imports/MusicPlayer/Pane.qml</file>
-        <file>ui/imports/MusicPlayer/TabBar.qml</file>
-        <file>ui/imports/MusicPlayer/TabButton.qml</file>
+        <file>ui/imports/MusicPlayer/qmldir</file>
+        <file>ui/imports/MusicPlayer/MainStackView.qml</file>
         <file>ui/imports/FontAwesome/qmldir</file>
         <file>ui/imports/FontAwesome/fa-brands-400.ttf</file>
         <file>ui/imports/FontAwesome/fa-duotone-900.ttf</file>
@@ -34,5 +33,10 @@
         <file>ui/utils/LinearGradientBlend.qml</file>
         <file>ui/utils/PagingSelector.qml</file>
         <file>ui/utils/PagingSelector.js</file>
+        <file>ui/utils/Carousel.qml</file>
+        <file>ui/utils/Loading.qml</file>
+        <file>ui/discover_music/dj_radios/DJRadios.qml</file>
+        <file>ui/MainNavigationBar.qml</file>
+        <file>ui/utils/FlatScrollBar.qml</file>
     </qresource>
 </RCC>

@@ -43,10 +43,10 @@ namespace MusicPlayer::API {
                    {})
             .via(AppExecutor::instance()->getCPUExecutor().get())
             .thenValue([](QNetworkReply* reply) {
-                auto threadId = std::this_thread::get_id();
-                std::cout << "parseResponse:" << threadId << std::endl;
+                //                auto threadId = std::this_thread::get_id();
+                //                std::cout << "parseResponse:" << threadId << std::endl;
 
-                DeleteLater guard(reply);
+                // DeleteLater guard(reply);
                 return parseResponse<APIDJBannersData>(reply);
             });
     }
@@ -160,5 +160,49 @@ namespace MusicPlayer::API {
                    {{"cat", cat}, {"limit", limit}, {"offset", offset}, {"order", "hot"}, {"total", true}})
             .via(Util::cpuExecutor())
             .thenValue([](QNetworkReply* reply) { return parseResponse<APITopPlayListData>(reply); });
+    }
+
+    APIResponse<APIDJCategoryListData> MusicAPI::djCatList() {
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/djradio/category/get"), {CryptoType::WEAPI}, {})
+            .via(Util::cpuExecutor())
+            .thenValue([](QNetworkReply* reply) { return parseResponse<APIDJCategoryListData>(reply); });
+    }
+
+    APIResponse<QString> MusicAPI::songDetail(const QVector<int>& songIds) {
+        QVariantList c;
+        QVariantList ids;
+        for (const auto& songId : songIds) {
+            QVariantHash map;
+            map.insert("id",songId);
+            c.append(map);
+
+            ids.append(songId);
+        }
+        QString cstr{QJsonDocument(QJsonArray::fromVariantList(c))
+                            .toJson(QJsonDocument::Compact)};
+
+        QString idsstr{QJsonDocument(QJsonArray::fromVariantList(ids))
+                         .toJson(QJsonDocument::Compact)};
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/v3/song/detail"), {CryptoType::WEAPI},
+                {{"c",cstr},{"ids",idsstr}})
+            .via(Util::cpuExecutor())
+            .thenValue([](QNetworkReply* reply) {
+                return Response<QString> { QString(reply->readAll()) };
+            });
+    }
+
+    APIResponse<QString> MusicAPI::songUrl(int songId,int br) {
+        QString idsstr{QJsonDocument(QJsonArray::fromVariantList(QVariantList{QVariant(songId)}))
+                           .toJson(QJsonDocument::Compact)};
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/song/enhance/player/url"), {CryptoType::WEAPI},
+                   {{"ids",idsstr},{"br",QString("%1").arg(br)}})
+            .via(Util::cpuExecutor())
+            .thenValue([](QNetworkReply* reply) {
+              return Response<QString> { QString(reply->readAll()) };
+            });
+
     }
 } // namespace MusicPlayer::API

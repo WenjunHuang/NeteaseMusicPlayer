@@ -4,49 +4,45 @@
 
 #pragma once
 
+#include <QtCore>
+#include <folly/futures/Future.h>
 #include "../../../api/api.h"
 #include "../../../api/data/banner.h"
-#include <QtCore>
-#include <QtQml/QQmlParserStatus>
-#include <folly/futures/Future.h>
+#include "../../base_state_view_model.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
 
-    class BannerImageList;
+    struct BannerViewModelReadyDataItem {
+        Q_GADGET
+        Q_PROPERTY(QString imageUrl MEMBER imageUrl)
+        Q_PROPERTY(QString typeTitle MEMBER typeTitle)
+      public:
+        QString imageUrl;
+        QString typeTitle;
+    };
 
-    class BannerViewModel : public QObject, public QQmlParserStatus {
+    struct BannerViewModelReadyData {
+        Q_GADGET
+        Q_PROPERTY(QVariantList bannerItems MEMBER bannerItems)
+      public:
+        QVariantList bannerItems;
+    };
+
+    class BannerViewModel : public BaseStateViewModel {
         Q_OBJECT
-        Q_INTERFACES(QQmlParserStatus)
-        Q_PROPERTY(int bannerCount
-                     READ
-                       bannerCount
-                     NOTIFY
-                     bannerCountChanged)
-        Q_PROPERTY(QAbstractListModel *banners
-                     READ
-                     bannerModel)
     public:
         BannerViewModel(QObject *parent = nullptr);
 
-        void componentComplete() override;
+        Q_INVOKABLE void reload();
 
-        void classBegin() override;
-
-        int bannerCount() const;
-
-        QAbstractListModel* bannerModel();
-
-    signals:
-        void bannerCountChanged();
-
+        static void registerMetaTypes();
     private:
-        void loadBannerData();
-
         std::optional<folly::Future<std::nullopt_t>> _loading;
-
-        BannerImageList *_bannerModel;
     };
 }
+
+Q_DECLARE_METATYPE(MusicPlayer::ViewModels::BannerViewModelReadyDataItem)
+Q_DECLARE_METATYPE(MusicPlayer::ViewModels::BannerViewModelReadyData)
 
 

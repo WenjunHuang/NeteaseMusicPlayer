@@ -4,6 +4,7 @@ import QtQuick.Controls.Material 2.12
 import "../styles/variables.mjs" as Vars
 import FontAwesome 1.0
 import "PagingSelector.js" as Code
+
 // 分页控件
 Item {
     id: root
@@ -39,6 +40,14 @@ Item {
                 icon: FAIcons.faAngleLeftLight
                 anchors.centerIn: parent
             }
+            MouseArea {
+                visible: selectedPage !== 1
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    root.offset = (selectedPage - 2) * limit
+                }
+            }
         }
         Repeater {
             model: Code.createPageModel()
@@ -56,7 +65,8 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     text: modelData.text
-                    color: modelData.selected ? Material.primaryHighlightedTextColor : Material.primaryTextColor
+                    color:
+                        modelData.click ? (modelData.selected ? Material.primaryHighlightedTextColor : Material.primaryTextColor): Material.color(Material.Grey,Material.Shade100)
                 }
 
                 MouseArea {

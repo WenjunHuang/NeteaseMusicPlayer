@@ -1,2 +1,2 @@
 module MusicPlayer
-Fontawesome 1.0 Fontawesome.qml
+singleton MainStackView 1.0 MainStackView.qml

@@ -89,7 +89,7 @@ namespace MusicPlayer::API {
 
     HttpWorker::HttpWorker() : _network{new QNetworkAccessManager} {
         auto executor = Util::AppExecutor::instance();
-        //      _network->setProxy(QNetworkProxy(QNetworkProxy::Socks5Proxy,"127.0.0.1",8889));
+//              _network->setProxy(QNetworkProxy(QNetworkProxy::Socks5Proxy,"127.0.0.1",8889));
         _network->moveToThread(executor->getIOThread());
         //        _network->setParent(this);
         moveToThread(executor->getIOThread());
@@ -101,10 +101,10 @@ namespace MusicPlayer::API {
 
             QNetworkRequest request(requestEvent->url);
 
-            //                  QSslConfiguration config;
-            //                  config.setPeerVerifyMode(QSslSocket::VerifyNone);
-            //                  config.setProtocol(QSsl::TlsV1SslV3);
-            //                  request.setSslConfiguration(config);
+//                              QSslConfiguration config;
+//                              config.setPeerVerifyMode(QSslSocket::VerifyNone);
+//                              config.setProtocol(QSsl::TlsV1SslV3);
+//                              request.setSslConfiguration(config);
 
             request.setHeader(QNetworkRequest::UserAgentHeader, chooseUserAgent(requestEvent->option.ua));
             request.setRawHeader(QByteArray("Referer"), QByteArray("https://music.163.com"));
@@ -118,9 +118,10 @@ namespace MusicPlayer::API {
                         } else if (std::is_convertible_v<decltype(cookie), QHash<QString, QString>>) {
                             QByteArrayList list;
                             for (auto value = cookie.cbegin(); value != cookie.cend(); value++) {
-                                list.append(QString("%1=%2").arg(value.key()).arg(value.value()).toUtf8());
+                                auto cookie = QString("%1=%2").arg(value.key()).arg(value.value()).toUtf8();
+                                list.append(cookie);
                             }
-                            request.setRawHeader(QByteArray("Cookie"), list.join(';'));
+                            request.setRawHeader(QByteArray("Cookie"), list.join("; "));
                         }
                     },
                     requestEvent->option.cookie.value());
@@ -199,4 +200,4 @@ namespace MusicPlayer::API {
         QCoreApplication::postEvent(
             this, new HttpRequestEvent(method, std::move(url), std::move(option), std::move(data), std::move(promise)));
     }
-}
+} // namespace MusicPlayer::API
