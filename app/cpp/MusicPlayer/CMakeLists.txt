@@ -7,6 +7,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 list(APPEND CMAKE_PREFIX_PATH ${QT_CMAKE})
+set(CMAKE_MODULE_PATH ${QT_CMAKE})
 
 find_package(Qt5 REQUIRED Core Network Quick QuickControls2)
 find_package(Qt5QuickCompiler)
