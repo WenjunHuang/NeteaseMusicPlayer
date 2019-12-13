@@ -14,11 +14,11 @@ namespace MusicPlayer::API {
     QString apiErrorMessage(const APIError& error) {
         return std::visit(
             [](const auto& e) -> QString {
-                if constexpr (std::is_convertible_v<decltype(error), ErrorResponseError>)
+                if constexpr (std::is_convertible_v<decltype(e), ErrorResponseError>)
                     return e.message.value_or(QString(""));
-                else if constexpr (std::is_convertible_v<decltype(error), NetworkError>)
+                else if constexpr (std::is_convertible_v<decltype(e), NetworkError>)
                     return e.message;
-                else if constexpr (std::is_convertible_v<decltype(error), JsonFormatError>) {
+                else if constexpr (std::is_convertible_v<decltype(e), JsonFormatError>) {
                     return e.parseError.errorString();
                 }
             },

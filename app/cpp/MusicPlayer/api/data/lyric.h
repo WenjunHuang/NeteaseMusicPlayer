@@ -3,9 +3,10 @@
 //
 
 #pragma once
+
+#include <QtCore>
 namespace MusicPlayer::API {
     struct APILyricData {
-        QString 
-
+        QString lyric;
     };
-}
+} // namespace MusicPlayer::API

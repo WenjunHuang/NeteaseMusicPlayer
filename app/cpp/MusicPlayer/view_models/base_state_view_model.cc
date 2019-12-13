@@ -3,6 +3,7 @@
 //
 
 #include "base_state_view_model.h"
+#include <variant>
 void MusicPlayer::ViewModels::BaseStateViewModel::setState(const MusicPlayer::ViewModels::ViewModelState& state) {
     if (state == _state)
         return;

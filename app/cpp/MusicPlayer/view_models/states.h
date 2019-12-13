@@ -4,6 +4,7 @@
 
 #pragma once
 #include <QtCore>
+#include <variant>
 
 namespace MusicPlayer::ViewModels {
 
