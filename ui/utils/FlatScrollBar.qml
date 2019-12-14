@@ -13,7 +13,6 @@ T.ScrollBar {
     x: parent.mirrored ? 0 : parent.width - width
     y: parent.topPadding
     height: parent.availableHeight
-    active: parent.ScrollBar.horizontal.active
     padding: control.interactive ? 1 : 2
     visible: control.policy !== T.ScrollBar.AlwaysOff
 

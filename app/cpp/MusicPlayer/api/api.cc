@@ -11,11 +11,9 @@
 #include <iostream>
 #include <variant>
 
-// using namespace AsyncFuture;
 namespace MusicPlayer::API {
     using namespace MusicPlayer::Util;
     template <typename T> Response<T> parseResponse(QNetworkReply* reply) {
-        //        auto fun = [reply]() {
         auto statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         if (statusCode == 200) {
             QJsonParseError jsonError;
@@ -31,9 +29,6 @@ namespace MusicPlayer::API {
             reply->deleteLater();
             return Response<T>(std::in_place_index<0>, NetworkError{error});
         }
-        //        };
-        //        return folly::makeSemiFutureWith(fun);
-        //        return QtConcurrent::run(fun);
     }
 
     APIResponse<APIDJBannersData> MusicAPI::djBanner() {
@@ -42,13 +37,7 @@ namespace MusicPlayer::API {
                    {CryptoType::WEAPI, {QHash<QString, QString>{{"os", "pc"}}}},
                    {})
             .via(AppExecutor::instance()->getCPUExecutor().get())
-            .thenValue([](QNetworkReply* reply) {
-                //                auto threadId = std::this_thread::get_id();
-                //                std::cout << "parseResponse:" << threadId << std::endl;
-
-                // DeleteLater guard(reply);
-                return parseResponse<APIDJBannersData>(reply);
-            });
+            .thenValue([](QNetworkReply* reply) { return parseResponse<APIDJBannersData>(reply); });
     }
 
     APIResponse<APIDJCategoryExcludeHotData> MusicAPI::djCategoryExcludeHot() {
@@ -174,35 +163,28 @@ namespace MusicPlayer::API {
         QVariantList ids;
         for (const auto& songId : songIds) {
             QVariantHash map;
-            map.insert("id",songId);
+            map.insert("id", songId);
             c.append(map);
 
             ids.append(songId);
         }
-        QString cstr{QJsonDocument(QJsonArray::fromVariantList(c))
-                            .toJson(QJsonDocument::Compact)};
+        QString cstr{QJsonDocument(QJsonArray::fromVariantList(c)).toJson(QJsonDocument::Compact)};
 
-        QString idsstr{QJsonDocument(QJsonArray::fromVariantList(ids))
-                         .toJson(QJsonDocument::Compact)};
+        QString idsstr{QJsonDocument(QJsonArray::fromVariantList(ids)).toJson(QJsonDocument::Compact)};
         return HttpWorker::instance()
-            ->post(QUrl("https://music.163.com/weapi/v3/song/detail"), {CryptoType::WEAPI},
-                {{"c",cstr},{"ids",idsstr}})
+            ->post(QUrl("https://music.163.com/weapi/v3/song/detail"), {CryptoType::WEAPI}, {{"c", cstr}, {"ids", idsstr}})
             .via(Util::cpuExecutor())
-            .thenValue([](QNetworkReply* reply) {
-                return Response<QString> { QString(reply->readAll()) };
-            });
+            .thenValue([](QNetworkReply* reply) { return Response<QString>{QString(reply->readAll())}; });
     }
 
-    APIResponse<QString> MusicAPI::songUrl(int songId,int br) {
-        QString idsstr{QJsonDocument(QJsonArray::fromVariantList(QVariantList{QVariant(songId)}))
-                           .toJson(QJsonDocument::Compact)};
+    APIResponse<QString> MusicAPI::songUrl(int songId, int br) {
+        QString idsstr{
+            QJsonDocument(QJsonArray::fromVariantList(QVariantList{QVariant(songId)})).toJson(QJsonDocument::Compact)};
         return HttpWorker::instance()
-            ->post(QUrl("https://music.163.com/weapi/song/enhance/player/url"), {CryptoType::WEAPI},
-                   {{"ids",idsstr},{"br",QString("%1").arg(br)}})
+            ->post(QUrl("https://music.163.com/weapi/song/enhance/player/url"),
+                   {CryptoType::WEAPI},
+                   {{"ids", idsstr}, {"br", QString("%1").arg(br)}})
             .via(Util::cpuExecutor())
-            .thenValue([](QNetworkReply* reply) {
-              return Response<QString> { QString(reply->readAll()) };
-            });
-
+            .thenValue([](QNetworkReply* reply) { return Response<QString>{QString(reply->readAll())}; });
     }
 } // namespace MusicPlayer::API

@@ -34,10 +34,8 @@ Item {
                 layout.currentIndex = 0
             } else if (viewModel.state.kind === StateKinds.Ready) {
                 if (!root.total) {
-                    console.log(viewModel.state.data.total)
                     root.total = viewModel.state.data.total
                 }
-                console.log(viewModel.state.data.playlist)
                 layout.currentIndex = 1
             }
         }

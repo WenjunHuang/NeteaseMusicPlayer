@@ -45,7 +45,8 @@ namespace MusicPlayer::API {
                                           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, "
                                           "like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/13.10586"};
 
-    const int kHttpRequestEventType = QEvent::registerEventType();
+    const int kInitHttpManagerEventType = QEvent::registerEventType();
+    const int kHttpRequestEventType     = QEvent::registerEventType();
 
     class HttpRequestEvent : public QEvent {
       public:
@@ -87,24 +88,28 @@ namespace MusicPlayer::API {
 
     HttpWorker* HttpWorker::_instance = nullptr;
 
-    HttpWorker::HttpWorker() : _network{new QNetworkAccessManager} {
+    HttpWorker::HttpWorker() : _network{nullptr} {
         auto executor = Util::AppExecutor::instance();
-//              _network->setProxy(QNetworkProxy(QNetworkProxy::Socks5Proxy,"127.0.0.1",8889));
-        _network->moveToThread(executor->getIOThread());
-        //        _network->setParent(this);
         moveToThread(executor->getIOThread());
+        qApp->postEvent(this, new QEvent((QEvent::Type)kInitHttpManagerEventType));
     }
 
     bool HttpWorker::event(QEvent* ev) {
+        if (ev->type() == kInitHttpManagerEventType) {
+            _network = new QNetworkAccessManager;
+            //            _network->setProxy(QNetworkProxy(QNetworkProxy::Socks5Proxy, "127.0.0.1", 8889));
+            //            _network->setParent(this);
+        }
+
         if (ev->type() == kHttpRequestEventType) {
             auto requestEvent = dynamic_cast<HttpRequestEvent*>(ev);
 
             QNetworkRequest request(requestEvent->url);
 
-//                              QSslConfiguration config;
-//                              config.setPeerVerifyMode(QSslSocket::VerifyNone);
-//                              config.setProtocol(QSsl::TlsV1SslV3);
-//                              request.setSslConfiguration(config);
+            //                              QSslConfiguration config;
+            //                              config.setPeerVerifyMode(QSslSocket::VerifyNone);
+            //                              config.setProtocol(QSsl::TlsV1SslV3);
+            //                              request.setSslConfiguration(config);
 
             request.setHeader(QNetworkRequest::UserAgentHeader, chooseUserAgent(requestEvent->option.ua));
             request.setRawHeader(QByteArray("Referer"), QByteArray("https://music.163.com"));

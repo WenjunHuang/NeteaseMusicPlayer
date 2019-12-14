@@ -21,7 +21,6 @@ Item {
                                                         "copywriter": state.data.copywriter,
                                                         "coverImgUrl": state.data.coverImgUrl
                                                     })]
-                    console.log(state.data.coverImgUrl)
                     root.visible = true
                 } else{
                     root.visible = false

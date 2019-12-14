@@ -15,6 +15,10 @@
 using namespace MusicPlayer::API;
 using namespace MusicPlayer::Util;
 
+TEST_CASE("Check Open SSL","[Check]") {
+    qDebug() <<  QSslSocket::supportsSsl() << QSslSocket::sslLibraryBuildVersionString() << QSslSocket::sslLibraryVersionString();
+}
+
 TEST_CASE("djBanner", "[MusicAPI]") {
     auto app = setUp();
 

@@ -6,6 +6,7 @@
 
 int main(int argc, char* argv[]) {
     using namespace MusicPlayer;
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     try {
 //        QQuickStyle::addStylePath(":/ui");

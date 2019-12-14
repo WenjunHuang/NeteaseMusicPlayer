@@ -16,7 +16,6 @@ namespace MusicPlayer::API {
         GET,
         POST,
         PUT
-
     };
 
     enum class CryptoType { WEAPI, LINUX_API, EAPI };

@@ -22,7 +22,6 @@ Item {
         }
         visible: false
     }
-
     Blend {
         anchors.fill: target
         source: target

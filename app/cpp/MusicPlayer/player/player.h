@@ -1,7 +1,7 @@
 //
 // Created by HUANG WEN JUN on 2019/12/9.
 //
-#include <QtAV>
+#include <QtAV/QtAV>
 #include <QtCore>
 #include <memory>
 
@@ -17,6 +17,8 @@ namespace MusicPlayer::Player {
         static void freeInstance();
 
         static Player* instance();
+
+        void play(QString songUrl);
 
       private:
         QtAV::VideoOutput *_output;

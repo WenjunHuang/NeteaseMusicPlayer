@@ -23,4 +23,7 @@ namespace MusicPlayer::Player {
        _instance = nullptr;
      }
    }
+   void Player::play(QString songUrl) {
+       _avPlayer->play(songUrl);
+   }
 }
