@@ -187,4 +187,11 @@ namespace MusicPlayer::API {
             .via(Util::cpuExecutor())
             .thenValue([](QNetworkReply* reply) { return Response<QString>{QString(reply->readAll())}; });
     }
+
+    APIResponse<QString> MusicAPI::artistDesc(int artistId) {
+        return HttpWorker::instance()
+            ->post(QUrl("https://music.163.com/weapi/artist/introduction"), {CryptoType::WEAPI}, {{"id", artistId}})
+            .via(Util::cpuExecutor())
+            .thenValue([](QNetworkReply* reply) { return Response<QString>{QString(reply->readAll())}; });
+    }
 } // namespace MusicPlayer::API

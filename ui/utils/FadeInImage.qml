@@ -14,7 +14,7 @@ Item {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: 300
+                duration: 1000
             }
         }
     }

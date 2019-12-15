@@ -71,93 +71,102 @@ Item {
                             Layout.fillWidth: true
                             radius: Vars.border_radius
                             implicitHeight: width
-                            LinearGradientBlend {
-                                target: image
+                            FadeInImage {
+                                id: fadeInImage
                                 anchors.fill: parent
-                                Image {
-                                    source: modelData.coverImgUrl
-                                    fillMode: Image.PreserveAspectFit
+                                contentItem: Item {
                                     anchors.fill: parent
-                                }
-                                FadeInImage {
-                                    id: image
-                                    anchors.fill: parent
-                                }
-                            }
-
-                            FAIcon {
-                                icon: FAIcons.faEyeLight
-                                color: "white"
-                                anchors.right: textPlayCount.left
-                                anchors.rightMargin: Vars.spacing_third
-                                anchors.verticalCenter: textPlayCount.verticalCenter
-                            }
-
-                            Text {
-                                // 播放数
-                                id: textPlayCount
-                                font.pixelSize: Vars.font_size
-                                color: "white"
-                                text: modelData.playCount
-                                anchors.right: parent.right
-                                anchors.top: parent.top
-                                anchors.rightMargin: Vars.spacing_half
-                                anchors.topMargin: Vars.spacing_half
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onEntered: {
-                                    playIcon.opacity = 0.8
-                                }
-                                onExited: {
-                                    playIcon.opacity = 0
-                                }
-                            }
-
-                            Rectangle {
-                                id: playIcon
-                                height: 40
-                                width: 40
-                                opacity: 0
-                                radius: height / 2
-                                color: "white"
-                                anchors.right: parent.right
-                                anchors.bottom: parent.bottom
-                                anchors.rightMargin: Vars.spacing_half
-                                anchors.bottomMargin: Vars.spacing_half
-
-                                FAIcon {
-                                    anchors.centerIn: parent
-                                    icon: FAIcons.faPlaySolid
-                                    size: 12
-                                    color: Material.color(Material.accentColor,
-                                                          Material.Shade400)
-                                }
-
-                                Behavior on opacity {
-                                    NumberAnimation {
-                                        duration: 200
+                                    LinearGradientBlend {
+                                        target: image
+                                        anchors.fill: parent
+                                        Image {
+                                            id: image
+                                            source: modelData.coverImgUrl
+                                            fillMode: Image.PreserveAspectFit
+                                            anchors.fill: parent
+                                            onStatusChanged: {
+                                                if (image.status === Image.Ready)
+                                                    fadeInImage.contentLoaded()
+                                            }
+                                        }
                                     }
-                                }
-                            }
 
-                            RowLayout {
-                                anchors.left: parent.left
-                                anchors.bottom: parent.bottom
-                                anchors.leftMargin: Vars.spacing_half
-                                anchors.bottomMargin: Vars.spacing_half
-                                spacing: Vars.spacing_third
+                                    FAIcon {
+                                        icon: FAIcons.faEyeLight
+                                        color: "white"
+                                        anchors.right: textPlayCount.left
+                                        anchors.rightMargin: Vars.spacing_third
+                                        anchors.verticalCenter: textPlayCount.verticalCenter
+                                    }
 
-                                FAIcon {
-                                    icon: FAIcons.faUserLight
-                                    size: Vars.font_size
-                                }
-                                Text {
-                                    text: modelData.creatorName
-                                    font.pixelSize: Vars.font_size
-                                    color: "white"
+                                    Text {
+                                        // 播放数
+                                        id: textPlayCount
+                                        font.pixelSize: Vars.font_size
+                                        color: "white"
+                                        text: modelData.playCount
+                                        anchors.right: parent.right
+                                        anchors.top: parent.top
+                                        anchors.rightMargin: Vars.spacing_half
+                                        anchors.topMargin: Vars.spacing_half
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        onEntered: {
+                                            playIcon.opacity = 0.8
+                                        }
+                                        onExited: {
+                                            playIcon.opacity = 0
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        id: playIcon
+                                        height: 40
+                                        width: 40
+                                        opacity: 0
+                                        radius: height / 2
+                                        color: "white"
+                                        anchors.right: parent.right
+                                        anchors.bottom: parent.bottom
+                                        anchors.rightMargin: Vars.spacing_half
+                                        anchors.bottomMargin: Vars.spacing_half
+
+                                        FAIcon {
+                                            anchors.centerIn: parent
+                                            icon: FAIcons.faPlaySolid
+                                            size: 12
+                                            color: Material.color(
+                                                       Material.accentColor,
+                                                       Material.Shade400)
+                                        }
+
+                                        Behavior on opacity {
+                                            NumberAnimation {
+                                                duration: 200
+                                            }
+                                        }
+                                    }
+
+                                    RowLayout {
+                                        anchors.left: parent.left
+                                        anchors.bottom: parent.bottom
+                                        anchors.leftMargin: Vars.spacing_half
+                                        anchors.bottomMargin: Vars.spacing_half
+                                        spacing: Vars.spacing_third
+
+                                        FAIcon {
+                                            icon: FAIcons.faUserLight
+                                            size: Vars.font_size
+                                        }
+                                        Text {
+                                            text: modelData.creatorName
+                                            font.pixelSize: Vars.font_size
+                                            color: "white"
+                                        }
+                                    }
                                 }
                             }
                         }

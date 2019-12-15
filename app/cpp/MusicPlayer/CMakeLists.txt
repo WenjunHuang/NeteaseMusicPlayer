@@ -5,7 +5,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_INCLUDE_CURRENT_DIR  ON)
 list(APPEND CMAKE_PREFIX_PATH ${QT_CMAKE})
 set(CMAKE_MODULE_PATH ${QT_CMAKE})
 
@@ -38,8 +38,9 @@ endif ()
 
 add_subdirectory(util)
 add_subdirectory(api)
-add_subdirectory(view_models)
 add_subdirectory(repositories)
+add_subdirectory(view_models)
+add_subdirectory(services)
 add_subdirectory(player)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -50,7 +51,7 @@ else ()
 endif ()
 
 add_library(application STATIC application.cc application.h )
-target_link_libraries(application PUBLIC api util view_models repositories ${GLOG}
+target_link_libraries(application PUBLIC api util view_models services ${GLOG}
         Qt5::Core
         Qt5::Network
         Qt5::Quick

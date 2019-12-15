@@ -56,6 +56,9 @@ namespace MusicPlayer::API {
         // 歌曲url
         APIResponse<QString> songUrl(int songId,int br = 999000);
 
+        // 歌手介绍
+        APIResponse<QString> artistDesc(int artistId);
+
 
       public:
         // 向meta type system注册，程序启动时必须调用

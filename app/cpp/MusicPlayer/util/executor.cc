@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by HUANG WEN JUN on 2019/11/27.
 //
 
@@ -10,8 +10,7 @@ namespace MusicPlayer::Util {
 
     class QtExecutorEvent : public QEvent {
       public:
-        QtExecutorEvent(folly::Func&& func)
-            : QEvent{(QEvent::Type)kEventType}, _func{std::move(func)} {}
+        QtExecutorEvent(folly::Func&& func) : QEvent{(QEvent::Type)kEventType}, _func{std::move(func)} {}
 
         void runNow() { _func(); }
 
@@ -24,10 +23,7 @@ namespace MusicPlayer::Util {
       public:
         QtExecutor(QObject* worker) : _worker{worker} {}
 
-        void add(folly::Func func) {
-            QCoreApplication::postEvent(_worker,
-                                        new QtExecutorEvent(std::move(func)));
-        }
+        void add(folly::Func func) { QCoreApplication::postEvent(_worker, new QtExecutorEvent(std::move(func))); }
 
       private:
         QObject* _worker;
@@ -53,15 +49,23 @@ namespace MusicPlayer::Util {
         mainWorker->moveToThread(_mainThread);
         _mainExecutor = std::make_shared<QtExecutor>(mainWorker);
 
-        // qt的io线程
-        _ioThread = new QThread(this);
-        _ioThread->setObjectName(QLatin1Literal("IO Thread"));
-        auto ioWorker = new QtExecutorEventWorker;
-        ioWorker->moveToThread(_ioThread);
-        _ioExecutor =
-            std::make_shared<QtExecutor>(ioWorker); // folly::getIOExecutor();
-        _ioThread->start();
+        // qt的http线程
+        _httpThread = new QThread(this);
+        _httpThread->setObjectName(QLatin1String("HTTP Thread"));
+        auto httpWorker = new QtExecutorEventWorker;
+        httpWorker->moveToThread(_httpThread);
+        _httpExecutor = std::make_shared<QtExecutor>(httpWorker);
+        _httpThread->start();
 
+        // db 线程
+        _dbThread = new QThread(this);
+        _dbThread->setObjectName(QLatin1String("DB Thread"));
+        auto dbWorker = new QtExecutorEventWorker;
+        dbWorker->moveToThread(_dbThread);
+        _dbExecutor = std::make_shared<QtExecutor>(dbWorker);
+        _dbThread->start();
+
+        // cpu线程池
         _cpuExecutor = createCPUThreadPoolExecutor();
     }
     void AppExecutor::initInstance() {
@@ -69,6 +73,7 @@ namespace MusicPlayer::Util {
             _instance = new AppExecutor;
         }
     }
+
     void AppExecutor::freeInstance() {
         if (_instance != nullptr) {
             delete _instance;
@@ -77,15 +82,11 @@ namespace MusicPlayer::Util {
     }
 
     AppExecutor* AppExecutor::instance() { return _instance; }
-    std::shared_ptr<folly::Executor> AppExecutor::getCPUExecutor() {
-        return _cpuExecutor;
-    }
-    std::shared_ptr<folly::Executor> AppExecutor::getIOExecutor() {
-        return _ioExecutor;
-    }
-    std::shared_ptr<folly::Executor> AppExecutor::getMainExecutor() {
-        return _mainExecutor;
-    }
-    QThread* AppExecutor::getIOThread() { return _ioThread; }
+    std::shared_ptr<folly::Executor> AppExecutor::getCPUExecutor() { return _cpuExecutor; }
+    std::shared_ptr<folly::Executor> AppExecutor::getHTTPExecutor() { return _httpExecutor; }
+    std::shared_ptr<folly::Executor> AppExecutor::getMainExecutor() { return _mainExecutor; }
+    std::shared_ptr<folly::Executor> AppExecutor::getDBExecutor() { return _dbExecutor; }
+
+    QThread* AppExecutor::getHTTPThread() { return _httpThread; }
 
 } // namespace MusicPlayer::Util

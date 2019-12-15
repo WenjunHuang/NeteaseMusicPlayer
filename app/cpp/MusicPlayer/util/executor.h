@@ -20,30 +20,36 @@ namespace MusicPlayer::Util {
 
         static AppExecutor* instance();
 
-        // 使用folly的cpu thread pool executor，与qt无关
+        // folly的cpu thread pool executor，与qt无关
         std::shared_ptr<folly::Executor> getCPUExecutor();
 
-        // 使用一个固定的qt QThread作为io线程，因为qt的http库
-        std::shared_ptr<folly::Executor> getIOExecutor();
+        // 一个固定的qt QThread作为qt http线程
+        std::shared_ptr<folly::Executor> getHTTPExecutor();
+
+        // 固定的qt thread作为sqlite3操作线程
+        std::shared_ptr<folly::Executor> getDBExecutor();
 
         // qt主线程executor
         std::shared_ptr<folly::Executor> getMainExecutor();
 
-        QThread* getIOThread();
+        QThread* getHTTPThread();
+        QThread* getDBThread();
 
       private:
         static AppExecutor* _instance;
         std::shared_ptr<folly::Executor> _cpuExecutor;
-        std::shared_ptr<folly::Executor> _ioExecutor;
+        std::shared_ptr<folly::Executor> _httpExecutor;
+        std::shared_ptr<folly::Executor> _dbExecutor;
         std::shared_ptr<folly::Executor> _mainExecutor;
 
-        QThread* _ioThread;
+        QThread* _httpThread;
+        QThread* _dbThread;
         QThread* _mainThread;
     };
 
     inline folly::Executor* mainExecutor() { return AppExecutor::instance()->getMainExecutor().get(); }
 
-    inline folly::Executor* ioExecutor() { return AppExecutor::instance()->getIOExecutor().get(); }
+    inline folly::Executor* httpExecutor() { return AppExecutor::instance()->getHTTPExecutor().get(); }
 
     inline folly::Executor* cpuExecutor() { return AppExecutor::instance()->getCPUExecutor().get(); }
 

@@ -12,7 +12,7 @@
 #include <variant>
 #include <vector>
 
-namespace MusicPlayer::Repository {
+namespace MusicPlayer::Service {
     using namespace MusicPlayer::API;
     using namespace MusicPlayer::Util;
 

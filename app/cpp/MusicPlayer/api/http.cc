@@ -90,7 +90,7 @@ namespace MusicPlayer::API {
 
     HttpWorker::HttpWorker() : _network{nullptr} {
         auto executor = Util::AppExecutor::instance();
-        moveToThread(executor->getIOThread());
+        moveToThread(executor->getHTTPThread());
         qApp->postEvent(this, new QEvent((QEvent::Type)kInitHttpManagerEventType));
     }
 
