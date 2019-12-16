@@ -20,13 +20,12 @@ namespace MusicPlayer::Repository {
     };
 
     struct PlayListSong {
-        SongId songId;
-        QString songName;
-        QVector<PlayListSongArtist> artists;
-        QVector<SongQuality> songQualities;
-        PlayListSongAlbum album;
-        std::optional<MusicVideoId> musicVideoId;
-        int songDuration;
+        SongId id;
+        QString name;
+        QString coverImgUrl;
+        int duration;
+        QString qualities;
+        QString artistsNames;
     };
 
     class PlayListRepository : public QAbstractListModel {
@@ -76,6 +75,6 @@ namespace MusicPlayer::Repository {
         std::optional<int> rowOfSong(SongId songId);
 
       private:
-        QVector<PlayListSong> _songs;
+        QVector<TPlayListSong> _songs;
     };
 } // namespace MusicPlayer::Repository

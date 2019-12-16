@@ -22,18 +22,19 @@ namespace MusicPlayer::ViewModels {
         MusicAPI api;
         _loading = api.djBanner().via(Util::mainExecutor()).thenValue([this](Response<APIDJBannersData>&& response) {
             std::visit(
-                [this](const auto& data) {
-                    if constexpr (std::is_convertible_v<decltype(data), APIDJBannersData>) {
+                overload{
+                    [this](const APIDJBannersData& data) {
                         QVariantList items;
                         for (const auto& item : data.data) {
                             items.append(QVariant::fromValue(DJBannerViewModelReadyStateDataItem{item.pic, item.typeTitle}));
                         }
                         setState(ReadyState{QVariant::fromValue(DJBannerViewModelReadyStateData{items})});
-                    } else if constexpr (std::is_convertible_v<decltype(data), APIError>) {
-                        auto errorMessage = apiErrorMessage(data);
+                    },
+                    [this](const APIError& error) {
+                        auto errorMessage = apiErrorMessage(error);
                         qDebug() << errorMessage;
                         setState(ErrorState{errorMessage});
-                    };
+                    },
                 },
                 response);
 

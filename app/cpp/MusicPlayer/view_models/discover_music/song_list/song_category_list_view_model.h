@@ -3,8 +3,8 @@
 //
 
 #pragma once
+#include ""
 #include "../../../api/api.h"
-#include "../../../repositories/repositories.h"
 #include "../../../util/util.h"
 #include "../../states.h"
 #include "../../base_state_view_model.h"
@@ -13,7 +13,7 @@
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
-    using namespace MusicPlayer::Repository;
+    using namespace MusicPlayer::Service;
     using namespace MusicPlayer::Util;
 
     struct SongCategoryListViewModelReadyStateCategoryItem {

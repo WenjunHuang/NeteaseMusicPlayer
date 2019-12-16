@@ -53,7 +53,7 @@ namespace MusicPlayer::Repository {
         if (role == Roles::SongDurationRole)
             return song.songDuration;
     }
-    void PlayListRepository::addSong(const PlayListSong& song) {
+    void PlayListRepository::addSong(const TPlayListSong& song) {
         if (contains(song.songId))
             return;
 
@@ -61,8 +61,8 @@ namespace MusicPlayer::Repository {
         _songs.append(song);
         endInsertRows();
     }
-    void PlayListRepository::addSongs(const QVector<PlayListSong>& songs) {
-        QVector<PlayListSong> toAdd;
+    void PlayListRepository::addSongs(const QVector<TPlayListSong>& songs) {
+        QVector<TPlayListSong> toAdd;
         std::copy_if(songs.cbegin(), songs.cend(), std::back_inserter(toAdd), [this](const auto& song) {
             return !contains(song.songId);
         });
