@@ -6,9 +6,10 @@
 #include "../commons.h"
 #include <QtCore>
 #include <algorithm>
+#include <folly/futures/Future.h>
 #include <optional>
 
-namespace MusicPlayer::Repository {
+namespace MusicPlayer::Service {
     struct PlayListSongArtist {
         ArtistId artistId;
         QString artistName;
@@ -23,9 +24,11 @@ namespace MusicPlayer::Repository {
         SongId id;
         QString name;
         QString coverImgUrl;
+        PlayListSongAlbum album;
         int duration;
-        QString qualities;
-        QString artistsNames;
+        QVector<SongQuality> qualities;
+        QVector<PlayListSongArtist> artists;
+        std::optional<MusicVideoId> musicVideoId;
     };
 
     class PlayListRepository : public QAbstractListModel {
@@ -66,6 +69,7 @@ namespace MusicPlayer::Repository {
         bool hasNext(SongId songId) { return nextSongOf(songId) != std::nullopt; }
 
         std::optional<SongId> prevSongOf(SongId songId);
+
         bool hasPrevious(SongId songId) { return prevSongOf(songId) != std::nullopt; }
 
         bool contains(SongId songId);
@@ -75,6 +79,7 @@ namespace MusicPlayer::Repository {
         std::optional<int> rowOfSong(SongId songId);
 
       private:
-        QVector<TPlayListSong> _songs;
+        QVector<PlayListSong> _songs;
+        std::optional<folly::Future<std::nullopt_t>> _syncDbJob;
     };
 } // namespace MusicPlayer::Repository

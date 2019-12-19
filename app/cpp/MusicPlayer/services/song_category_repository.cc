@@ -5,7 +5,7 @@
 #include "song_category_repository.h"
 #include <variant>
 
-namespace MusicPlayer::Repository {
+namespace MusicPlayer::Service {
     SongCategoryRepository* SongCategoryRepository::_instance = nullptr;
     void SongCategoryRepository::initInstance() {
         if (!_instance)

@@ -4,12 +4,14 @@
 
 #pragma once
 
-#include "../util/sqlite_orm.h"
+#include "tables.h"
 #include <QtCore>
+#include <folly/futures/Future.h>
 #include <memory>
 
 namespace MusicPlayer::Repository {
     using namespace sqlite_orm;
+    using namespace folly;
     class DatabaseRepository : public QObject {
         Q_OBJECT
         Q_DISABLE_COPY_MOVE(DatabaseRepository)
@@ -20,8 +22,11 @@ namespace MusicPlayer::Repository {
         static void freeInstance();
         static DatabaseRepository* instance();
 
+        SemiFuture<Unit> replacePlayListSongs(QVector<TPlayListSong> songs);
+        SemiFuture<QVector<TPlayListSong>> getAllPlayListSongs();
+
       private:
         static DatabaseRepository* _instance;
-        std::unique_ptr<internal::storage_base> _storage;
+        QString _dbFilePath;
     };
 } // namespace MusicPlayer::Repository

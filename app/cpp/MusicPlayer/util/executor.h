@@ -53,6 +53,8 @@ namespace MusicPlayer::Util {
 
     inline folly::Executor* cpuExecutor() { return AppExecutor::instance()->getCPUExecutor().get(); }
 
+    inline folly::Executor* dbExecutor() { return AppExecutor::instance()->getDBExecutor().get(); }
+
     class QtExecutorEventWorker : public QObject {
         Q_OBJECT
       public:

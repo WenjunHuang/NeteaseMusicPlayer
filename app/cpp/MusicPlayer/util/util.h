@@ -1,6 +1,7 @@
 //
 // Created by HUANG WEN JUN on 2019/11/28.
 //
+#pragma once
 #include "executor.h"
 #include "json.h"
 #include "logger.h"

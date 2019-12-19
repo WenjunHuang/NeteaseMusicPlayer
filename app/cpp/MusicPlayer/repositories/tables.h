@@ -6,16 +6,17 @@
 #include "../commons.h"
 #include "../util/sqlite_orm.h"
 #include <QtCore>
+#include <string>
 
 namespace MusicPlayer::Repository {
     using namespace sqlite_orm;
     struct TPlayListSong {
         SongId id;
-        QString name;
-        QString coverImgUrl;
+        std::string name;
+        std::string coverImgUrl;
         int duration;
-        QString qualities;
-        QString artistsNames;
+        std::string qualities;
+        std::string artistsNames;
 
         static inline auto table() {
             return make_table("songs",

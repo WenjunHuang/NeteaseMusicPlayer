@@ -4,7 +4,7 @@
 
 #include "application.h"
 #include "api/data/data.h"
-#include "repositories/repositories.h"
+#include "repositories/database_repository.h"
 #include "view_models/view_models.h"
 #include <QQuickStyle>
 #include <QtQml/QQmlApplicationEngine>
@@ -21,10 +21,11 @@ namespace MusicPlayer {
     }
 
     Application::Application(const QString& id, int& argc, char** argv) : QGuiApplication(argc, argv) {
+        // singletons
         Util::Logger::initInstance();
         Util::AppExecutor::initInstance();
         API::HttpWorker::initInstance();
-        Repository::SongCategoryRepository::initInstance();
+        Repository::DatabaseRepository::initInstance();
 
         // 注册Viewmodel的metatype
         ViewModels::registerMetaTypes();
