@@ -8,6 +8,7 @@
 #include "view_models/view_models.h"
 #include <QQuickStyle>
 #include <QtQml/QQmlApplicationEngine>
+#include <services/play_list_repository.h>
 
 namespace MusicPlayer {
     int Application::run(const QStringList& params) {
@@ -26,6 +27,7 @@ namespace MusicPlayer {
         Util::AppExecutor::initInstance();
         API::HttpWorker::initInstance();
         Repository::DatabaseRepository::initInstance();
+        Service::PlayListRepository::initInstance();
 
         // 注册Viewmodel的metatype
         ViewModels::registerMetaTypes();

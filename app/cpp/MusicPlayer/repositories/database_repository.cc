@@ -40,33 +40,47 @@ namespace MusicPlayer::Repository {
         storage.sync_schema();
     }
 
-    SemiFuture<Unit> DatabaseRepository::replacePlayListSongs(QVector<TPlayListSong> songs) {
+    SemiFuture<Unit> DatabaseRepository::replacePlayListSongs(std::vector<TPlayListSong>&& songs) {
         return SemiFuture<Unit>().via(dbExecutor()).thenValue([this, songs = std::move(songs)](Unit u) {
-            auto storage = getStorage(_dbFilePath);
+            int batchSize = 10;
+            auto storage  = getStorage(_dbFilePath);
             storage.begin_transaction();
             try {
                 storage.remove_all<TPlayListSong>();
-//                for (const auto& song: songs) {
-//                    storage.insert(song);
-//                }
-                storage.insert_range(songs.cbegin(),songs.cend());
+                //                for (const auto& song: songs) {
+                //                    storage.insert(song);
+                //                }
+                auto start = songs.cbegin();
+                int count = 0;
+                for (auto index = songs.cbegin();index < songs.cend();index++) {
+                    if (count != 0 && (count  % batchSize) == 0) {
+                        storage.insert_range(start, index);
+                        start = index;
+                    }
+                    count++;
+                }
+                if (start < songs.cend())
+                    storage.insert_range(start, songs.cend());
                 storage.commit();
+                std::cout << "committed" << std::endl;
             } catch (...) {
                 storage.rollback();
+                std::cout << "rollback" << std::endl;
                 throw;
             }
         });
     }
 
-    SemiFuture<QVector<TPlayListSong>> DatabaseRepository::getAllPlayListSongs() {
+    SemiFuture<std::vector<TPlayListSong>> DatabaseRepository::getAllPlayListSongs() {
         return SemiFuture<Unit>().via(dbExecutor()).thenValue([this](Unit u) {
             auto storage = getStorage(_dbFilePath);
-            QVector<TPlayListSong> result;
-            for (auto &song: storage.iterate<TPlayListSong>(order_by(&TPlayListSong::id))) {
-                result.append(song);
-            }
-
-            return result;
+            return storage.get_all<TPlayListSong>(order_by(&TPlayListSong::songId));
+            //            std::vector<TPlayListSong> result;
+            //            for (auto &song: storage.iterate<TPlayListSong>(order_by(&TPlayListSong::songId))) {
+            //                result.push_back(song);
+            //            }
+            //
+            //            return result;
         });
     }
 } // namespace MusicPlayer::Repository

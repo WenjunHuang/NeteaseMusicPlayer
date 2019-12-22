@@ -7,6 +7,7 @@
 #include "tables.h"
 #include <QtCore>
 #include <folly/futures/Future.h>
+#include <vector>
 #include <memory>
 
 namespace MusicPlayer::Repository {
@@ -22,8 +23,8 @@ namespace MusicPlayer::Repository {
         static void freeInstance();
         static DatabaseRepository* instance();
 
-        SemiFuture<Unit> replacePlayListSongs(QVector<TPlayListSong> songs);
-        SemiFuture<QVector<TPlayListSong>> getAllPlayListSongs();
+        SemiFuture<Unit> replacePlayListSongs(std::vector<TPlayListSong>&& songs);
+        SemiFuture<std::vector<TPlayListSong>> getAllPlayListSongs();
 
       private:
         static DatabaseRepository* _instance;

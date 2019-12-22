@@ -9,6 +9,7 @@
 #include <folly/futures/Future.h>
 #include <optional>
 
+
 namespace MusicPlayer::Service {
     struct PlayListSongArtist {
         ArtistId artistId;
@@ -45,7 +46,9 @@ namespace MusicPlayer::Service {
             HasSQRole,
             AlbumNameRole,
             MusicVideoIdRole,
-            SongDurationRole
+            SongDurationRole,
+            IsPlayingRole,
+            IsPausedRole,
         };
 
         int rowCount(const QModelIndex& parent) const override;
@@ -78,7 +81,18 @@ namespace MusicPlayer::Service {
 
         std::optional<int> rowOfSong(SongId songId);
 
+      public:
+        static void initInstance();
+        static void freeInstance();
+        static PlayListRepository* instance();
+
+        void loadFromDb();
       private:
+        void syncToDb();
+
+      private:
+        static PlayListRepository *_instance;
+
         QVector<PlayListSong> _songs;
         std::optional<folly::Future<std::nullopt_t>> _syncDbJob;
     };

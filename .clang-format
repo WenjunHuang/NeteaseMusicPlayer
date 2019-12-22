@@ -7,6 +7,7 @@ PointerAlignment: Left
 AlignConsecutiveAssignments: true
 AlignEscapedNewlines: Right
 AlignTrailingComments: true
+AlignOperands: true
 BinPackArguments: false
 BinPackParameters: false
 AllowAllArgumentsOnNextLine: true
@@ -15,4 +16,4 @@ AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: true
 NamespaceIndentation: All
-AllowShortLambdasOnASingleLine: true
+AllowShortLambdasOnASingleLine: All
