@@ -1,4 +1,10 @@
 add_library(player STATIC player.cc)
-target_link_libraries(player PUBLIC Qt5::Core Qt5::Quick  api util repositories)
-target_link_libraries(player PUBLIC "${QTAV_LIBRARIES}/QtAV")
+target_link_libraries(player PUBLIC Qt5::Core Qt5::Quick api util repositories)
+if (APPLE)
+    target_link_libraries(player PUBLIC "${QTAV_LIBRARIES}/QtAV")
+endif ()
+if (WIN32)
+    target_link_libraries(player PUBLIC ${QTAV_LIBRARIES})
+#    target_link_libraries(player PUBLIC QtAV)
+endif ()
 

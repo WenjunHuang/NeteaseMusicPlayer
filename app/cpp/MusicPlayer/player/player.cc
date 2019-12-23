@@ -88,6 +88,7 @@ namespace MusicPlayer::Player {
         MusicAPI api;
         auto f = api.songUrl(songId, quality).via(mainExecutor()).thenValue([=](Response<APISongUrlData> response) {
             std::visit(overload{[=](const APISongUrlData& urlData) {
+                qDebug() << urlData.data[0].url;
                                     this->_avPlayer->setFile(urlData.data[0].url);
                                     this->_avPlayer->load();
                                     this->_avPlayer->setPosition(position);
@@ -98,6 +99,7 @@ namespace MusicPlayer::Player {
                                         position,
                                     });
                                     this->_avPlayer->play();
+                                    qDebug() << "ok";
                                 },
                                 [](const auto& error) { qDebug() << "Error"; }},
                        response);
