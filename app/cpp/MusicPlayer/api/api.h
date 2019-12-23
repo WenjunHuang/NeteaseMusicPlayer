@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "../commons.h"
 #include "data/data.h"
 #include "http.h"
 #include <QFuture>
@@ -39,26 +40,25 @@ namespace MusicPlayer::API {
         APIResponse<APIPlaylistCatListData> playlistCatlist();
 
         // 精品歌单
-        APIResponse<APITopPlayListData> topPlaylistHighQuality(const QString& cat = "全部",int limit = 50,qint64 before = 0);
+        APIResponse<APITopPlayListData> topPlaylistHighQuality(const QString& cat = "全部", int limit = 50, qint64 before = 0);
 
         // 歌单详情
         APIResponse<APIPlayListDetailData> playlistDetail(int playlistId);
 
         // 分类歌单
-        APIResponse<APITopPlayListData> topPlaylist(const QString& cat,int limit = 50, int offset = 0);
+        APIResponse<APITopPlayListData> topPlaylist(const QString& cat, int limit = 50, int offset = 0);
 
         // 电台分类
         APIResponse<APIDJCategoryListData> djCatList();
 
         // 歌曲详情
-        APIResponse<QString> songDetail(const QVector<int> &songIds);
+        APIResponse<QString> songDetail(const QVector<int>& songIds);
 
         // 歌曲url
-        APIResponse<QString> songUrl(int songId,int br = 999000);
+        APIResponse<APISongUrlData> songUrl(SongId songId, SongQuality songQuality = SongQuality::Q990000);
 
         // 歌手介绍
-        APIResponse<QString> artistDesc(int artistId);
-
+        APIResponse<QString> artistDesc(ArtistId artistId);
 
       public:
         // 向meta type system注册，程序启动时必须调用

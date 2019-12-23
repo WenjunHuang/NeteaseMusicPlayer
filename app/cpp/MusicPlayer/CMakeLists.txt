@@ -5,12 +5,12 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
-set(CMAKE_INCLUDE_CURRENT_DIR  ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 list(APPEND CMAKE_PREFIX_PATH ${QT_CMAKE})
 set(CMAKE_MODULE_PATH ${QT_CMAKE})
 
+find_package(QtAV REQUIRED)
 find_package(Qt5 REQUIRED Core Network Quick QuickControls2)
-find_package(QtAV)
 add_compile_definitions(QT_NO_FOREACH)
 
 if (WIN32)
@@ -55,13 +55,13 @@ else ()
     set(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
 endif ()
 
-add_library(application STATIC application.cc application.h )
-target_link_libraries(application PUBLIC api util view_models services ${GLOG}
+add_library(application STATIC application.cc application.h)
+target_link_libraries(application PUBLIC api util view_models services player ${GLOG}
         Qt5::Core
         Qt5::Network
         Qt5::Quick
         Qt5::QuickControls2)
 
 add_executable(MusicPlayer main.cpp ${RESOURCES})
-target_link_libraries(MusicPlayer LINK_PRIVATE application)
+target_link_libraries(MusicPlayer PRIVATE application)
 

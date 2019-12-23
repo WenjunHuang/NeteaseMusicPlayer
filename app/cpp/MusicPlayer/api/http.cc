@@ -155,10 +155,10 @@ namespace MusicPlayer::API {
                                            {"params", requestEvent->data}};
                     content = linuxApi(linuxData);
                     request.setHeader(QNetworkRequest::UserAgentHeader,
-                                      QLatin1Literal("Mozilla/5.0 (X11; Linux x86_64) "
+                                      QLatin1String("Mozilla/5.0 (X11; Linux x86_64) "
                                                      "AppleWebKit/537.36 (KHTML, like Gecko) "
                                                      "Chrome/60.0.3112.90 Safari/537.36"));
-                    request.setUrl(QUrl(QLatin1Literal("https://music.163.com/api/linux/forward")));
+                    request.setUrl(QUrl(QLatin1String("https://music.163.com/api/linux/forward")));
                 }
 
                 reply = _network->post(request, content);

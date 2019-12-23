@@ -8,11 +8,11 @@ namespace MusicPlayer::API {
     APIPersonalizedNewSongResultSongAlbumData APIPersonalizedNewSongResultSongAlbumData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("type"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
-            Util::fromJsonValue<QUrl>(object.value(QLatin1Literal("picUrl"))),
-            Util::fromJsonArray<QString>(object.value(QLatin1Literal("alias"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("id"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("type"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("name"))),
+            Util::fromJsonValue<QUrl>(object.value(QLatin1String("picUrl"))),
+            Util::fromJsonArray<QString>(object.value(QLatin1String("alias"))),
         };
     }
 
@@ -28,9 +28,9 @@ namespace MusicPlayer::API {
     APIPersonalizedNewSongResultSongArtistData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
-            Util::fromJsonArray<QString>(object.value(QLatin1Literal("alias"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("id"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("name"))),
+            Util::fromJsonArray<QString>(object.value(QLatin1String("alias"))),
         };
     }
 
@@ -45,13 +45,13 @@ namespace MusicPlayer::API {
     APIPersonalizedNewSongResultSongData APIPersonalizedNewSongResultSongData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
-            Util::fromJsonArray<QString>(object.value(QLatin1Literal("alias"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("mvid"))),
-            Util::fromJsonArray<APIPersonalizedNewSongResultSongArtistData>(object.value(QLatin1Literal("artists"))),
-            Util::fromJsonValue<APIPersonalizedNewSongResultSongAlbumData>(object.value(QLatin1Literal("album"))),
-            Util::fromJsonValue<APISongPrivilegeData>(object.value(QLatin1Literal("privilege"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("id"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("name"))),
+            Util::fromJsonArray<QString>(object.value(QLatin1String("alias"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("mvid"))),
+            Util::fromJsonArray<APIPersonalizedNewSongResultSongArtistData>(object.value(QLatin1String("artists"))),
+            Util::fromJsonValue<APIPersonalizedNewSongResultSongAlbumData>(object.value(QLatin1String("album"))),
+            Util::fromJsonValue<APISongPrivilegeData>(object.value(QLatin1String("privilege"))),
         };
     }
     bool APIPersonalizedNewSongResultSongData::operator==(const APIPersonalizedNewSongResultSongData& other) const {
@@ -65,8 +65,8 @@ namespace MusicPlayer::API {
     APIPersonalizedNewSongData APIPersonalizedNewSongData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("category"))),
-            Util::fromJsonArray<APIPersonalizedNewSongResultData>(object.value(QLatin1Literal("result"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("category"))),
+            Util::fromJsonArray<APIPersonalizedNewSongResultData>(object.value(QLatin1String("result"))),
         };
     }
 
@@ -79,10 +79,10 @@ namespace MusicPlayer::API {
     APIPersonalizedNewSongResultData APIPersonalizedNewSongResultData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("type"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
-            Util::fromJsonValue<APIPersonalizedNewSongResultSongData>(object.value(QLatin1Literal("song"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("id"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("type"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("name"))),
+            Util::fromJsonValue<APIPersonalizedNewSongResultSongData>(object.value(QLatin1String("song"))),
         };
     }
 

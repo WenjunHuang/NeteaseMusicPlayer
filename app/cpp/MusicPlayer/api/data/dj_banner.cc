@@ -8,12 +8,12 @@ namespace MusicPlayer::API {
     APIDJBannerData APIDJBannerData::fromJsonValue(const QJsonValue& value) {
         auto object = value.toObject();
 
-        return {Util::fromJsonValue<int>(object.value(QLatin1Literal("targetId"))),
-                Util::fromJsonValue<int>(object.value(QLatin1Literal("targetType"))),
-                Util::fromJsonValue<QString>(object.value(QLatin1Literal("pic"))),
-                Util::fromJsonValue<QString>(object.value(QLatin1Literal("url"))),
-                Util::fromJsonValue<QString>(object.value(QLatin1Literal("typeTitle"))),
-                Util::fromJsonValue<bool>(object.value(QLatin1Literal("exclusive")))};
+        return {Util::fromJsonValue<int>(object.value(QLatin1String("targetId"))),
+                Util::fromJsonValue<int>(object.value(QLatin1String("targetType"))),
+                Util::fromJsonValue<QString>(object.value(QLatin1String("pic"))),
+                Util::fromJsonValue<QString>(object.value(QLatin1String("url"))),
+                Util::fromJsonValue<QString>(object.value(QLatin1String("typeTitle"))),
+                Util::fromJsonValue<bool>(object.value(QLatin1String("exclusive")))};
     }
 
     bool APIDJBannerData::operator==(const APIDJBannerData& other) const {
@@ -25,7 +25,7 @@ namespace MusicPlayer::API {
 
     APIDJBannersData APIDJBannersData::fromJsonValue(const QJsonValue& value) {
         auto object = value.toObject();
-        return {Util::fromJsonArray<APIDJBannerData>(object.value(QLatin1Literal("data")))};
+        return {Util::fromJsonArray<APIDJBannerData>(object.value(QLatin1String("data")))};
     }
 
     bool APIDJBannersData::operator==(const APIDJBannersData& other) const { return data == other.data; }

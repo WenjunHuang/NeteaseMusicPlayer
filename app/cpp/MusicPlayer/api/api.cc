@@ -33,7 +33,7 @@ namespace MusicPlayer::API {
 
     APIResponse<APIDJBannersData> MusicAPI::djBanner() {
         return HttpWorker::instance()
-            ->post(QUrl(QLatin1Literal("https://music.163.com/weapi/djradio/banner/get")),
+            ->post(QUrl(QLatin1String("https://music.163.com/weapi/djradio/banner/get")),
                    {CryptoType::WEAPI, {QHash<QString, QString>{{"os", "pc"}}}},
                    {})
             .via(AppExecutor::instance()->getCPUExecutor().get())
@@ -70,7 +70,7 @@ namespace MusicPlayer::API {
 
     APIResponse<APIPersonalizedData> MusicAPI::personalized(int limit) {
         return HttpWorker::instance()
-            ->post(QUrl(QLatin1Literal("https://music.163.com/weapi/personalized/playlist")),
+            ->post(QUrl(QLatin1String("https://music.163.com/weapi/personalized/playlist")),
                    {CryptoType::WEAPI, {}},
                    {{"limit", limit}, {"total", true}, {"n", 1000}})
             .via(Util::AppExecutor::instance()->getCPUExecutor().get())
@@ -177,15 +177,24 @@ namespace MusicPlayer::API {
             .thenValue([](QNetworkReply* reply) { return Response<QString>{QString(reply->readAll())}; });
     }
 
-    APIResponse<QString> MusicAPI::songUrl(int songId, int br) {
+    APIResponse<APISongUrlData> MusicAPI::songUrl(SongId songId, SongQuality songQuality) {
         QString idsstr{
             QJsonDocument(QJsonArray::fromVariantList(QVariantList{QVariant(songId)})).toJson(QJsonDocument::Compact)};
+        int br;
+        if (songQuality == SongQuality::Q96000)
+            br = 96000;
+        if (songQuality == SongQuality::Q160000)
+            br = 160000;
+        if (songQuality == SongQuality::Q320000)
+            br = 320000;
+        if (songQuality == SongQuality::Q990000)
+            br = 990000;
         return HttpWorker::instance()
             ->post(QUrl("https://music.163.com/weapi/song/enhance/player/url"),
                    {CryptoType::WEAPI},
                    {{"ids", idsstr}, {"br", QString("%1").arg(br)}})
             .via(Util::cpuExecutor())
-            .thenValue([](QNetworkReply* reply) { return Response<QString>{QString(reply->readAll())}; });
+            .thenValue([](QNetworkReply* reply) { return parseResponse<APISongUrlData>(reply); });
     }
 
     APIResponse<QString> MusicAPI::artistDesc(int artistId) {

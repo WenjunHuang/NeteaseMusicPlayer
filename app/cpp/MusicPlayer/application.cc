@@ -6,6 +6,7 @@
 #include "api/data/data.h"
 #include "repositories/database_repository.h"
 #include "view_models/view_models.h"
+#include "player/player.h"
 #include <QQuickStyle>
 #include <QtQml/QQmlApplicationEngine>
 #include <services/play_list_repository.h>
@@ -28,6 +29,8 @@ namespace MusicPlayer {
         API::HttpWorker::initInstance();
         Repository::DatabaseRepository::initInstance();
         Service::PlayListRepository::initInstance();
+
+        Player::AudioPlayer::initInstance();
 
         // 注册Viewmodel的metatype
         ViewModels::registerMetaTypes();

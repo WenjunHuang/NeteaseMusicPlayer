@@ -3,6 +3,7 @@
 //
 #include "../commons.h"
 #include <QtAV/QtAV>
+//#include <QtAV>
 #include <QtCore>
 #include <folly/futures/Future.h>
 #include <memory>
@@ -52,14 +53,14 @@ namespace MusicPlayer::Player {
 
     using PlayerState = std::variant<EmptyState, PlayingAudioState, PausedAudioState, LoadingAudioState, ErrorState>;
 
-    class Player : public QObject {
+    class AudioPlayer : public QObject {
         Q_OBJECT
-        Q_DISABLE_COPY_MOVE(Player)
+        Q_DISABLE_COPY_MOVE(AudioPlayer)
         //        Q_PROPERTY(SongId currentSongId READ currentSongId NOTIFY currentSongIdChanged)
-        //        Q_PROPERTY(MusicPlayer::Player::SongPlayingState READ currentSongPlayingState NOTIFY
+        //        Q_PROPERTY(MusicPlayer::AudioPlayer::SongPlayingState READ currentSongPlayingState NOTIFY
         //        currentSongPlayingStateChanged)
 
-        Player();
+        AudioPlayer();
 
       public:
         enum class SongPlayingState { Playing, Paused };
@@ -76,7 +77,7 @@ namespace MusicPlayer::Player {
 
         static void freeInstance();
 
-        static Player* instance();
+        static AudioPlayer* instance();
 
         void playAudio(SongId songId, SongQuality quality);
         void pauseAudio();
@@ -90,12 +91,12 @@ namespace MusicPlayer::Player {
         void positionChanged(qint64 position);
 
       private:
-        QtAV::VideoOutput* _output;
+        QtAV::VideoOutput* _output = nullptr;
         QtAV::AVPlayer* _avPlayer;
         int _avPlayerNotifyInterval = 1000;
 
         PlayerState _state;
 
-        static Player* _instance;
+        static AudioPlayer* _instance;
     };
-} // namespace MusicPlayer::Player
+} // namespace MusicPlayer::AudioPlayer

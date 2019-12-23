@@ -7,14 +7,14 @@ namespace MusicPlayer::API {
     APIBannerData APIBannerData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("imageUrl"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("targetId"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("targetType"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("titleColor"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("typeTitle"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("exclusive"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("encodeId"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("scm"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("imageUrl"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("targetId"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("targetType"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("titleColor"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("typeTitle"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("exclusive"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("encodeId"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("scm"))),
         };
     }
 
@@ -29,7 +29,7 @@ namespace MusicPlayer::API {
     APIBannersData APIBannersData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
 
-        return {Util::fromJsonArray<APIBannerData>(object.value(QLatin1Literal("banners")))};
+        return {Util::fromJsonArray<APIBannerData>(object.value(QLatin1String("banners")))};
     }
 
     bool APIBannersData::operator==(const APIBannersData& other) const { return banners == other.banners; }

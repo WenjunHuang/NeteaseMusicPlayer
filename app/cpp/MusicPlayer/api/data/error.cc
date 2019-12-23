@@ -8,8 +8,8 @@ namespace MusicPlayer::API {
     ErrorResponseError ErrorResponseError::fromJsonValue(const QJsonValue& value) {
         auto object = value.toObject();
 
-        return {Util::fromJsonValue<int>(object.value(QLatin1Literal("code"))),
-                Util::fromOptionalJsonValue<QString>(QLatin1Literal("message"))};
+        return {Util::fromJsonValue<int>(object.value(QLatin1String("code"))),
+                Util::fromOptionalJsonValue<QString>(QLatin1String("message"))};
     }
     QString apiErrorMessage(const APIError& error) {
         return std::visit(

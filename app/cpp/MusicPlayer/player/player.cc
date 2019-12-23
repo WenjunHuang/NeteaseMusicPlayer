@@ -6,9 +6,9 @@ namespace MusicPlayer::Player {
     using namespace MusicPlayer::API;
     using namespace MusicPlayer::Util;
     using namespace QtAV;
-    Player* Player::_instance = nullptr;
+    AudioPlayer* AudioPlayer::_instance = nullptr;
 
-    Player::Player() {
+    AudioPlayer::AudioPlayer() {
         _avPlayer = new AVPlayer(this);
         connect(_avPlayer, &AVPlayer::stopped, [this]() {
             std::visit(overload{[this](const PlayingAudioState& playingState) { emit stopped(playingState.songId); },
@@ -17,28 +17,39 @@ namespace MusicPlayer::Player {
                        _state);
         });
 
-        connect(_avPlayer,&AVPlayer::notifyIntervalChanged,[=](){ _avPlayerNotifyInterval = _avPlayer->notifyInterval(); });
-        connect(_avPlayer,&AVPlayer::positionChanged,[=](qint64 position) {
+        connect(_avPlayer, &AVPlayer::notifyIntervalChanged, [=]() { _avPlayerNotifyInterval = _avPlayer->notifyInterval(); });
+        connect(_avPlayer, &AVPlayer::positionChanged, [=](qint64 position) {
+            std::visit(overload{[=](const PlayingAudioState& state) {
+                                    setState(PlayingAudioState{
+                                        state.songId,
+                                        state.songQuality,
+                                        position,
+                                    });
+                                },
+                                [](const PausedAudioState& state) {
 
+                                },
+                                [](const auto& state) {}},
+                       _state);
         });
     }
 
-    void Player::initInstance() {
+    void AudioPlayer::initInstance() {
         if (_instance == nullptr) {
-            _instance = new Player;
+            _instance = new AudioPlayer;
         }
     }
 
-    Player* Player::instance() { return _instance; }
+    AudioPlayer* AudioPlayer::instance() { return _instance; }
 
-    void Player::freeInstance() {
+    void AudioPlayer::freeInstance() {
         if (_instance) {
             delete _instance;
             _instance = nullptr;
         }
     }
 
-    void Player::playAudio(SongId songId, SongQuality quality) {
+    void AudioPlayer::playAudio(SongId songId, SongQuality quality) {
         std::visit(overload{[=](const PlayingAudioState& state) {
                                 if (songId == state.songId && quality == state.songQuality)
                                     return;
@@ -66,17 +77,18 @@ namespace MusicPlayer::Player {
                                     fetchSongUrlAndPlay(songId, quality, 0);
                                 }
                             },
+                            [=](EmptyState& state) { fetchSongUrlAndPlay(songId, quality, 0); },
                             [](const auto& other) {
 
                             }},
                    _state);
     }
 
-    void Player::fetchSongUrlAndPlay(SongId songId, SongQuality quality, qint64 position) {
+    void AudioPlayer::fetchSongUrlAndPlay(SongId songId, SongQuality quality, qint64 position) {
         MusicAPI api;
-        auto f = api.songUrl(songId, static_cast<int>(quality)).via(mainExecutor()).thenValue([=](Response<QString> response) {
-            std::visit(overload{[=](const QString& url) {
-                                    this->_avPlayer->setFile(url);
+        auto f = api.songUrl(songId, quality).via(mainExecutor()).thenValue([=](Response<APISongUrlData> response) {
+            std::visit(overload{[=](const APISongUrlData& urlData) {
+                                    this->_avPlayer->setFile(urlData.data[0].url);
                                     this->_avPlayer->load();
                                     this->_avPlayer->setPosition(position);
 
@@ -87,9 +99,7 @@ namespace MusicPlayer::Player {
                                     });
                                     this->_avPlayer->play();
                                 },
-                                [](const auto& error) {
-
-                                }},
+                                [](const auto& error) { qDebug() << "Error"; }},
                        response);
         });
         setState(LoadingAudioState{
@@ -100,7 +110,7 @@ namespace MusicPlayer::Player {
         });
     }
 
-    void Player::pauseAudio() {
+    void AudioPlayer::pauseAudio() {
         std::visit(overload{[=](const PlayingAudioState& state) {
                                 _avPlayer->pause();
                                 setState(PausedAudioState{
@@ -113,7 +123,7 @@ namespace MusicPlayer::Player {
                    _state);
     }
 
-    void Player::resumeAudio() {
+    void AudioPlayer::resumeAudio() {
         auto newState = std::visit(overload{[=](PausedAudioState&& state) {
                                                 _avPlayer->play();
                                                 return PlayerState{PlayingAudioState{
@@ -127,8 +137,7 @@ namespace MusicPlayer::Player {
         setState(std::move(newState));
     }
 
-
-    std::optional<CurrentSong> Player::getCurrentSong() {
+    std::optional<CurrentSong> AudioPlayer::getCurrentSong() {
         return std::visit(overload{[](const PlayingAudioState& state) {
                                        return std::make_optional(CurrentSong{
                                            state.songId,
@@ -156,6 +165,32 @@ namespace MusicPlayer::Player {
                           _state);
     }
 
-    void Player::setState(PlayerState&& state) { _state = std::move(state); }
-    void Player::positionChanged() {}
+    void AudioPlayer::setState(PlayerState&& state) {
+        _state = std::move(state);
+        std::visit(overload{[=](const PlayingAudioState& state) {
+                                qDebug() << "Playing:" << state.songId << ",position:" << state.position
+                                         << ",seconds: " << state.position / _avPlayerNotifyInterval;
+                            },
+                            [](const auto& state) {}},
+                   _state);
+    }
+
+    void AudioPlayer::positionChanged(qint64 position) {
+        std::visit(overload{[=](const PlayingAudioState& state) {
+                                setState(PlayingAudioState{
+                                    state.songId,
+                                    state.songQuality,
+                                    position,
+                                });
+                            },
+                            [=](const PausedAudioState& state) {
+                                setState(PausedAudioState{
+                                    state.songId,
+                                    state.songQuality,
+                                    position,
+                                });
+                            },
+                            [](const auto& state) {}},
+                   _state);
+    }
 } // namespace MusicPlayer::Player

@@ -27,7 +27,7 @@ namespace MusicPlayer::API {
     APITopPlayListData APITopPlayListData::fromJsonValue(const QJsonValue& json) {
         auto jsonObject = json.toObject();
         return {Util::fromJsonValue<int>(jsonObject.value(QLatin1String("total"))),
-                Util::fromJsonValue<long>(jsonObject.value(QLatin1Literal("lasttime"))),
+                Util::fromJsonValue<long>(jsonObject.value(QLatin1String("lasttime"))),
                 Util::fromJsonValue<bool>(jsonObject.value(QLatin1String("more"))),
                 Util::fromJsonValue<int>(jsonObject.value(QLatin1String("code"))),
                 Util::fromJsonArray<APITopPlayListItemData>(jsonObject.value(QLatin1String("playlists")))};

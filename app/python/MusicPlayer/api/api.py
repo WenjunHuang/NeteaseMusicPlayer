@@ -532,6 +532,22 @@ class API:
                                  },
                                  RequestOption(crypto=CryptoType.WEAPI))
         return response
+    async def song_url(self, sids: Iterable[int]):
+        # 歌曲详情
+        cstr = "[" + ",".join([f'{{"id": {sid}}}' for sid in sids]) + "]"
+        sid_str = "[" + ",".join([str(sid) for sid in sids]) + "]"
+
+        response = await request(self._http_session,
+                                 HTTPMethod.POST,
+                                 f"https://music.163.com/weapi/song/enhance/player/url",
+                                 {
+                                     "c": cstr,
+                                     "ids": sid_str
+                                 },
+                                 RequestOption(crypto=CryptoType.WEAPI))
+        return response
+
+
 
     async def lyric(self, sid: int):
         response = await request(self._http_session,

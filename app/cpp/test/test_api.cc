@@ -298,11 +298,11 @@ TEST_CASE("songDetail", "[MusicAPI]") {
 TEST_CASE("songUrl", "[MusicAPI]") {
     auto app = setUp();
     MusicAPI api;
-    api.songUrl(347230).via(mainExecutor()).thenValue([](const Response<QString>& value) {
+    api.songUrl(347230).via(mainExecutor()).thenValue([](const Response<APISongUrlData>& value) {
       std::visit(
           [](const auto& v) {
-            if constexpr (std::is_convertible_v<decltype(v), QString>) {
-                qDebug() << v;
+            if constexpr (std::is_convertible_v<decltype(v), APISongUrlData>) {
+                qDebug() << v.data[0].url;
             } else {
                 std::visit([](const auto& error) { qDebug() << "error"; }, v);
             }

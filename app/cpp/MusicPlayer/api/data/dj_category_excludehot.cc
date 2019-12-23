@@ -10,7 +10,7 @@ namespace MusicPlayer::API {
     APIDJCategoryExcludeHotData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {Util::fromJsonArray<APIDJCategoryItemData>(
-            object.value(QLatin1Literal("data")))};
+            object.value(QLatin1String("data")))};
     }
 
 } // namespace MusicPlayer::API

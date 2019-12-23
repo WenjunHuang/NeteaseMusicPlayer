@@ -9,24 +9,24 @@ namespace MusicPlayer::API {
     APIUserPrivateMessageUserData APIUserPrivateMessageUserData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("userId"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("nickname"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("avatarImgId"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("userType"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("vipType"))),
-            Util::fromJsonValue<long>(object.value(QLatin1Literal("birthday"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("avatarUrl"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("backgroundUrl"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("gender"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("accountStatus"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("city"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("authStatus"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("detailDescription"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("defaultAvatar"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("djStatus"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("followed"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("description"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("signature"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("userId"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("nickname"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("avatarImgId"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("userType"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("vipType"))),
+            Util::fromJsonValue<long>(object.value(QLatin1String("birthday"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("avatarUrl"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("backgroundUrl"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("gender"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("accountStatus"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("city"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("authStatus"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("detailDescription"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("defaultAvatar"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("djStatus"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("followed"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("description"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("signature"))),
         };
     }
 
@@ -45,11 +45,11 @@ namespace MusicPlayer::API {
     APIUserPrivateMessageData APIUserPrivateMessageData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("noticeAccountFlag"))),
-            Util::fromJsonValue<long>(object.value(QLatin1Literal("lastMsgTime"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("lastMsg"))),
-            Util::fromJsonValue<APIUserPrivateMessageUserData>(object.value(QLatin1Literal("fromUser"))),
-            Util::fromJsonValue<APIUserPrivateMessageUserData>(object.value(QLatin1Literal("toUser"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("noticeAccountFlag"))),
+            Util::fromJsonValue<long>(object.value(QLatin1String("lastMsgTime"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("lastMsg"))),
+            Util::fromJsonValue<APIUserPrivateMessageUserData>(object.value(QLatin1String("fromUser"))),
+            Util::fromJsonValue<APIUserPrivateMessageUserData>(object.value(QLatin1String("toUser"))),
         };
     }
 
@@ -62,9 +62,9 @@ namespace MusicPlayer::API {
     APIUserPrivateMessagesData APIUserPrivateMessagesData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("more"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("newMsgCount"))),
-            Util::fromJsonArray<APIUserPrivateMessageData>(object.value(QLatin1Literal("msgs"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("more"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("newMsgCount"))),
+            Util::fromJsonArray<APIUserPrivateMessageData>(object.value(QLatin1String("msgs"))),
         };
     }
     bool APIUserPrivateMessagesData::operator==(const APIUserPrivateMessagesData& other) const {

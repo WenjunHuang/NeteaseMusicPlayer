@@ -9,17 +9,17 @@ namespace MusicPlayer::API {
     APIPersonalizedItemData APIPersonalizedItemData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("type"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("copywriter"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("picUrl"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("canDislike"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("trackNumberUpdateTime"))),
-            Util::fromJsonValue<double>(object.value(QLatin1Literal("playCount"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("trackCount"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("highQuality"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("alg"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("id"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("type"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("name"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("copywriter"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("picUrl"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("canDislike"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("trackNumberUpdateTime"))),
+            Util::fromJsonValue<double>(object.value(QLatin1String("playCount"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("trackCount"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("highQuality"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("alg"))),
         };
     }
 
@@ -35,9 +35,9 @@ namespace MusicPlayer::API {
     APIPersonalizedData APIPersonalizedData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("hasTaste"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("category"))),
-            Util::fromJsonArray<APIPersonalizedItemData>(object.value(QLatin1Literal("result"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("hasTaste"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("category"))),
+            Util::fromJsonArray<APIPersonalizedItemData>(object.value(QLatin1String("result"))),
         };
     }
 

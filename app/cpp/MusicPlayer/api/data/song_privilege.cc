@@ -8,21 +8,21 @@ namespace MusicPlayer::API {
     APISongPrivilegeData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("fee"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("payed"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("st"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("pl"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("dl"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("sp"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("cp"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("subp"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("cs"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("maxbr"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("fl"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("toast"))),
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("flag"))),
-            Util::fromJsonValue<bool>(object.value(QLatin1Literal("preSell"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("id"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("fee"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("payed"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("st"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("pl"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("dl"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("sp"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("cp"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("subp"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("cs"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("maxbr"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("fl"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("toast"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("flag"))),
+            Util::fromJsonValue<bool>(object.value(QLatin1String("preSell"))),
         };
     }
     bool APISongPrivilegeData::operator==(const APISongPrivilegeData& other) const {

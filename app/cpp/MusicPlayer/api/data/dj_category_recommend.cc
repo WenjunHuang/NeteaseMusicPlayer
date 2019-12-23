@@ -7,16 +7,16 @@
 namespace MusicPlayer::API {
     APIDJCategoryRecommendItemRadioData APIDJCategoryRecommendItemRadioData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
-        return {Util::fromJsonValue<int>(object.value(QLatin1Literal("id"))),
-                Util::fromJsonValue<QString>(object.value(QLatin1Literal("name"))),
-                Util::fromJsonValue<QString>(object.value(QLatin1Literal("rcmdText"))),
-                Util::fromJsonValue<int>(object.value(QLatin1Literal("radioFeeType"))),
-                Util::fromJsonValue<int>(object.value(QLatin1Literal("feeScope"))),
-                Util::fromJsonValue<QString>(object.value(QLatin1Literal("picUrl"))),
-                Util::fromJsonValue<int>(object.value(QLatin1Literal("programCount"))),
-                Util::fromOptionalJsonValue<int>(object.value(QLatin1Literal("playCount"))),
-                Util::fromJsonValue<QString>(object.value(QLatin1Literal("alg"))),
-                Util::fromJsonValue<QString>(object.value(QLatin1Literal("lastProgramName")))};
+        return {Util::fromJsonValue<int>(object.value(QLatin1String("id"))),
+                Util::fromJsonValue<QString>(object.value(QLatin1String("name"))),
+                Util::fromJsonValue<QString>(object.value(QLatin1String("rcmdText"))),
+                Util::fromJsonValue<int>(object.value(QLatin1String("radioFeeType"))),
+                Util::fromJsonValue<int>(object.value(QLatin1String("feeScope"))),
+                Util::fromJsonValue<QString>(object.value(QLatin1String("picUrl"))),
+                Util::fromJsonValue<int>(object.value(QLatin1String("programCount"))),
+                Util::fromOptionalJsonValue<int>(object.value(QLatin1String("playCount"))),
+                Util::fromJsonValue<QString>(object.value(QLatin1String("alg"))),
+                Util::fromJsonValue<QString>(object.value(QLatin1String("lastProgramName")))};
     }
 
     bool APIDJCategoryRecommendItemRadioData::operator==(const APIDJCategoryRecommendItemRadioData& other) const {
@@ -32,9 +32,9 @@ namespace MusicPlayer::API {
     APIDJCategoryRecommendItemData APIDJCategoryRecommendItemData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
         return {
-            Util::fromJsonValue<int>(object.value(QLatin1Literal("categoryId"))),
-            Util::fromJsonValue<QString>(object.value(QLatin1Literal("categoryName"))),
-            Util::fromJsonArray<APIDJCategoryRecommendItemRadioData>(object.value(QLatin1Literal("radios"))),
+            Util::fromJsonValue<int>(object.value(QLatin1String("categoryId"))),
+            Util::fromJsonValue<QString>(object.value(QLatin1String("categoryName"))),
+            Util::fromJsonArray<APIDJCategoryRecommendItemRadioData>(object.value(QLatin1String("radios"))),
         };
     }
 
@@ -48,7 +48,7 @@ namespace MusicPlayer::API {
 
     APIDJCategoryRecommendData APIDJCategoryRecommendData::fromJsonValue(const QJsonValue& json) {
         auto object = json.toObject();
-        return {Util::fromJsonArray<APIDJCategoryRecommendItemData>(object.value(QLatin1Literal("data")))};
+        return {Util::fromJsonArray<APIDJCategoryRecommendItemData>(object.value(QLatin1String("data")))};
     }
 
     bool APIDJCategoryRecommendData::operator==(const APIDJCategoryRecommendData& other) const { return data == other.data; }
