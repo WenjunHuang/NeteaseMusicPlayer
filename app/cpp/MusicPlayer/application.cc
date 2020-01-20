@@ -22,15 +22,17 @@ namespace MusicPlayer {
         return exec();
     }
 
-    Application::Application(const QString& id, int& argc, char** argv) : QGuiApplication(argc, argv) {
+    void Application::initialize() {
         // singletons
         Util::Logger::initInstance();
         Util::AppExecutor::initInstance();
         API::HttpWorker::initInstance();
         Repository::DatabaseRepository::initInstance();
         Service::PlayListRepository::initInstance();
+        Service::SongCategoryRepository::initInstance();
 
         Player::AudioPlayer::initInstance();
+
 
         // 注册Viewmodel的metatype
         ViewModels::registerMetaTypes();
@@ -43,6 +45,11 @@ namespace MusicPlayer {
         qmlRegisterType<ViewModels::SongListHighQualityBannerViewModel>("MusicPlayer", 1, 0, "SongListHighQualityBannerViewModel");
         qmlRegisterType<ViewModels::SongCategoryPlayListsViewModel>("MusicPlayer", 1, 0, "SongCategoryPlayListsViewModel");
         qmlRegisterType<ViewModels::DJBannerViewModel>("MusicPlayer", 1, 0, "DJBannerViewModel");
+
+    }
+
+    Application::Application(const QString& id, int& argc, char** argv) : QGuiApplication(argc, argv) {
+        initialize();
 
 
         //          connect(this,&QGuiApplication::aboutToQuit,this,&Application::cleanup);

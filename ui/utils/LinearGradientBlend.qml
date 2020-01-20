@@ -28,5 +28,4 @@ Item {
         foregroundSource: gradient
         mode: "darken"
     }
-
 }
