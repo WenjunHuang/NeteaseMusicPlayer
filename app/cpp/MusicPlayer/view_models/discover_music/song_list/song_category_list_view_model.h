@@ -3,11 +3,11 @@
 //
 
 #pragma once
-#include "../../../api/api.h"
+#include "../../../api/music_api.h"
 #include "../../../services/services.h"
 #include "../../../util/util.h"
-#include "../../states.h"
 #include "../../base_state_view_model.h"
+#include "../../states.h"
 #include <QtCore>
 #include <QtQml/QQmlParserStatus>
 

@@ -3,8 +3,8 @@
 //
 
 #include "recommendation_song_lists_view_model.h"
-#include "../../../api/api.h"
-#include "../../../util/util.h"
+#include "api.h"
+#include "util.h"
 #include <QtCore>
 
 namespace MusicPlayer::ViewModels {
@@ -122,7 +122,7 @@ namespace MusicPlayer::ViewModels {
 
         MusicAPI api;
         _loading = api.personalized(10)
-                       .via(AppExecutor::instance()->getMainExecutor().get())
+                       .via(Util::mainExecutor())
                        .thenValue([this](const Response<APIPersonalizedData>& reply) {
                            std::visit(
                                [=](const auto& value) {

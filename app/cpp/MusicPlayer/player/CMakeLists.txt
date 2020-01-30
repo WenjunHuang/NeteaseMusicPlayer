@@ -1,5 +1,6 @@
 add_library(player STATIC player.cc)
 target_link_libraries(player PUBLIC Qt5::Core Qt5::Quick api util repositories)
+target_include_directories(player PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 if (APPLE)
     target_link_libraries(player PUBLIC "${QTAV_LIBRARIES}/QtAV")
 endif ()

@@ -55,13 +55,13 @@ Item {
             Rectangle {
                 Layout.preferredHeight: 78
                 Layout.fillWidth: true
-                color:"transparent"
+                color: "transparent"
                 ColumnLayout {
                     anchors.fill: parent
                     Rectangle {
                         Layout.fillWidth: true
                         height: 1
-                        color:Material.frameColor
+                        color: Material.frameColor
                     }
 
                     RowLayout {
@@ -73,23 +73,25 @@ Item {
                         RoundCorner {
                             Layout.preferredWidth: 62
                             Layout.preferredHeight: 62
-                            Layout.alignment: Qt.AlignVCenter|Qt.AlignLeading
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeading
                             radius: Vars.border_radius
                             Image {
+                                id: image
                                 source: imageUrl
+                                sourceSize:Qt.size(image.width,image.height)
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
                                 mipmap: true
                             }
                         }
                         Text {
-                            Layout.alignment: Qt.AlignVCenter|Qt.AlignLeading
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeading
                             text: ("0" + (index + 1)).slice(-2)
                             font.pixelSize: Vars.font_size
                         }
                         ColumnLayout {
                             spacing: Vars.spacing_half
-                            Layout.alignment: Qt.AlignVCenter|Qt.AlignLeading
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeading
                             RowLayout {
                                 Text {
                                     wrapMode: Text.Wrap
@@ -111,12 +113,11 @@ Item {
                     Rectangle {
                         Layout.fillWidth: true
                         height: 1
-                        color:Material.frameColor
+                        color: Material.frameColor
                     }
                 }
 
-
-                MouseArea{
+                MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
                 }

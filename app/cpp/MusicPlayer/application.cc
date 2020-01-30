@@ -3,13 +3,13 @@
 //
 
 #include "application.h"
-#include "api/data/data.h"
-#include "repositories/database_repository.h"
-#include "view_models/view_models.h"
-#include "player/player.h"
+#include "api.h"
+#include "player.h"
+#include "repositories.h"
+#include "util.h"
+#include "view_models.h"
 #include <QQuickStyle>
 #include <QtQml/QQmlApplicationEngine>
-#include <services/play_list_repository.h>
 
 namespace MusicPlayer {
     int Application::run(const QStringList& params) {
@@ -33,7 +33,6 @@ namespace MusicPlayer {
 
         Player::AudioPlayer::initInstance();
 
-
         // 注册Viewmodel的metatype
         ViewModels::registerMetaTypes();
 
@@ -42,15 +41,14 @@ namespace MusicPlayer {
         qmlRegisterType<ViewModels::PersonalizedNewSongViewModel>("MusicPlayer", 1, 0, "PersonalizedNewSongViewModel");
         qmlRegisterType<ViewModels::RecommendationSongListsViewModel>("MusicPlayer", 1, 0, "RecommendationSongListsViewModel");
         qmlRegisterType<ViewModels::SongCategoryListViewModel>("MusicPlayer", 1, 0, "SongCategoryListViewModel");
-        qmlRegisterType<ViewModels::SongListHighQualityBannerViewModel>("MusicPlayer", 1, 0, "SongListHighQualityBannerViewModel");
+        qmlRegisterType<ViewModels::SongListHighQualityBannerViewModel>(
+            "MusicPlayer", 1, 0, "SongListHighQualityBannerViewModel");
         qmlRegisterType<ViewModels::SongCategoryPlayListsViewModel>("MusicPlayer", 1, 0, "SongCategoryPlayListsViewModel");
         qmlRegisterType<ViewModels::DJBannerViewModel>("MusicPlayer", 1, 0, "DJBannerViewModel");
-
     }
 
     Application::Application(const QString& id, int& argc, char** argv) : QGuiApplication(argc, argv) {
         initialize();
-
 
         //          connect(this,&QGuiApplication::aboutToQuit,this,&Application::cleanup);
     }

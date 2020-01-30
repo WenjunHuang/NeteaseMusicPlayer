@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#include "../api/api.h"
-#include "../util/executor.h"
+#include "api.h"
+#include "util.h"
 #include <QtCore>
 #include <folly/futures/Future.h>
 #include <optional>
@@ -31,7 +31,6 @@ namespace MusicPlayer::Service {
         folly::SemiFuture<Response<APIPlaylistCatListData>> getPlaylistCatListData();
 
       private:
-
         std::optional<APIPlaylistCatListData> _categoryData;
 
         // if is loading
@@ -41,4 +40,4 @@ namespace MusicPlayer::Service {
 
         static SongCategoryRepository* _instance;
     };
-} // namespace MusicPlayer::Repository
+} // namespace MusicPlayer::Service

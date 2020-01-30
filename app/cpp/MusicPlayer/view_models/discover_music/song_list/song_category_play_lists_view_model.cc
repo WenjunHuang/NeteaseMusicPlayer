@@ -3,9 +3,10 @@
 //
 
 #include "song_category_play_lists_view_model.h"
-#include "../../../api/api.h"
-#include "../../../util/util.h"
+#include "api.h"
+#include "util.h"
 #include <type_traits>
+
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
     using namespace MusicPlayer::Util;

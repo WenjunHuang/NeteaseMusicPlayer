@@ -34,7 +34,7 @@ namespace MusicPlayer::Service {
                 MusicAPI api;
                 _waitings.push_back(std::move(promise));
                 _loading = api.playlistCatlist()
-                               .via(AppExecutor::instance()->getMainExecutor().get())
+                               .via(Util::mainExecutor())
                                .thenValue([this](Response<APIPlaylistCatListData>&& response) {
                                    std::visit(
                                        [this](auto& var) {

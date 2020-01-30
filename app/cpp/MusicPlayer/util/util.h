@@ -6,6 +6,8 @@
 #include "json.h"
 #include "logger.h"
 #include "misc.h"
+#include "magic_enum.hpp"
+#include "sqlite_orm.h"
 
 template<typename ... Ts>
 struct overload : Ts ... {

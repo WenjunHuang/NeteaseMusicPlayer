@@ -13,7 +13,9 @@ namespace MusicPlayer::Repository {
     using namespace sqlite_orm;
     using namespace MusicPlayer::Util;
 
-    static auto getStorage(QString& filePath) { return make_storage(filePath.toStdString(), TPlayListSong::table()); }
+    static auto getStorage(QString& filePath) {
+        return make_storage(filePath.toStdString(), TPlayListSong::table(), TImageCache::table());
+    }
 
     DatabaseRepository* DatabaseRepository::_instance = nullptr;
     void DatabaseRepository::initInstance() {
@@ -51,9 +53,9 @@ namespace MusicPlayer::Repository {
                 //                    storage.insert(song);
                 //                }
                 auto start = songs.cbegin();
-                int count = 0;
-                for (auto index = songs.cbegin();index < songs.cend();index++) {
-                    if (count != 0 && (count  % batchSize) == 0) {
+                int count  = 0;
+                for (auto index = songs.cbegin(); index < songs.cend(); index++) {
+                    if (count != 0 && (count % batchSize) == 0) {
                         storage.insert_range(start, index);
                         start = index;
                     }
@@ -62,10 +64,8 @@ namespace MusicPlayer::Repository {
                 if (start < songs.cend())
                     storage.insert_range(start, songs.cend());
                 storage.commit();
-                std::cout << "committed" << std::endl;
             } catch (...) {
                 storage.rollback();
-                std::cout << "rollback" << std::endl;
                 throw;
             }
         });
@@ -83,4 +83,12 @@ namespace MusicPlayer::Repository {
             //            return result;
         });
     }
+
+    SemiFuture<Unit> DatabaseRepository::insertImageCache(TImageCache imageCache) {
+        return SemiFuture<Unit>().via(dbExecutor()).thenValue([this,imageCache = std::move(imageCache)](Unit u){
+          auto storage  = getStorage(_dbFilePath);
+          storage.insert(imageCache);
+        });
+    }
+
 } // namespace MusicPlayer::Repository

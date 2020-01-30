@@ -99,6 +99,7 @@ Item {
                                 source: modelImageUrl
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
+                                sourceSize: Qt.size(image.width,image.height)
                                 onStatusChanged: {
                                     if (image.status === Image.Ready)
                                         fadeInImage.contentLoaded()

@@ -3,7 +3,7 @@
 //
 
 #include "dj_banner_view_model.h"
-#include "../api/api.h"
+#include "../../../api/music_api.h"
 #include "../util/util.h"
 
 namespace MusicPlayer::ViewModels {

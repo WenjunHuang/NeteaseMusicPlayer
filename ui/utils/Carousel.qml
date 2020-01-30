@@ -34,6 +34,7 @@ Item {
                     source: modelData.imageUrl
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectCrop
+                    sourceSize: Qt.size(myIcon.width,myIcon.height)
                     onStatusChanged: {
                         if (myIcon.status === Image.Ready)
                             fadeInImage.contentLoaded()

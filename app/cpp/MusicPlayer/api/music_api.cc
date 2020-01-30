@@ -2,13 +2,11 @@
 // Created by rick on 2019/11/7.
 //
 
-#include "api.h"
-#include "../util/executor.h"
-#include "../util/misc.h"
+#include "music_api.h"
+#include "util.h"
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QtNetwork>
-#include <iostream>
 #include <variant>
 
 namespace MusicPlayer::API {
@@ -16,7 +14,7 @@ namespace MusicPlayer::API {
     template <typename T> Response<T> parseResponse(QNetworkReply* reply) {
         auto statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         if (statusCode == 200) {
-            QJsonParseError jsonError;
+            QJsonParseError jsonError{};
             auto content = reply->readAll();
             reply->deleteLater();
 
@@ -36,35 +34,35 @@ namespace MusicPlayer::API {
             ->post(QUrl(QLatin1String("https://music.163.com/weapi/djradio/banner/get")),
                    {CryptoType::WEAPI, {QHash<QString, QString>{{"os", "pc"}}}},
                    {})
-            .via(AppExecutor::instance()->getCPUExecutor().get())
+            .via(Util::cpuExecutor())
             .thenValue([](QNetworkReply* reply) { return parseResponse<APIDJBannersData>(reply); });
     }
 
     APIResponse<APIDJCategoryExcludeHotData> MusicAPI::djCategoryExcludeHot() {
         return HttpWorker::instance()
             ->post(QUrl("https://music.163.com/weapi/djradio/category/excludehot"), {CryptoType::WEAPI, {}}, {})
-            .via(Util::AppExecutor::instance()->getCPUExecutor().get())
+            .via(Util::cpuExecutor())
             .thenValue([](QNetworkReply* reply) { return parseResponse<APIDJCategoryExcludeHotData>(reply); });
     }
 
     APIResponse<APIDJCategoryRecommendData> MusicAPI::djCategoryRecommend() {
         return HttpWorker::instance()
             ->post(QUrl("https://music.163.com/weapi/djradio/home/category/recommend"), {CryptoType::WEAPI, {}}, {})
-            .via(Util::AppExecutor::instance()->getCPUExecutor().get())
+            .via(Util::cpuExecutor())
             .thenValue([](QNetworkReply* reply) { return parseResponse<APIDJCategoryRecommendData>(reply); });
     }
 
     APIResponse<APIBannersData> MusicAPI::banner() {
         return HttpWorker::instance()
             ->post(QUrl("https://music.163.com/api/v2/banner/get"), {CryptoType::LINUX_API, {}}, {{"clientType", "pc"}})
-            .via(Util::AppExecutor::instance()->getCPUExecutor().get())
+            .via(Util::cpuExecutor())
             .thenValue([this](QNetworkReply* reply) { return parseResponse<APIBannersData>(reply); });
     }
 
     APIResponse<APIPersonalizedNewSongData> MusicAPI::personalizedNewSong() {
         return HttpWorker::instance()
             ->post(QUrl("https://music.163.com/weapi/personalized/newsong"), {CryptoType::WEAPI, {}}, {{"type", "recommend"}})
-            .via(Util::AppExecutor::instance()->getCPUExecutor().get())
+            .via(Util::cpuExecutor())
             .thenValue([this](QNetworkReply* reply) { return parseResponse<APIPersonalizedNewSongData>(reply); });
     }
 
@@ -73,7 +71,7 @@ namespace MusicPlayer::API {
             ->post(QUrl(QLatin1String("https://music.163.com/weapi/personalized/playlist")),
                    {CryptoType::WEAPI, {}},
                    {{"limit", limit}, {"total", true}, {"n", 1000}})
-            .via(Util::AppExecutor::instance()->getCPUExecutor().get())
+            .via(Util::cpuExecutor())
             .thenValue([this](QNetworkReply* reply) { return parseResponse<APIPersonalizedData>(reply); });
     }
 
@@ -86,7 +84,7 @@ namespace MusicPlayer::API {
             ->post(QUrl("https://music.163.com/weapi/login/cellphone"),
                    {CryptoType::WEAPI, {}},
                    {{"phone", cellphone}, {"password", hashedPassword}, {"remberLogin", "true"}})
-            .via(Util::AppExecutor::instance()->getCPUExecutor().get())
+            .via(Util::cpuExecutor())
             .thenValue([](QNetworkReply* reply) -> Response<APIUserLoginData> {
                 auto result = parseResponse<APIUserLoginData>(reply);
                 return std::visit(
@@ -110,14 +108,14 @@ namespace MusicPlayer::API {
             ->post(QUrl("https://music.163.com/weapi/msg/private/users"),
                    {CryptoType::WEAPI, cookieToken},
                    {{"offset", offset}, {"limit", limit}, {"total", "true"}})
-            .via(Util::AppExecutor::instance()->getCPUExecutor().get())
+            .via(Util::cpuExecutor())
             .thenValue([](QNetworkReply* reply) { return parseResponse<APIUserPrivateMessagesData>(reply); });
     }
 
     APIResponse<APIPlaylistCatListData> MusicAPI::playlistCatlist() {
         return HttpWorker::instance()
             ->post(QUrl("https://music.163.com/weapi/playlist/catalogue"), {CryptoType::WEAPI}, {})
-            .via(Util::AppExecutor::instance()->getCPUExecutor().get())
+            .via(Util::cpuExecutor())
             .thenValue([](QNetworkReply* reply) { return parseResponse<APIPlaylistCatListData>(reply); });
     }
 

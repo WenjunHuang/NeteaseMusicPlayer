@@ -6,5 +6,5 @@ endif ()
 add_library(repositories STATIC
         database_repository.cc database_repository.h tables.h)
 target_link_libraries(repositories PUBLIC Qt5::Core Qt5::Network Qt5::Quick ${FOLLY} sqlite3 util api)
-
+target_include_directories(repositories PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 

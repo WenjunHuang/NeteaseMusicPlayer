@@ -7,7 +7,7 @@
 #include <memory>
 
 namespace MusicPlayer::Util{
-    // because Qt5 also defined macro slots, and folly use this variable :(
-    std::shared_ptr<folly::Executor> createCPUThreadPoolExecutor();
+    // because Qt5 also defined macro "slots" and folly has a "slots" variable, so if put together will cause compiler treat "slots" as macro :(
+    std::unique_ptr<folly::Executor> createCPUThreadPoolExecutor();
 }
 

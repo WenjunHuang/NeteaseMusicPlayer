@@ -9,7 +9,7 @@
 
 namespace MusicPlayer::Util{
 
-    std::shared_ptr<folly::Executor> createCPUThreadPoolExecutor() {
-        return std::make_shared<folly::CPUThreadPoolExecutor>(std::thread::hardware_concurrency());
+    std::unique_ptr<folly::Executor> createCPUThreadPoolExecutor() {
+        return std::make_unique<folly::CPUThreadPoolExecutor>(std::thread::hardware_concurrency());
     }
 }

@@ -3,9 +3,8 @@
 //
 
 #include "play_list_repository.h"
-#include "../repositories/repositories.h"
-#include "../util/executor.h"
-#include "../util/magic_enum.hpp"
+#include "repositories.h"
+#include "util.h"
 #include <boost/range/adaptors.hpp>
 #include <boost/range/algorithm.hpp>
 
@@ -66,6 +65,8 @@ namespace MusicPlayer::Service {
         }
         if (role == Roles::SongDurationRole)
             return song.duration;
+
+        return QVariant();
     }
 
     void PlayListRepository::addSong(const PlayListSong& song) {

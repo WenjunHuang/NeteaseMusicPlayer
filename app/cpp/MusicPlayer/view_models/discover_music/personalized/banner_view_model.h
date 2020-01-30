@@ -4,11 +4,10 @@
 
 #pragma once
 
+#include "api.h"
+#include "base_state_view_model.h"
 #include <QtCore>
 #include <folly/futures/Future.h>
-#include "../../../api/api.h"
-#include "../../../api/data/banner.h"
-#include "../../base_state_view_model.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
@@ -31,18 +30,17 @@ namespace MusicPlayer::ViewModels {
 
     class BannerViewModel : public BaseStateViewModel {
         Q_OBJECT
-    public:
-        BannerViewModel(QObject *parent = nullptr);
+      public:
+        BannerViewModel(QObject* parent = nullptr);
 
         Q_INVOKABLE void reload();
 
         static void registerMetaTypes();
-    private:
+
+      private:
         std::optional<folly::Future<std::nullopt_t>> _loading;
     };
-}
+} // namespace MusicPlayer::ViewModels
 
 Q_DECLARE_METATYPE(MusicPlayer::ViewModels::BannerViewModelReadyDataItem)
 Q_DECLARE_METATYPE(MusicPlayer::ViewModels::BannerViewModelReadyData)
-
-

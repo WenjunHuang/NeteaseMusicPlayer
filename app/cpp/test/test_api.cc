@@ -2,12 +2,12 @@
 // Created by rick on 2019/11/9.
 //
 
-#include "../MusicPlayer/api/api.h"
 #include "../MusicPlayer/api/crypto.h"
 #include "../MusicPlayer/api/data/data.h"
+#include "../MusicPlayer/api/music_api.h"
 #include "../MusicPlayer/util/executor.h"
-#include "set_up.h"
 #include "./catch2/catch.hpp"
+#include "set_up.h"
 #include <QtCore>
 #include <QtGui/QGuiApplication>
 #include <iostream>
@@ -24,7 +24,7 @@ TEST_CASE("djBanner", "[MusicAPI]") {
 
     MusicAPI api;
     auto f = api.djBanner();
-    std::move(f).via(AppExecutor::instance()->getMainExecutor().get()).thenValue([](Response<APIDJBannersData> value) {
+    std::move(f).via(mainExecutor()).thenValue([](Response<APIDJBannersData> value) {
         auto threadId = std::this_thread::get_id();
         std::cout << "thenValue:" << threadId << std::endl;
 
@@ -52,7 +52,7 @@ TEST_CASE("djCategoryExcludeHot", "[MusicAPI]") {
     MusicAPI api;
     auto f = api.djCategoryExcludeHot();
     std::move(f)
-        .via(AppExecutor::instance()->getMainExecutor().get())
+        .via(mainExecutor())
         .thenValue([](Response<APIDJCategoryExcludeHotData> value) {
             std::visit(
                 [](const auto& v) {
@@ -284,7 +284,7 @@ TEST_CASE("songDetail", "[MusicAPI]") {
       std::visit(
           [](const auto& v) {
             if constexpr (std::is_convertible_v<decltype(v), QString>) {
-                qDebug() << v;
+                qDebug().noquote() << v;
             } else {
                 std::visit([](const auto& error) { qDebug() << "error"; }, v);
             }

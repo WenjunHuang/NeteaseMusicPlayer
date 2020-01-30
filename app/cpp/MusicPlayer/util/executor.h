@@ -21,45 +21,43 @@ namespace MusicPlayer::Util {
         static AppExecutor* instance();
 
         // folly的cpu thread pool executor，与qt无关
-        std::shared_ptr<folly::Executor> getCPUExecutor();
+        folly::Executor* getCPUExecutor();
 
         // 一个固定的qt QThread作为qt http线程
-        std::shared_ptr<folly::Executor> getHTTPExecutor();
+        folly::Executor* getHTTPExecutor();
 
         // 固定的qt thread作为sqlite3操作线程
-        std::shared_ptr<folly::Executor> getDBExecutor();
+        folly::Executor* getDBExecutor();
 
         // qt主线程executor
-        std::shared_ptr<folly::Executor> getMainExecutor();
+        folly::Executor* getMainExecutor();
 
         QThread* getHTTPThread();
+
         QThread* getDBThread();
 
       private:
         static AppExecutor* _instance;
-        std::shared_ptr<folly::Executor> _cpuExecutor;
-        std::shared_ptr<folly::Executor> _httpExecutor;
-        std::shared_ptr<folly::Executor> _dbExecutor;
-        std::shared_ptr<folly::Executor> _mainExecutor;
+        std::unique_ptr<folly::Executor> _cpuExecutor;
+        std::unique_ptr<folly::Executor> _httpExecutor;
+        std::unique_ptr<folly::Executor> _dbExecutor;
+        std::unique_ptr<folly::Executor> _mainExecutor;
 
         QThread* _httpThread;
         QThread* _dbThread;
         QThread* _mainThread;
     };
 
-    inline folly::Executor* mainExecutor() { return AppExecutor::instance()->getMainExecutor().get(); }
+    inline folly::Executor* mainExecutor() { return AppExecutor::instance()->getMainExecutor(); }
 
-    inline folly::Executor* httpExecutor() { return AppExecutor::instance()->getHTTPExecutor().get(); }
+    inline folly::Executor* httpExecutor() { return AppExecutor::instance()->getHTTPExecutor(); }
 
-    inline folly::Executor* cpuExecutor() { return AppExecutor::instance()->getCPUExecutor().get(); }
+    inline folly::Executor* cpuExecutor() { return AppExecutor::instance()->getCPUExecutor(); }
 
-    inline folly::Executor* dbExecutor() { return AppExecutor::instance()->getDBExecutor().get(); }
+    inline folly::Executor* dbExecutor() { return AppExecutor::instance()->getDBExecutor(); }
 
     class QtExecutorEventWorker : public QObject {
         Q_OBJECT
-      public:
-        QtExecutorEventWorker();
-
       protected:
         bool event(QEvent* ev) override;
     };

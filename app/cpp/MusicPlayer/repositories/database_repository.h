@@ -13,11 +13,11 @@
 namespace MusicPlayer::Repository {
     using namespace sqlite_orm;
     using namespace folly;
+
     class DatabaseRepository : public QObject {
         Q_OBJECT
         Q_DISABLE_COPY_MOVE(DatabaseRepository)
         DatabaseRepository();
-
       public:
         static void initInstance();
         static void freeInstance();
@@ -25,6 +25,8 @@ namespace MusicPlayer::Repository {
 
         SemiFuture<Unit> replacePlayListSongs(std::vector<TPlayListSong>&& songs);
         SemiFuture<std::vector<TPlayListSong>> getAllPlayListSongs();
+
+        SemiFuture<Unit> insertImageCache(TImageCache imageCache);
 
       private:
         static DatabaseRepository* _instance;

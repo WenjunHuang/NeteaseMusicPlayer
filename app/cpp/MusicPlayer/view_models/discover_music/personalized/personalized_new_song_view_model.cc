@@ -3,10 +3,9 @@
 //
 
 #include "personalized_new_song_view_model.h"
-#include "../../../util/executor.h"
+#include "util.h"
 
 namespace MusicPlayer::ViewModels {
-    using namespace Util;
     PersonalizedNewSongListModel::PersonalizedNewSongListModel(QObject* parent) : QAbstractListModel{parent} {}
 
     QHash<int, QByteArray> PersonalizedNewSongListModel::roleNames() const {
@@ -38,10 +37,10 @@ namespace MusicPlayer::ViewModels {
             return QStringList(item.song.alias.toList()).join(',');
         if (role == Roles::Artists) {
             QStringList artistNames;
-            std::transform(
-                item.song.artists.cbegin(), item.song.artists.cend(), std::back_inserter(artistNames), [](const auto& artist) {
-                    return artist.name;
-                });
+            std::transform(item.song.artists.cbegin(),
+                           item.song.artists.cend(),
+                           std::back_inserter(artistNames),
+                           [](const auto& artist) { return artist.name; });
             return artistNames.join(" / ");
         }
         if (role == Roles::IsCurrentSong)
@@ -72,7 +71,7 @@ namespace MusicPlayer::ViewModels {
             return;
         MusicAPI api;
         _loading = api.personalizedNewSong()
-                       .via(AppExecutor::instance()->getMainExecutor().get())
+                       .via(Util::mainExecutor())
                        .thenValue([this](const Response<APIPersonalizedNewSongData>& reply) {
                            std::visit(
                                [=](const auto& value) {

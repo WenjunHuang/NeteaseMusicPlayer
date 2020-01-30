@@ -10,6 +10,27 @@
 
 namespace MusicPlayer::Repository {
     using namespace sqlite_orm;
+
+    // image cache
+    struct TImageCache {
+        int id;
+        std::string url;
+        std::string path;
+        std::string etag;
+        int validTill;
+        int touched;
+
+        static inline auto table() {
+            return make_table("image_cache",
+                              make_column("id", &TImageCache::id, primary_key()),
+                              make_column("url", &TImageCache::url),
+                              make_column("path", &TImageCache::path),
+                              make_column("etag", &TImageCache::etag),
+                              make_column("valid_till", &TImageCache::validTill),
+                              make_column("touched", &TImageCache::touched));
+        }
+    };
+    // play list
     struct TPlayListSong {
         int id;
         SongId songId;

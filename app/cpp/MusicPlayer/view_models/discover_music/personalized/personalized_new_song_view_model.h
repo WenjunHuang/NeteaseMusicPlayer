@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../../../api/api.h"
+#include "api.h"
 #include <QtCore>
 #include <QtQml/QQmlParserStatus>
 #include <folly/futures/Future.h>
