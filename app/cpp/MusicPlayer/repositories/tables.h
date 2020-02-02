@@ -11,6 +11,8 @@
 namespace MusicPlayer::Repository {
     using namespace sqlite_orm;
 
+    constexpr int kNewId = -1;
+
     // image cache
     struct TImageCache {
         int id;
@@ -30,6 +32,7 @@ namespace MusicPlayer::Repository {
                               make_column("touched", &TImageCache::touched));
         }
     };
+
     // play list
     struct TPlayListSong {
         int id;
