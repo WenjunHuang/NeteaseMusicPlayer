@@ -84,10 +84,12 @@ namespace MusicPlayer::Repository {
         });
     }
 
-    SemiFuture<Unit> DatabaseRepository::insertImageCache(TImageCache imageCache) {
-        return SemiFuture<Unit>().via(dbExecutor()).thenValue([this,imageCache = std::move(imageCache)](Unit u){
+    SemiFuture<TImageCache> DatabaseRepository::insertImageCache(TImageCache imageCache) {
+        return SemiFuture<Unit>().via(dbExecutor()).thenValue([this,imageCache = std::move(imageCache)](Unit u) mutable{
           auto storage  = getStorage(_dbFilePath);
-          storage.insert(imageCache);
+          auto newId = storage.insert(imageCache);
+          imageCache.id = newId;
+          return imageCache;
         });
     }
 

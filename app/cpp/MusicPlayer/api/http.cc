@@ -115,10 +115,10 @@ namespace MusicPlayer::API {
                                             cookie.constKeyValueBegin(),
                                             cookie.constKeyValueEnd(),
                                             QString(),
-                                            [](auto& accum, auto const& v) { return accum + "; " + v; },
+                                            [](auto const& accum, auto const& v) { return accum + "; " + v; },
                                             [](auto const& pair) {
-                                                auto const& [key, value] = pair;
-                                                return QString("%1=%2").arg(key).arg(value).toUtf8();
+//                                                auto& [key, value] = pair;
+                                                return QString("%1=%2").arg(pair.first).arg(pair.second).toUtf8();
                                             });
                                         request.setRawHeader(QByteArray("Cookie"), cookieStr.toLocal8Bit());
                                     }},
