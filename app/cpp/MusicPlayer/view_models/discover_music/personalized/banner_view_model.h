@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include "../../base_state_view_model.h"
 #include "api.h"
-#include "base_state_view_model.h"
 #include <QtCore>
 #include <folly/futures/Future.h>
 
@@ -34,6 +34,7 @@ namespace MusicPlayer::ViewModels {
         BannerViewModel(QObject* parent = nullptr);
 
         Q_INVOKABLE void reload();
+
 
         static void registerMetaTypes();
 

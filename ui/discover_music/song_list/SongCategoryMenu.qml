@@ -72,8 +72,8 @@ Popup {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    currentSelectedCategoryName = modelData.name
                                     root.close()
+                                    currentSelectedCategoryName = modelData.name
                                 }
                             }
                         }

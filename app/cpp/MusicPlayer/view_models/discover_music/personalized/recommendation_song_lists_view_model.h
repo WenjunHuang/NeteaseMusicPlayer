@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../../../api/data/personalized.h"
+#include "api.h"
 #include <QAbstractListModel>
 #include <QtCore/QDateTime>
 #include <QtCore/QObject>

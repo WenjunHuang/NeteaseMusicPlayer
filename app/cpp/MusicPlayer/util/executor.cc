@@ -21,7 +21,10 @@ namespace MusicPlayer::Util {
     class QtExecutor : public folly::Executor {
 
       public:
-        explicit QtExecutor(QObject* worker) : _worker{worker} {}
+        explicit QtExecutor(QThread* thread) {
+            _worker = new QtExecutorEventWorker;
+            _worker->moveToThread(thread);
+        }
 
         void add(folly::Func func) override { QCoreApplication::postEvent(_worker, new QtExecutorEvent(std::move(func))); }
 
@@ -43,25 +46,19 @@ namespace MusicPlayer::Util {
 
     AppExecutor::AppExecutor() {
         // qt的主线程
-        _mainThread     = qApp->thread();
-        auto mainWorker = new QtExecutorEventWorker;
-        mainWorker->moveToThread(_mainThread);
-        _mainExecutor = std::make_unique<QtExecutor>(mainWorker);
+        _mainThread   = qApp->thread();
+        _mainExecutor = std::make_unique<QtExecutor>(_mainThread);
 
         // qt的http线程
         _httpThread = new QThread(this);
         _httpThread->setObjectName(QStringLiteral("HTTP Thread"));
-        auto httpWorker = new QtExecutorEventWorker;
-        httpWorker->moveToThread(_httpThread);
-        _httpExecutor = std::make_unique<QtExecutor>(httpWorker);
+        _httpExecutor = std::make_unique<QtExecutor>(_httpThread);
         _httpThread->start();
 
         // db 线程
         _dbThread = new QThread(this);
         _dbThread->setObjectName(QStringLiteral("DB Thread"));
-        auto dbWorker = new QtExecutorEventWorker;
-        dbWorker->moveToThread(_dbThread);
-        _dbExecutor = std::make_unique<QtExecutor>(dbWorker);
+        _dbExecutor = std::make_unique<QtExecutor>(_dbThread);
         _dbThread->start();
 
         // cpu线程池
