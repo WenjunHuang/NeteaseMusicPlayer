@@ -14,19 +14,27 @@ find_package(QtAV REQUIRED)
 find_package(Qt5 REQUIRED Core Network Quick QuickControls2)
 add_compile_definitions(QT_NO_FOREACH)
 
-if (WIN32)
+if (MSVC)
     # use vcpkg
     find_package(cryptopp CONFIG REQUIRED)
     find_package(folly CONFIG REQUIRED)
     find_package(glog CONFIG REQUIRED)
     find_package(ZLIB REQUIRED)
-    find_package(Boost REQUIRED)
-    set(CRYPTOPP cryptopp-static)
-    set(FOLLY Folly::folly Folly::folly_deps)
-    set(GLOG glog::glog)
-    set(BOOST Boost)
+    find_package(sqlite3 CONFIG REQUIRED)
+
+
+    # add interface targets
+    add_library(CRYPTOPP INTERFACE)
+    target_link_libraries(CRYPTOPP INTERFACE cryptopp-static)
+    add_library(FOLLY INTERFACE)
+    target_link_libraries(FOLLY INTERFACE Folly::folly Folly::folly_deps)
+    add_library(GLOG INTERFACE)
+    target_link_libraries(GLOG INTERFACE glog::glog)
+    add_library(SQLITE3 INTERFACE)
+    target_link_libraries(SQLITE3 INTERFACE sqlite3)
+
+    # make visual c++ to treat every source file with utf-8 encoding instead of utf8-bom
     add_compile_options("/Zc:__cplusplus" "/utf-8")
-    #    add_library(cryptopp ALIAS cryptopp-static)
 endif ()
 if (APPLE)
     find_package(PkgConfig)
@@ -36,10 +44,15 @@ if (APPLE)
     pkg_search_module(glog REQUIRED libglog IMPORTED_TARGET)
     find_package(Boost REQUIRED)
 
-    set(CRYPTOPP PkgConfig::cryptopp)
-    set(FOLLY PkgConfig::folly)
-    set(GLOG PkgConfig::glog)
-    set(BOOST Boost)
+    # add interface targets
+    add_library(CRYPTOPP INTERFACE)
+    target_link_libraries(CRYPTOPP INTERFACE PkgConfig::cryptopp)
+    add_library(FOLLY INTERFACE)
+    target_link_libraries(FOLLY INTERFACE PkgConfig::folly)
+    add_library(GLOG INTERFACE)
+    target_link_libraries(GLOG INTERFACE PkgConfig::glog)
+    add_library(SQLITE3 INTERFACE)
+    target_link_libraries(SQLITE3 INTERFACE sqlite3)
 endif ()
 
 add_subdirectory(util)
@@ -56,13 +69,17 @@ else ()
     set(RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
 endif ()
 
-add_library(application STATIC application.cc application.h)
-target_link_libraries(application PUBLIC api util view_models services player ${GLOG}
+add_library(application STATIC application.h application.cc)
+target_link_libraries(application PUBLIC api util view_models services player
         Qt5::Core
         Qt5::Network
         Qt5::Quick
         Qt5::QuickControls2)
 
-add_executable(MusicPlayer main.cpp ${RESOURCES})
+add_executable(MusicPlayer main.cc ${RESOURCES})
 target_link_libraries(MusicPlayer PRIVATE application)
+target_compile_definitions(MusicPlayer PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+
+#add_executable(MusicPlayer main.cpp ${RESOURCES})
+#target_link_libraries(MusicPlayer PRIVATE application)
 

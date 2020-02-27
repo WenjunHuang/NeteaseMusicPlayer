@@ -31,7 +31,7 @@ Item {
                 anchors.fill: parent
                 contentItem: Image {
                     id: myIcon
-                    source: modelData.imageUrl
+                    source: "image://MusicImage/" + modelData.imageUrl
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectCrop
                     sourceSize: Qt.size(myIcon.width,myIcon.height)

@@ -10,6 +10,7 @@
 #include "view_models.h"
 #include <QQuickStyle>
 #include <QtQml/QQmlApplicationEngine>
+#include <iostream>
 
 namespace MusicPlayer {
     int Application::run(const QStringList& params) {
@@ -17,6 +18,7 @@ namespace MusicPlayer {
         //            qDebug() << path;
 
         QQmlApplicationEngine engine;
+        engine.addImageProvider("MusicImage",new API::ImageProvider);
         engine.addImportPath(":/ui/imports");
         engine.load("qrc:/ui/main.qml");
         return exec();
@@ -32,6 +34,7 @@ namespace MusicPlayer {
         Service::SongCategoryRepository::initInstance();
 
         Player::AudioPlayer::initInstance();
+
 
         // 注册Viewmodel的metatype
         ViewModels::registerMetaTypes();

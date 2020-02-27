@@ -89,12 +89,13 @@ namespace MusicPlayer::API {
 
     bool HttpWorker::event(QEvent* ev) {
         if (ev->type() == kInitHttpManagerEventType) {
-            _network = new QNetworkAccessManager;
+            _network = new QNetworkAccessManager(this);
             //            _network->setProxy(QNetworkProxy(QNetworkProxy::Socks5Proxy, "127.0.0.1", 8889));
             //            _network->setParent(this);
         }
 
         if (ev->type() == kHttpRequestEventType) {
+            qDebug() << "get http request event";
             auto requestEvent = dynamic_cast<HttpRequestEvent*>(ev);
 
             QNetworkRequest request(requestEvent->url);
@@ -154,10 +155,13 @@ namespace MusicPlayer::API {
                     request.setUrl(QUrl(QLatin1String("https://music.163.com/api/linux/forward")));
                 }
 
+                qDebug() << content;
                 reply = _network->post(request, content);
+                qDebug() << "posted request";
             }
 
             QObject::connect(reply, &QNetworkReply::finished, [reply, promise = std::move(requestEvent->promise)]() mutable {
+                qDebug() << "reply finished";
                 promise.setValue(reply);
             });
             return true;
@@ -171,6 +175,13 @@ namespace MusicPlayer::API {
         auto f = promise.getSemiFuture();
         request(HttpMethod::POST, std::move(url), std::move(option), std::move(data), std::move(promise));
 
+        return f;
+    }
+
+    folly::SemiFuture<QNetworkReply*> HttpWorker::get(QUrl&& url) {
+        folly::Promise<QNetworkReply*> promise;
+        auto f = promise.getSemiFuture();
+        request(HttpMethod::GET,std::move(url),RequestOption{},QVariantHash{},std::move(promise));
         return f;
     }
 

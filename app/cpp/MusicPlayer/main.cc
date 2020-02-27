@@ -6,16 +6,16 @@
 
 int main(int argc, char* argv[]) {
     using namespace MusicPlayer;
+    QLoggingCategory::setFilterRules("qt.scenegraph.general=true");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     try {
-//        QQuickStyle::addStylePath(":/ui");
-//        QQuickStyle::setStyle("MusicPlayer");
-//        QQuickStyle::setFallbackStyle("Material");
+        //        QQuickStyle::addStylePath(":/ui");
+        //        QQuickStyle::setStyle("MusicPlayer");
+        //        QQuickStyle::setFallbackStyle("Material");
         //    QQuickStyle::setStyle("Material");
         //    QQuickStyle::setFallbackStyle("Fusion");
-        std::unique_ptr<Application> application{
-            std::make_unique<Application>(Util::getUserIDString(), argc, argv)};
+        std::unique_ptr<Application> application = std::make_unique<Application>(Util::getUserIDString(), argc, argv);
         application->run(QStringList());
     } catch (...) {}
 }

@@ -77,7 +77,7 @@ Item {
                             radius: Vars.border_radius
                             Image {
                                 id: image
-                                source: imageUrl
+                                source: "image://MusicImage/"+imageUrl
                                 sourceSize:Qt.size(image.width,image.height)
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit

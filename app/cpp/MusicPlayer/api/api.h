@@ -6,3 +6,4 @@
 #include "data/data.h"
 #include "http.h"
 #include "music_api.h"
+#include "image_provider.h"

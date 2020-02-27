@@ -96,7 +96,7 @@ Item {
                             anchors.fill: parent
                             Image {
                                 id:image
-                                source: modelImageUrl
+                                source: "image://MusicImage/" + modelImageUrl
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
                                 sourceSize: Qt.size(image.width,image.height)

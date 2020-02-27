@@ -35,7 +35,8 @@ namespace MusicPlayer::API {
                    {CryptoType::WEAPI, {QHash<QString, QString>{{"os", "pc"}}}},
                    {})
             .via(Util::cpuExecutor())
-            .thenValue([](QNetworkReply* reply) { return parseResponse<APIDJBannersData>(reply); });
+            .thenValue([](QNetworkReply* reply) {
+            return parseResponse<APIDJBannersData>(reply); });
     }
 
     APIResponse<APIDJCategoryExcludeHotData> MusicAPI::djCategoryExcludeHot() {

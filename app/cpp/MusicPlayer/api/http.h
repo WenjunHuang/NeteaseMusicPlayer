@@ -12,18 +12,14 @@
 #include <vector>
 
 namespace MusicPlayer::API {
-    enum class HttpMethod {
-        GET,
-        POST,
-        PUT
-    };
+    enum class HttpMethod { GET, POST, PUT };
 
     enum class CryptoType { WEAPI, LINUX_API, EAPI };
 
     enum class UserAgentType { Mobile, PC };
 
     struct RequestOption {
-        CryptoType cryptoType;
+        CryptoType cryptoType                                                = CryptoType::WEAPI;
         std::optional<std::variant<QString, QHash<QString, QString>>> cookie = std::nullopt;
         std::optional<UserAgentType> ua                                      = std::nullopt;
     };
@@ -45,6 +41,7 @@ namespace MusicPlayer::API {
         static HttpWorker* instance();
 
         folly::SemiFuture<QNetworkReply*> post(QUrl&& url, RequestOption&& option, QVariantHash&& data);
+        folly::SemiFuture<QNetworkReply*> get(QUrl&& url);
 
         bool event(QEvent* ev) override;
 
