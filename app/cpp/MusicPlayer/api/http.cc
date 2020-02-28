@@ -95,7 +95,6 @@ namespace MusicPlayer::API {
         }
 
         if (ev->type() == kHttpRequestEventType) {
-            qDebug() << "get http request event";
             auto requestEvent = dynamic_cast<HttpRequestEvent*>(ev);
 
             QNetworkRequest request(requestEvent->url);
@@ -155,13 +154,10 @@ namespace MusicPlayer::API {
                     request.setUrl(QUrl(QLatin1String("https://music.163.com/api/linux/forward")));
                 }
 
-                qDebug() << content;
                 reply = _network->post(request, content);
-                qDebug() << "posted request";
             }
 
             QObject::connect(reply, &QNetworkReply::finished, [reply, promise = std::move(requestEvent->promise)]() mutable {
-                qDebug() << "reply finished";
                 promise.setValue(reply);
             });
             return true;

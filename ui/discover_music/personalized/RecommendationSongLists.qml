@@ -52,6 +52,7 @@ Item {
 
         Component {
             id: gridDelegate
+
             ColumnLayout {
                 spacing: 0
                 Layout.preferredWidth: 1
@@ -76,10 +77,15 @@ Item {
         Component {
             id: normalDelegate
             FadeInImage {
+                Component.onCompleted: {
+                    console.log("loaded fade in image")
+                }
+
                 id: fadeInImage
                 Layout.preferredWidth: 1
                 Layout.fillWidth: true
                 implicitHeight: content.implicitHeight
+
                 contentItem: ColumnLayout {
                     id: content
                     spacing: Vars.spacing
@@ -96,6 +102,7 @@ Item {
                             anchors.fill: parent
                             Image {
                                 id:image
+                                cache: true
                                 source: "image://MusicImage/" + modelImageUrl
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
