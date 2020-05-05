@@ -4,7 +4,6 @@
 
 #pragma once
 #include <QtCore>
-#include <folly/futures/Future.h>
 #include <optional>
 #include "../../states.h"
 #include "../../base_state_view_model.h"
@@ -43,7 +42,6 @@ namespace MusicPlayer::ViewModels {
 
       private:
         QString _categoryName;
-        std::optional<folly::Future<std::nullopt_t>> _loading;
 
         void reload();
     };

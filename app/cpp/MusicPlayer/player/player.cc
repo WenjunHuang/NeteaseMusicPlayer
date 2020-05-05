@@ -73,7 +73,6 @@ namespace MusicPlayer::Player {
                                 if (songId == state.songId && quality == state.songQuality) {
                                     return;
                                 } else {
-                                    state.cancel();
                                     fetchSongUrlAndPlay(songId, quality, 0);
                                 }
                             },
@@ -86,19 +85,20 @@ namespace MusicPlayer::Player {
 
     void AudioPlayer::fetchSongUrlAndPlay(SongId songId, SongQuality quality, qint64 position) {
         MusicAPI api;
-        auto f = api.songUrl(songId, quality).via(mainExecutor()).thenValue([=](Response<APISongUrlData> response) {
+        auto response = api.songUrl(songId, quality);
+        connect(response, &APIResponseHandler<APISongUrlData>::finished, [=](APIResponse<APISongUrlData> response) {
             std::visit(overload{[=](const APISongUrlData& urlData) {
-                qDebug() << urlData.data[0].url;
-                                    this->_avPlayer->setFile(urlData.data[0].url);
-                                    this->_avPlayer->load();
-                                    this->_avPlayer->setPosition(position);
+                                    qDebug() << urlData.data[0].url;
+                                    _avPlayer->setFile(urlData.data[0].url);
+                                    _avPlayer->load();
+                                    _avPlayer->setPosition(position);
 
-                                    this->setState(PlayingAudioState{
+                                    setState(PlayingAudioState{
                                         songId,
                                         quality,
                                         position,
                                     });
-                                    this->_avPlayer->play();
+                                    _avPlayer->play();
                                     qDebug() << "ok";
                                 },
                                 [](const auto& error) { qDebug() << "Error"; }},
@@ -107,8 +107,7 @@ namespace MusicPlayer::Player {
         setState(LoadingAudioState{
             songId,
             quality,
-            position,
-            std::move(f),
+            position
         });
     }
 

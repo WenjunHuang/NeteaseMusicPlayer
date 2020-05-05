@@ -6,7 +6,6 @@
 
 #include <QtCore>
 #include <QtNetwork>
-#include <folly/futures/Future.h>
 #include <optional>
 #include <variant>
 #include <vector>
@@ -24,24 +23,52 @@ namespace MusicPlayer::API {
         std::optional<UserAgentType> ua                                      = std::nullopt;
     };
 
-    class HttpWorker : public QObject {
+    struct MusicHttpResult {
+        QString url;
+        QString errorString;
+        QByteArray data;
+        QNetworkReply *reply;
+    };
+
+    class MusicHttpWorker;
+
+    class MusicHttpHandler : public QObject {
+        Q_OBJECT
+        Q_DISABLE_COPY(MusicHttpHandler)
+        friend class MusicHttpWorker;
+
+      public:
+        explicit MusicHttpHandler(const QString& url);
+
+        void cancel();
+      signals:
+        void finished(MusicHttpResult const &result);
+
+      private:
+        void attachNetworkReply(QNetworkReply* reply);
+
+        QNetworkReply* reply_ = nullptr;
+        QString url_;
+    };
+
+    class MusicHttpWorker : public QObject {
         Q_OBJECT
 
-        Q_DISABLE_COPY(HttpWorker)
+        Q_DISABLE_COPY(MusicHttpWorker)
 
         Q_ENUM(HttpMethod)
 
-        HttpWorker();
+        MusicHttpWorker();
 
       public:
         static void initInstance();
 
         static void freeInstance();
 
-        static HttpWorker* instance();
+        static MusicHttpWorker* instance();
 
-        folly::SemiFuture<QNetworkReply*> post(QUrl&& url, RequestOption&& option, QVariantHash&& data);
-        folly::SemiFuture<QNetworkReply*> get(QUrl&& url);
+        MusicHttpHandler* post(QUrl&& url, RequestOption&& option, QVariantHash&& data);
+        MusicHttpHandler* get(QUrl&& url);
 
         bool event(QEvent* ev) override;
 
@@ -50,12 +77,13 @@ namespace MusicPlayer::API {
                      QUrl&& url,
                      RequestOption&& option,
                      QVariantHash&& data,
-                     folly::Promise<QNetworkReply*>&& promise);
+                     MusicHttpHandler* handler);
 
-        static HttpWorker* _instance;
+        static MusicHttpWorker* _instance;
         QNetworkAccessManager* _network;
     };
 
 } // namespace MusicPlayer::API
 Q_DECLARE_METATYPE(MusicPlayer::API::HttpMethod)
+Q_DECLARE_METATYPE(MusicPlayer::API::MusicHttpResult)
 // Q_DECLARE_METATYPE(MusicPlayer::MusicAPI::HttpWorker)

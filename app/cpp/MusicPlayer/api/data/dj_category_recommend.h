@@ -46,3 +46,4 @@ namespace MusicPlayer::API {
         static APIDJCategoryRecommendData fromJsonValue(const QJsonValue& json);
     };
 } // namespace MusicPlayer::API
+

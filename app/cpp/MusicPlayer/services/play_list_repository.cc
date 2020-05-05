@@ -147,7 +147,7 @@ namespace MusicPlayer::Service {
 
     void PlayListRepository::syncToDb() {
         auto dbInstance = DatabaseRepository::instance();
-        std::vector<TPlayListSong> dbSongs;
+        QVector<TPlayListSong> dbSongs;
         std::transform(_songs.cbegin(), _songs.cend(), std::back_inserter(dbSongs), [](const PlayListSong& song) {
             QStringList qualities;
             std::transform(
@@ -174,43 +174,55 @@ namespace MusicPlayer::Service {
                 song.musicVideoId.has_value() ? std::make_unique<MusicVideoId>(song.musicVideoId.value()) : nullptr,
             };
         });
-        dbInstance->replacePlayListSongs(std::move(dbSongs)).get();
+        dbInstance->replacePlayListSongs(std::move(dbSongs));
     }
 
     void PlayListRepository::loadFromDb() {
         auto dbInstance = DatabaseRepository::instance();
-        auto records    = dbInstance->getAllPlayListSongs().get();
+        auto records    = dbInstance->getAllPlayListSongs();
+        connect(records,
+                &DatabaseResponseHandler<QVector<TPlayListSong>>::finished,
+                [this](DatabaseResponse<QVector<TPlayListSong>> const& records) {
+                    std::visit(
+                        [=](auto const& data) {
+                            if constexpr (std::is_convertible_v<decltype(data), QVector<TPlayListSong>>) {
+                                _songs.clear();
+                                std::transform(
+                                    data.cbegin(), data.cend(), std::back_inserter(_songs), [](const TPlayListSong& record) {
+                                        auto artistsList = QString(record.artists.data()).split(',');
+                                        QVector<PlayListSongArtist> artists;
+                                        std::transform(artistsList.cbegin(),
+                                                       artistsList.cend(),
+                                                       std::back_inserter(artists),
+                                                       [](const auto& artist) {
+                                                           QRegExp reg{"(\\d+):(\\w+)"};
+                                                           auto split = artist.split(':');
+                                                           return PlayListSongArtist{split[0].toInt(), split[1]};
+                                                       });
 
-        _songs.clear();
+                                        QVector<SongQuality> qualities;
+                                        auto qualitiesList = QString(record.qualities.data()).split(',');
+                                        boost::copy(qualitiesList | transformed([](const auto& v) {
+                                                        return magic_enum::enum_cast<SongQuality>(v.toStdString());
+                                                    }) | filtered([](const auto& v) { return v.has_value(); }) |
+                                                        transformed([](const auto& v) { return v.value(); }),
+                                                    std::back_inserter(qualities));
 
-        std::transform(records.cbegin(), records.cend(), std::back_inserter(_songs), [](const TPlayListSong& record) {
-            auto artistsList = QString(record.artists.data()).split(',');
-            QVector<PlayListSongArtist> artists;
-            std::transform(artistsList.cbegin(), artistsList.cend(), std::back_inserter(artists), [](const auto& artist) {
-                QRegExp reg{"(\\d+):(\\w+)"};
-                auto split = artist.split(':');
-                return PlayListSongArtist{split[0].toInt(), split[1]};
-            });
-
-            QVector<SongQuality> qualities;
-            auto qualitiesList = QString(record.qualities.data()).split(',');
-            boost::copy(qualitiesList |
-                            transformed([](const auto& v) { return magic_enum::enum_cast<SongQuality>(v.toStdString()); }) |
-                            filtered([](const auto& v) { return v.has_value(); }) |
-                            transformed([](const auto& v) { return v.value(); }),
-                        std::back_inserter(qualities));
-
-            return PlayListSong{
-                record.id,
-                QString(record.name.data()),
-                QString(record.coverImgUrl.data()),
-                PlayListSongAlbum{record.albumId, QString(record.albumName.data())},
-                record.duration,
-                qualities,
-                artists,
-                record.musicVideoId ? std::optional(*record.musicVideoId) : std::nullopt,
-            };
-        });
+                                        return PlayListSong{
+                                            record.id,
+                                            QString(record.name.data()),
+                                            QString(record.coverImgUrl.data()),
+                                            PlayListSongAlbum{record.albumId, QString(record.albumName.data())},
+                                            record.duration,
+                                            qualities,
+                                            artists,
+                                            record.musicVideoId ? std::optional(*record.musicVideoId) : std::nullopt,
+                                        };
+                                    });
+                            }
+                        },
+                        records);
+                });
     }
 
     void PlayListRepository::initInstance() {

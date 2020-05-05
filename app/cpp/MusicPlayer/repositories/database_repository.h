@@ -4,16 +4,18 @@
 
 #pragma once
 
-#include "tables.h"
 #include <QtCore>
-#include <folly/futures/Future.h>
 #include <memory>
 #include <optional>
 #include <vector>
+#include <variant>
+
+#include "tables.h"
+#include "wobjectdefs.h"
+#include "database_response.h"
 
 namespace MusicPlayer::Repository {
     using namespace sqlite_orm;
-    using namespace folly;
 
     class DatabaseRepository : public QObject {
         Q_OBJECT
@@ -26,17 +28,18 @@ namespace MusicPlayer::Repository {
         static DatabaseRepository* instance();
 
         // 播放列表
-        SemiFuture<Unit> replacePlayListSongs(std::vector<TPlayListSong>&& songs);
-        SemiFuture<std::vector<TPlayListSong>> getAllPlayListSongs();
+        DatabaseResponseHandler<int>* replacePlayListSongs(QVector<TPlayListSong>&& songs);
+        DatabaseResponseHandler<QVector<TPlayListSong>>* getAllPlayListSongs();
 
         // 图片缓存
-        SemiFuture<TImageCache> insertImageCache(TImageCache imageCache);
-        SemiFuture<Unit> updateImageCache(TImageCache imageCache);
-        SemiFuture<std::optional<TImageCache>> getImageCacheByUrl(QString url);
-        SemiFuture<std::vector<TImageCache>> getAllImageCaches();
-        SemiFuture<std::vector<TImageCache>> getImageCachesOverCapacity(int capacity);
-        SemiFuture<std::vector<TImageCache>> getOldImageCaches(int maxAgeInMilliseconds);
+        DatabaseResponseHandler<int>* insertImageCache(TImageCache imageCache);
+        DatabaseResponseHandler<int>* updateImageCache(TImageCache imageCache);
+        DatabaseResponseHandler<std::optional<TImageCache>>* getImageCacheByUrl(QString url);
+        DatabaseResponseHandler<QVector<TImageCache>>* getAllImageCaches();
+        DatabaseResponseHandler<QVector<TImageCache>>* getImageCachesOverCapacity(int capacity);
+        DatabaseResponseHandler<QVector<TImageCache>>* getOldImageCaches(int maxAgeInMilliseconds);
 
+        bool event(QEvent* event) override;
       private:
         static DatabaseRepository* _instance;
         QString _dbFilePath;

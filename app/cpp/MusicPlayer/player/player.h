@@ -5,7 +5,6 @@
 #include <QtAV/QtAV>
 //#include <QtAV>
 #include <QtCore>
-#include <folly/futures/Future.h>
 #include <memory>
 #include <optional>
 
@@ -23,12 +22,6 @@ namespace MusicPlayer::Player {
         SongId songId;
         SongQuality songQuality;
         qint64 position;
-        folly::Future<folly::Unit> future;
-
-        void cancel() {
-            if (future.valid() && !future.isReady())
-                future.cancel();
-        }
     };
 
     struct PlayingAudioState {

@@ -3,8 +3,6 @@
 //
 
 #include "dj_banner_view_model.h"
-#include "../../../api/music_api.h"
-#include "../util/util.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
@@ -14,13 +12,14 @@ namespace MusicPlayer::ViewModels {
         qRegisterMetaType<DJBannerViewModelReadyStateDataItem>();
     }
     void DJBannerViewModel::reload() {
-        if (_loading && !_loading->isReady())
+        if (std::get_if<LoadingState>(&_state))
             return;
 
         setState(LoadingState{});
 
         MusicAPI api;
-        _loading = api.djBanner().via(Util::mainExecutor()).thenValue([this](Response<APIDJBannersData>&& response) {
+        auto response = api.djBanner();
+        connect(response,&APIResponseHandler<APIDJBannersData>::finished,[this](const APIResponse<APIDJBannersData>& response) {
             std::visit(
                 overload{
                     [this](const APIDJBannersData& data) {
@@ -37,8 +36,6 @@ namespace MusicPlayer::ViewModels {
                     },
                 },
                 response);
-
-            return std::nullopt;
         });
     }
 } // namespace MusicPlayer::ViewModels

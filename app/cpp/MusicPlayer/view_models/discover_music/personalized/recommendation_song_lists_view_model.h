@@ -4,14 +4,14 @@
 
 #pragma once
 
-#include "api.h"
 #include <QAbstractListModel>
 #include <QtCore/QDateTime>
 #include <QtCore/QObject>
 #include <QtQml/QQmlParserStatus>
-#include <folly/futures/Future.h>
 #include <optional>
 #include <variant>
+#include "api.h"
+#include "../../base_state_view_model.h"
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
@@ -24,7 +24,7 @@ namespace MusicPlayer::ViewModels {
     };
 
     class RecommendationSongsListModel;
-    class RecommendationSongListsViewModel : public QObject, public QQmlParserStatus {
+    class RecommendationSongListsViewModel : public BaseStateViewModel, public QQmlParserStatus {
         Q_OBJECT
         Q_INTERFACES(QQmlParserStatus)
         Q_PROPERTY(QAbstractListModel* songLists READ songLists)
@@ -41,7 +41,6 @@ namespace MusicPlayer::ViewModels {
       private:
         void loadData();
 
-        std::optional<folly::Future<std::nullopt_t>> _loading;
         RecommendationSongsListModel* _songsModel;
     };
 

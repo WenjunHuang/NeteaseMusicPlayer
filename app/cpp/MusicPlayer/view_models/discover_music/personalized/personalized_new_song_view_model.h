@@ -4,10 +4,10 @@
 
 #pragma once
 
+#include "../../base_state_view_model.h"
 #include "api.h"
 #include <QtCore>
 #include <QtQml/QQmlParserStatus>
-#include <folly/futures/Future.h>
 #include <optional>
 
 namespace MusicPlayer::ViewModels {
@@ -42,7 +42,7 @@ namespace MusicPlayer::ViewModels {
 
     };
 
-    class PersonalizedNewSongViewModel : public QObject, public QQmlParserStatus {
+    class PersonalizedNewSongViewModel : public BaseStateViewModel,public QQmlParserStatus {
         Q_OBJECT
         Q_INTERFACES(QQmlParserStatus)
         Q_PROPERTY(QAbstractListModel* newSongListModel READ newSongListModel)
@@ -60,8 +60,6 @@ namespace MusicPlayer::ViewModels {
 
     private:
         void loadData();
-
-        std::optional<folly::Future<std::nullopt_t>> _loading;
 
         PersonalizedNewSongListModel *_newSongModel;
     };

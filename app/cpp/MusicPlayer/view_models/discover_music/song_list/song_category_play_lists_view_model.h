@@ -6,8 +6,8 @@
 #include "../../base_state_view_model.h"
 #include "../../states.h"
 #include <QtCore>
-#include <folly/futures/Future.h>
 #include <optional>
+#include <atomic>
 namespace MusicPlayer::ViewModels {
 
     class SongCategoryPlayListsViewModel : public BaseStateViewModel {
@@ -21,9 +21,6 @@ namespace MusicPlayer::ViewModels {
         Q_INVOKABLE void load(const QString& catName, int limit, int offset);
 
         static void registerMetaTypes();
-
-      private:
-        std::optional<folly::Future<std::nullopt_t>> _loading;
     };
 
     struct SongCategoryPlayListsViewModelReadyStateData {

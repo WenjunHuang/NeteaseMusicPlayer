@@ -2,7 +2,7 @@
 // Created by rick on 2019/11/25.
 //
 #include "error.h"
-#include "../../util/json.h"
+#include "json.h"
 
 namespace MusicPlayer::API {
     ErrorResponseError ErrorResponseError::fromJsonValue(const QJsonValue& value) {

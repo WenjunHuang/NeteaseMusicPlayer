@@ -7,7 +7,6 @@
 #include "../../base_state_view_model.h"
 #include "api.h"
 #include <QtCore>
-#include <folly/futures/Future.h>
 
 namespace MusicPlayer::ViewModels {
     using namespace MusicPlayer::API;
@@ -28,18 +27,19 @@ namespace MusicPlayer::ViewModels {
         QVariantList bannerItems;
     };
 
-    class BannerViewModel : public BaseStateViewModel {
+    class BannerViewModel : public BaseStateViewModel,public QQmlParserStatus {
         Q_OBJECT
+        Q_INTERFACES(QQmlParserStatus)
+
       public:
         BannerViewModel(QObject* parent = nullptr);
-
-        Q_INVOKABLE void reload();
-
+        void componentComplete() override;
+        void classBegin() override {}
 
         static void registerMetaTypes();
-
       private:
-        std::optional<folly::Future<std::nullopt_t>> _loading;
+        void loadBannerData();
+
     };
 } // namespace MusicPlayer::ViewModels
 

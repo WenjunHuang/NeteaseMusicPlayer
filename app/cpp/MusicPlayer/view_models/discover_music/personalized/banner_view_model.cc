@@ -4,39 +4,44 @@
 
 #include "banner_view_model.h"
 #include "util.h"
+#include <variant>
 
 namespace MusicPlayer::ViewModels {
     //    using namespace MusicPlayer::Util;
 
     BannerViewModel::BannerViewModel(QObject* parent) : BaseStateViewModel(parent) {}
 
-    void BannerViewModel::reload() {
-        if (_loading && !_loading->isReady())
-            return; // 还在加载中
+    void BannerViewModel::loadBannerData() {
+        if (auto ptr = std::get_if<LoadingState>(&_state)) {
+            return;
+        } else {
+            MusicAPI api;
+            auto result = api.banner();
+            connect(result, &APIResponseHandler<APIBannersData>::finished, [this](const APIResponse<APIBannersData>& reply) {
+                std::visit(
+                    [=](const auto& value) {
+                        if constexpr (std::is_convertible_v<decltype(value), APIBannersData>) {
+                            QVariantList items;
+                            for (const auto& banner : value.banners) {
+                                items.append(
+                                    QVariant::fromValue(BannerViewModelReadyDataItem{banner.imageUrl, banner.typeTitle}));
+                            }
 
-        MusicAPI api;
-        _loading = api.banner().via(Util::mainExecutor()).thenValue([this](Response<APIBannersData>&& reply) {
-            std::visit(
-                [=](const auto& value) {
-                    if constexpr (std::is_convertible_v<decltype(value), APIBannersData>) {
-                        QVariantList items;
-                        for (const auto& banner : value.banners) {
-                            items.append(QVariant::fromValue(BannerViewModelReadyDataItem{banner.imageUrl, banner.typeTitle}));
+                            setState(ReadyState{QVariant::fromValue(BannerViewModelReadyData{items})});
+                        } else if constexpr (std::is_convertible_v<decltype(value), APIError>) {
+                            // errors
+                            setState(ErrorState{QStringLiteral("出错了")});
                         }
-
-                        setState(ReadyState{QVariant::fromValue(BannerViewModelReadyData{items})});
-                    } else {
-                        // errors
-                    }
-                },
-                reply);
-            return std::nullopt;
-        });
+                    },
+                    reply);
+            });
+        }
     }
 
     void BannerViewModel::registerMetaTypes() {
         qRegisterMetaType<BannerViewModelReadyDataItem>();
         qRegisterMetaType<BannerViewModelReadyData>();
     }
+    void BannerViewModel::componentComplete() {}
 
 } // namespace MusicPlayer::ViewModels

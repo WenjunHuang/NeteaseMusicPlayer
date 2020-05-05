@@ -23,35 +23,35 @@ namespace MusicPlayer::ViewModels {
     }
 
     void SongCategoryPlayListsViewModel::load(const QString& catName, int limit, int offset) {
-        if (_loading && !_loading->isReady())
-            _loading->cancel();
-        MusicAPI api;
-        setState(LoadingState{});
-        _loading = api.topPlaylist(catName, limit, offset)
-                       .via(mainExecutor())
-                       .thenValue([this](Response<APITopPlayListData>&& response) {
-                           std::visit(
-                               [this](const auto& value) {
-                                   if constexpr (std::is_convertible_v<decltype(value), APITopPlayListData>) {
-                                       QVariantList playlists;
-                                       for (const auto& playlist : value.playlists) {
-                                           playlists.append(QVariant::fromValue(
-                                               SongCategoryPlayListsViewModelPlaylistItem{playlist.id,
-                                                                                          playlist.coverImgUrl,
-                                                                                          playlist.name,
-                                                                                          playlist.playCount,
-                                                                                          playlist.creator.nickname,
-                                                                                          creatorType(playlist.creator)}));
-                                       }
-                                       setState(ReadyState{QVariant::fromValue(
-                                           SongCategoryPlayListsViewModelReadyStateData{playlists, value.total})});
-                                   } else {
-                                       setState(ErrorState{apiErrorMessage(value)});
-                                   }
-                               },
-                               response);
-                           return std::nullopt;
-                       });
+        if (auto ptr = std::get_if<LoadingState>(&_state)) {
+            return;
+        } else {
+            MusicAPI api;
+            setState(LoadingState{});
+            auto response = api.topPlaylist(catName, limit, offset);
+            connect(response, &APIResponseHandler<APITopPlayListData>::finished, [this](const APIResponse<APITopPlayListData>& response) {
+                std::visit(
+                    [this](const auto& value) {
+                        if constexpr (std::is_convertible_v<decltype(value), APITopPlayListData>) {
+                            QVariantList playlists;
+                            for (const auto& playlist : value.playlists) {
+                                playlists.append(QVariant::fromValue(
+                                    SongCategoryPlayListsViewModelPlaylistItem{playlist.id,
+                                                                               playlist.coverImgUrl,
+                                                                               playlist.name,
+                                                                               playlist.playCount,
+                                                                               playlist.creator.nickname,
+                                                                               creatorType(playlist.creator)}));
+                            }
+                            setState(ReadyState{
+                                QVariant::fromValue(SongCategoryPlayListsViewModelReadyStateData{playlists, value.total})});
+                        } else {
+                            setState(ErrorState{apiErrorMessage(value)});
+                        }
+                    },
+                    response);
+            });
+        }
     }
     void SongCategoryPlayListsViewModel::registerMetaTypes() {
         qRegisterMetaType<SongCategoryPlayListsViewModelReadyStateData>();

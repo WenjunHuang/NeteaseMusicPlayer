@@ -5,7 +5,6 @@
 #pragma once
 #include <QQuickAsyncImageProvider>
 #include <QNetworkReply>
-#include <folly/futures/Future.h>
 
 namespace MusicPlayer::API {
 

@@ -3,10 +3,11 @@
 //
 
 #pragma once
-#include "../commons.h"
-#include "../util/sqlite_orm.h"
 #include <QtCore>
 #include <string>
+#include <optional>
+#include "../commons.h"
+#include "../util/sqlite_orm.h"
 
 namespace MusicPlayer::Repository {
     using namespace sqlite_orm;
@@ -44,7 +45,7 @@ namespace MusicPlayer::Repository {
         std::string artists; // id1:name,id2:name,...
         AlbumId albumId;
         std::string albumName;
-        std::unique_ptr<MusicVideoId> musicVideoId;
+        std::shared_ptr<MusicVideoId> musicVideoId;
 
         static inline auto table() {
             return make_table("songs",

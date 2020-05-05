@@ -28,13 +28,13 @@ namespace MusicPlayer {
         // singletons
         Util::Logger::initInstance();
         Util::AppExecutor::initInstance();
-        API::HttpWorker::initInstance();
+        API::MusicHttpWorker::initInstance();
         Repository::DatabaseRepository::initInstance();
         Service::PlayListRepository::initInstance();
-        Service::SongCategoryRepository::initInstance();
-
         Player::AudioPlayer::initInstance();
 
+        // api
+        API::MusicAPI::registerMetaTypes();
 
         // 注册Viewmodel的metatype
         ViewModels::registerMetaTypes();

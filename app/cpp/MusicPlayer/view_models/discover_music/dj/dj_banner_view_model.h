@@ -6,7 +6,6 @@
 
 #include <QtCore>
 #include <optional>
-#include <folly/futures/Future.h>
 #include "../../states.h"
 #include "../../view_models.h"
 #include "../../base_state_view_model.h"
@@ -37,8 +36,6 @@ namespace MusicPlayer::ViewModels {
         Q_INVOKABLE void reload();
 
         static void registerMetaTypes();
-      private:
-        std::optional<folly::Future<std::nullopt_t>> _loading;
     };
 }
 

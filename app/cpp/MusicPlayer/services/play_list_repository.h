@@ -6,7 +6,6 @@
 #include "../commons.h"
 #include <QtCore>
 #include <algorithm>
-#include <folly/futures/Future.h>
 #include <optional>
 
 
@@ -94,6 +93,5 @@ namespace MusicPlayer::Service {
         static PlayListRepository *_instance;
 
         QVector<PlayListSong> _songs;
-        std::optional<folly::Future<std::nullopt_t>> _syncDbJob;
     };
 } // namespace MusicPlayer::Repository

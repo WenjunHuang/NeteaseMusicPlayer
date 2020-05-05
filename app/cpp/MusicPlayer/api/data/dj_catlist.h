@@ -2,7 +2,7 @@
 // Created by HUANG WEN JUN on 2019/12/8.
 //
 #pragma once
-#include "../../util/util.h"
+#include "util.h"
 #include <QtCore>
 namespace MusicPlayer::API {
 

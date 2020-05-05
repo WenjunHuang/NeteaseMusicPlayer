@@ -4,64 +4,65 @@
 
 #pragma once
 
-#include "../commons.h"
-#include "data/data.h"
-#include "http.h"
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QJsonDocument>
 #include <QtConcurrent/QtConcurrent>
 #include <exception>
-#include <folly/futures/Future.h>
 #include <variant>
+#include "../commons.h"
+#include "data/data.h"
+#include "http.h"
+#include "api_response.h"
 
 namespace MusicPlayer::API {
-    template <typename T> using Response    = std::variant<APIError, T>;
-    template <typename T> using APIResponse = folly::SemiFuture<Response<T>>;
 
     class MusicAPI {
       public:
-        APIResponse<APIDJBannersData> djBanner();
+        APIResponseHandler<APIDJBannersData>* djBanner();
 
-        APIResponse<APIDJCategoryExcludeHotData> djCategoryExcludeHot();
+        APIResponseHandler<APIDJCategoryExcludeHotData>* djCategoryExcludeHot();
 
-        APIResponse<APIDJCategoryRecommendData> djCategoryRecommend();
+        APIResponseHandler<APIDJCategoryRecommendData>* djCategoryRecommend();
 
-        APIResponse<APIBannersData> banner();
+        APIResponseHandler<APIBannersData>* banner();
 
-        APIResponse<APIPersonalizedNewSongData> personalizedNewSong();
+        APIResponseHandler<APIPersonalizedNewSongData>* personalizedNewSong();
 
-        APIResponse<APIPersonalizedData> personalized(int limit = 30);
+        APIResponseHandler<APIPersonalizedData>* personalized(int limit = 30);
 
-        APIResponse<APIUserLoginData> loginCellphone(const QString& cellphone, const QString& password);
+        APIResponseHandler<APIUserLoginData>* loginCellphone(const QString& cellphone, const QString& password);
 
-        APIResponse<APIUserPrivateMessagesData> userPrivateMessages(const QString& cookieToken, int limit = 30, int offset = 0);
+        APIResponseHandler<APIUserPrivateMessagesData>* userPrivateMessages(const QString& cookieToken, int limit = 30, int offset = 0);
 
-        APIResponse<APIPlaylistCatListData> playlistCatlist();
+        APIResponseHandler<APIPlaylistCatListData>* playlistCatlist();
 
         // 精品歌单
-        APIResponse<APITopPlayListData> topPlaylistHighQuality(const QString& cat = "全部", int limit = 50, qint64 before = 0);
+        APIResponseHandler<APITopPlayListData>* topPlaylistHighQuality(const QString& cat = "全部", int limit = 50, qint64 before = 0);
 
         // 歌单详情
-        APIResponse<APIPlayListDetailData> playlistDetail(int playlistId);
+        APIResponseHandler<APIPlayListDetailData>* playlistDetail(int playlistId);
 
         // 分类歌单
-        APIResponse<APITopPlayListData> topPlaylist(const QString& cat, int limit = 50, int offset = 0);
+        APIResponseHandler<APITopPlayListData>* topPlaylist(const QString& cat, int limit = 50, int offset = 0);
 
         // 电台分类
-        APIResponse<APIDJCategoryListData> djCatList();
+        APIResponseHandler<APIDJCategoryListData>* djCatList();
 
         // 歌曲详情
-        APIResponse<QString> songDetail(const QVector<int>& songIds);
+        APIResponseHandler<QString>* songDetail(const QVector<int>& songIds);
 
         // 歌曲url
-        APIResponse<APISongUrlData> songUrl(SongId songId, SongQuality songQuality = SongQuality::Q990000);
+        APIResponseHandler<APISongUrlData>* songUrl(SongId songId, SongQuality songQuality = SongQuality::Q990000);
 
         // 歌手介绍
-        APIResponse<QString> artistDesc(ArtistId artistId);
+        APIResponseHandler<QString>* artistDesc(ArtistId artistId);
 
       public:
         // 向meta type system注册，程序启动时必须调用
-        static void registerTypes();
+        static void registerMetaTypes();
     };
 } // namespace MusicPlayer::API
+
+Q_DECLARE_METATYPE(MusicPlayer::API::APIResponse<MusicPlayer::API::APIDJBannersData>)
+Q_DECLARE_METATYPE(MusicPlayer::API::APIResponse<MusicPlayer::API::APIDJCategoryExcludeHotData>)

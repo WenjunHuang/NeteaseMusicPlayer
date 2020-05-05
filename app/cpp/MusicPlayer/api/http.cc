@@ -3,9 +3,7 @@
 //
 #include "http.h"
 
-#include "../util/executor.h"
-#include "../util/magic_enum.hpp"
-#include "../util/util.h"
+#include "util.h"
 #include "crypto.h"
 #include <iostream>
 #include <thread>
@@ -49,19 +47,19 @@ namespace MusicPlayer::API {
 
     const int kInitHttpManagerEventType = QEvent::registerEventType();
     const int kHttpRequestEventType     = QEvent::registerEventType();
+    QString httpErrorCodeToString(QNetworkReply::NetworkError status);
 
     class HttpRequestEvent : public QEvent {
       public:
-        HttpRequestEvent(
-            HttpMethod method, QUrl url, RequestOption option, QVariantHash data, folly::Promise<QNetworkReply*>&& promise)
+        HttpRequestEvent(HttpMethod method, QUrl url, RequestOption option, QVariantHash data, MusicHttpHandler* handler)
             : QEvent((QEvent::Type)kHttpRequestEventType), method{method}, url{std::move(url)}, option{std::move(option)},
-              data{std::move(data)}, promise{std::move(promise)} {}
+              data{std::move(data)}, handler{handler} {}
 
         HttpMethod method;
         QUrl url;
         RequestOption option;
         QVariantHash data;
-        folly::Promise<QNetworkReply*> promise;
+        MusicHttpHandler* handler;
     };
 
     QString httpMethodName(const HttpMethod& method) { return QString(magic_enum::enum_name(method).data()); }
@@ -79,17 +77,20 @@ namespace MusicPlayer::API {
         return kUserAgentList[index];
     }
 
-    HttpWorker* HttpWorker::_instance = nullptr;
+    MusicHttpWorker* MusicHttpWorker::_instance = nullptr;
 
-    HttpWorker::HttpWorker() : _network{nullptr} {
+    MusicHttpWorker::MusicHttpWorker() : _network{nullptr} {
         auto executor = Util::AppExecutor::instance();
         moveToThread(executor->getHTTPThread());
         QCoreApplication::postEvent(this, new QEvent((QEvent::Type)kInitHttpManagerEventType));
     }
 
-    bool HttpWorker::event(QEvent* ev) {
+    bool MusicHttpWorker::event(QEvent* ev) {
         if (ev->type() == kInitHttpManagerEventType) {
             _network = new QNetworkAccessManager(this);
+            connect(_network, &QNetworkAccessManager::sslErrors, [](QNetworkReply* reply, const QList<QSslError>& errors) {
+                reply->ignoreSslErrors(errors);
+            });
             //            _network->setProxy(QNetworkProxy(QNetworkProxy::Socks5Proxy, "127.0.0.1", 8889));
             //            _network->setParent(this);
         }
@@ -99,10 +100,10 @@ namespace MusicPlayer::API {
 
             QNetworkRequest request(requestEvent->url);
 
-            //                              QSslConfiguration config;
-            //                              config.setPeerVerifyMode(QSslSocket::VerifyNone);
-            //                              config.setProtocol(QSsl::TlsV1SslV3);
-            //                              request.setSslConfiguration(config);
+            //            QSslConfiguration config;
+            //            config.setPeerVerifyMode(QSslSocket::VerifyNone);
+            //            config.setProtocol(QSsl::TlsV1SslV3);
+            //            request.setSslConfiguration(config);
 
             request.setHeader(QNetworkRequest::UserAgentHeader, chooseUserAgent(requestEvent->option.ua));
             request.setRawHeader(QByteArray("Referer"), QByteArray("https://music.163.com"));
@@ -117,7 +118,7 @@ namespace MusicPlayer::API {
                                             QString(),
                                             [](auto const& accum, auto const& v) { return accum + "; " + v; },
                                             [](auto const& pair) {
-//                                                auto& [key, value] = pair;
+                                                //                                                auto& [key, value] = pair;
                                                 return QString("%1=%2").arg(pair.first).arg(pair.second).toUtf8();
                                             });
                                         request.setRawHeader(QByteArray("Cookie"), cookieStr.toLocal8Bit());
@@ -157,33 +158,30 @@ namespace MusicPlayer::API {
                 reply = _network->post(request, content);
             }
 
-            QObject::connect(reply, &QNetworkReply::finished, [reply, promise = std::move(requestEvent->promise)]() mutable {
-                promise.setValue(reply);
-            });
+            requestEvent->handler->attachNetworkReply(reply);
             return true;
         }
 
         return QObject::event(ev);
     } // namespace MusicPlayer::API
 
-    folly::SemiFuture<QNetworkReply*> HttpWorker::post(QUrl&& url, RequestOption&& option, QVariantHash&& data) {
-        folly::Promise<QNetworkReply*> promise;
-        auto f = promise.getSemiFuture();
-        request(HttpMethod::POST, std::move(url), std::move(option), std::move(data), std::move(promise));
-
-        return f;
+    MusicHttpHandler* MusicHttpWorker::post(QUrl&& url, RequestOption&& option, QVariantHash&& data) {
+        auto handler = new MusicHttpHandler( url.toString());
+        connect(handler, &MusicHttpHandler::finished, handler, &QObject::deleteLater);
+        request(HttpMethod::POST, std::move(url), std::move(option), std::move(data), handler);
+        return handler;
     }
 
-    folly::SemiFuture<QNetworkReply*> HttpWorker::get(QUrl&& url) {
-        folly::Promise<QNetworkReply*> promise;
-        auto f = promise.getSemiFuture();
-        request(HttpMethod::GET,std::move(url),RequestOption{},QVariantHash{},std::move(promise));
-        return f;
+    MusicHttpHandler* MusicHttpWorker::get(QUrl&& url) {
+        auto handler = new MusicHttpHandler( url.toString());
+        connect(handler, &MusicHttpHandler::finished, handler, &QObject::deleteLater);
+        request(HttpMethod::GET, std::move(url), RequestOption{}, QVariantHash{}, handler);
+        return handler;
     }
 
-    void HttpWorker::initInstance() {
+    void MusicHttpWorker::initInstance() {
         if (!_instance) {
-            _instance = new HttpWorker;
+            _instance = new MusicHttpWorker;
             qRegisterMetaType<HttpMethod>("HttpMethod");
             qRegisterMetaType<RequestOption>("RequestOption");
             //            qRegisterMetaType<QFutureInterface<QNetworkReply*>>(
@@ -191,18 +189,76 @@ namespace MusicPlayer::API {
         }
     }
 
-    void HttpWorker::freeInstance() {
+    void MusicHttpWorker::freeInstance() {
         if (_instance) {
             delete _instance;
             _instance = nullptr;
         }
     }
 
-    HttpWorker* HttpWorker::instance() { return _instance; }
+    MusicHttpWorker* MusicHttpWorker::instance() { return _instance; }
 
-    void HttpWorker::request(
-        HttpMethod method, QUrl&& url, RequestOption&& option, QVariantHash&& data, folly::Promise<QNetworkReply*>&& promise) {
-        QCoreApplication::postEvent(
-            this, new HttpRequestEvent(method, std::move(url), std::move(option), std::move(data), std::move(promise)));
+    void MusicHttpWorker::request(
+        HttpMethod method, QUrl&& url, RequestOption&& option, QVariantHash&& data, MusicHttpHandler* handler) {
+        QCoreApplication::postEvent(this,
+                                    new HttpRequestEvent(method, std::move(url), std::move(option), std::move(data), handler));
+    }
+
+    MusicHttpHandler::MusicHttpHandler(const QString& url) : url_{url} {}
+
+    void MusicHttpHandler::attachNetworkReply(QNetworkReply* reply) {
+        reply->setParent(this);
+        reply_ = reply;
+        connect(reply, &QNetworkReply::finished, [this]() {
+            qDebug("Http finished: %s", qUtf8Printable(url_));
+            if (reply_->error() != QNetworkReply::NoError) {
+                QString errorString = httpErrorCodeToString(reply_->error());
+                qDebug("Http error (%s): %s", qUtf8Printable(url_), qUtf8Printable(errorString));
+
+                emit finished(MusicHttpResult{url_, errorString, {}, nullptr});
+            } else {
+                emit finished(MusicHttpResult{
+                    url_,
+                    "",
+                    reply_->readAll(),
+                    reply_
+                });
+            }
+        });
+    }
+
+    QString httpErrorCodeToString(QNetworkReply::NetworkError status) {
+        switch (status) {
+        case QNetworkReply::HostNotFoundError: return ("The remote host name was not found (invalid hostname)");
+        case QNetworkReply::OperationCanceledError: return ("The operation was canceled");
+        case QNetworkReply::RemoteHostClosedError:
+            return ("The remote server closed the connection prematurely, before the entire reply was received and processed");
+        case QNetworkReply::TimeoutError: return ("The connection to the remote server timed out");
+        case QNetworkReply::SslHandshakeFailedError: return ("SSL/TLS handshake failed");
+        case QNetworkReply::ConnectionRefusedError: return ("The remote server refused the connection");
+        case QNetworkReply::ProxyConnectionRefusedError: return ("The connection to the proxy server was refused");
+        case QNetworkReply::ProxyConnectionClosedError: return ("The proxy server closed the connection prematurely");
+        case QNetworkReply::ProxyNotFoundError: return ("The proxy host name was not found");
+        case QNetworkReply::ProxyTimeoutError:
+            return ("The connection to the proxy timed out or the proxy did not reply in time to the request sent");
+        case QNetworkReply::ProxyAuthenticationRequiredError:
+            return (
+                "The proxy requires authentication in order to honor the request but did not accept any credentials offered");
+        case QNetworkReply::ContentAccessDenied: return ("The access to the remote content was denied (401)");
+        case QNetworkReply::ContentOperationNotPermittedError:
+            return ("The operation requested on the remote content is not permitted");
+        case QNetworkReply::ContentNotFoundError: return ("The remote content was not found at the server (404)");
+        case QNetworkReply::AuthenticationRequiredError:
+            return ("The remote server requires authentication to serve the content but the credentials provided were not "
+                    "accepted");
+        case QNetworkReply::ProtocolUnknownError:
+            return ("The Network Access API cannot honor the request because the protocol is not known");
+        case QNetworkReply::ProtocolInvalidOperationError: return ("The requested operation is invalid for this protocol");
+        case QNetworkReply::UnknownNetworkError: return ("An unknown network-related error was detected");
+        case QNetworkReply::UnknownProxyError: return ("An unknown proxy-related error was detected");
+        case QNetworkReply::UnknownContentError: return ("An unknown error related to the remote content was detected");
+        case QNetworkReply::ProtocolFailure: return ("A breakdown in protocol was detected");
+        default: return ("Unknown error");
+        }
     }
 } // namespace MusicPlayer::API

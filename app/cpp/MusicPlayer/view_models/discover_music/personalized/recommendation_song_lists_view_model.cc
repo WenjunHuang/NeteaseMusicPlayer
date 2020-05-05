@@ -112,30 +112,30 @@ namespace MusicPlayer::ViewModels {
 
     RecommendationSongsListModel::RecommendationSongsListModel(QObject* parent) : QAbstractListModel{parent} {}
 
-    RecommendationSongListsViewModel::RecommendationSongListsViewModel(QObject* parent) : QObject{parent} {
+    RecommendationSongListsViewModel::RecommendationSongListsViewModel(QObject* parent) : BaseStateViewModel{parent} {
         _songsModel = new RecommendationSongsListModel(this);
     }
 
     void RecommendationSongListsViewModel::loadData() {
-        if (_loading && !_loading->isReady())
+        if (std::get_if<LoadingState>(&_state))
             return;
 
+        setState(LoadingState{});
         MusicAPI api;
-        _loading = api.personalized(10)
-                       .via(Util::mainExecutor())
-                       .thenValue([this](const Response<APIPersonalizedData>& reply) {
-                           std::visit(
-                               [=](const auto& value) {
-                                   if constexpr (std::is_convertible_v<decltype(value), APIPersonalizedData>) {
-                                       _songsModel->setRecommendationSongListsData(value);
-                                   } else {
-                                       // errors
-                                   }
-                               },
-                               reply);
-
-                           return std::nullopt;
-                       });
+        auto response = api.personalized(10);
+        connect(
+            response, &APIResponseHandler<APIPersonalizedData>::finished, [this](const APIResponse<APIPersonalizedData>& reply) {
+                std::visit(
+                    [=](const auto& value) {
+                        if constexpr (std::is_convertible_v<decltype(value), APIPersonalizedData>) {
+                            _songsModel->setRecommendationSongListsData(value);
+                            setState(ReadyState{});
+                        } else {
+                            // errors
+                        }
+                    },
+                    reply);
+            });
     }
 
     void RecommendationSongListsViewModel::componentComplete() { loadData(); }

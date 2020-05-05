@@ -13,10 +13,9 @@ namespace MusicPlayer::ViewModels {
         }
 
         setState(LoadingState{});
-        SongCategoryRepository::instance()
-            ->getPlaylistCatListData()
-            .via(mainExecutor())
-            .thenValue([this](const Response<APIPlaylistCatListData>& reply) {
+        MusicAPI api;
+        auto response = api.playlistCatlist();
+        connect(response,&APIResponseHandler<APIPlaylistCatListData>::finished,[this](const APIResponse<APIPlaylistCatListData>& reply) {
                 std::visit(
                     [this](auto& value) {
                         if constexpr (std::is_convertible_v<decltype(value), APIPlaylistCatListData>) {

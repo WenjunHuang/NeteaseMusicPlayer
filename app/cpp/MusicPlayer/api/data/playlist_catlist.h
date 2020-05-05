@@ -32,4 +32,3 @@ namespace MusicPlayer::API {
         static APIPlaylistCatListData fromJsonValue(const QJsonValue& json);
     };
 } // namespace MusicPlayer::API
-

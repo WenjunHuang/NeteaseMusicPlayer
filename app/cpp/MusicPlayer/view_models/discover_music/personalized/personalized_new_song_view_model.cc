@@ -62,28 +62,34 @@ namespace MusicPlayer::ViewModels {
         endResetModel();
     }
 
-    PersonalizedNewSongViewModel::PersonalizedNewSongViewModel(QObject* parent) : QObject{parent} {
+    PersonalizedNewSongViewModel::PersonalizedNewSongViewModel(QObject* parent) : BaseStateViewModel{parent} {
         _newSongModel = new PersonalizedNewSongListModel(this);
     }
 
     void PersonalizedNewSongViewModel::loadData() {
-        if (_loading && !_loading->isReady())
+        if (auto state = std::get_if<LoadingState>(&_state)) {
             return;
-        MusicAPI api;
-        _loading = api.personalizedNewSong()
-                       .via(Util::mainExecutor())
-                       .thenValue([this](const Response<APIPersonalizedNewSongData>& reply) {
-                           std::visit(
-                               [=](const auto& value) {
-                                   if constexpr (std::is_convertible_v<decltype(value), APIPersonalizedNewSongData>) {
-                                       _newSongModel->setPersonalizedNewSongData(value);
-                                   } else {
-                                       // errors
-                                   }
-                               },
-                               reply);
-                           return std::nullopt;
-                       });
+        } else {
+            setState(LoadingState{});
+
+            MusicAPI api;
+            auto response = api.personalizedNewSong();
+            connect(response,
+                    &APIResponseHandler<APIPersonalizedNewSongData>::finished,
+                    [this](const APIResponse<APIPersonalizedNewSongData>& reply) {
+                        std::visit(
+                            [=](const auto& value) {
+                                if constexpr (std::is_convertible_v<decltype(value), APIPersonalizedNewSongData>) {
+                                    _newSongModel->setPersonalizedNewSongData(value);
+                                    setState(ReadyState{});
+                                } else {
+                                    // errors
+                                }
+                            },
+                            reply);
+                        return std::nullopt;
+                    });
+        }
     }
 
     QAbstractListModel* PersonalizedNewSongViewModel::newSongListModel() const { return _newSongModel; }

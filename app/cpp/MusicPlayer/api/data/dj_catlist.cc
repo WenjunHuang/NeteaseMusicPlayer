@@ -2,6 +2,8 @@
 // Created by HUANG WEN JUN on 2019/12/8.
 //
 #include "dj_catlist.h"
+#include "../api_response.h"
+#include "wobjectimpl.h"
 
 namespace MusicPlayer::API {
     APIDJCategoryItemData APIDJCategoryItemData::fromJsonValue(const QJsonValue& jsonValue) {
@@ -15,4 +17,4 @@ namespace MusicPlayer::API {
         auto jsonObj = jsonValue.toObject();
         return {Util::fromJsonArray<APIDJCategoryItemData>(jsonObj.value(QLatin1String("categories")))};
     }
-} // namespace MusicPlayer::API
+} // namespace Music
