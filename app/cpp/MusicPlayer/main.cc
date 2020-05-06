@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[]) {
     using namespace MusicPlayer;
-    QLoggingCategory::setFilterRules("qt.scenegraph.general=true");
+//    QLoggingCategory::setFilterRules("qt.scenegraph.general=true");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     try {

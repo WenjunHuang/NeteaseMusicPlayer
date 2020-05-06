@@ -18,9 +18,6 @@ Item {
             if (state.kind === StateKinds.Ready)
                 layout.currentIndex = 1
         }
-        Component.onCompleted: {
-            viewModel.reload()
-        }
     }
 
     StackLayout {

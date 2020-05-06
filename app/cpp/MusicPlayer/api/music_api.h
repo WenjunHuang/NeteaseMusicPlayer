@@ -4,20 +4,22 @@
 
 #pragma once
 
-#include <QFuture>
-#include <QFutureWatcher>
-#include <QJsonDocument>
-#include <QtConcurrent/QtConcurrent>
-#include <exception>
-#include <variant>
 #include "../commons.h"
+#include "api_response.h"
 #include "data/data.h"
 #include "http.h"
-#include "api_response.h"
+#include <QJsonDocument>
+#include <QtCore/QtCore>
+#include <exception>
+#include <variant>
 
 namespace MusicPlayer::API {
 
-    class MusicAPI {
+    class MusicAPI : public QObject {
+        Q_OBJECT
+        Q_DISABLE_COPY_MOVE(MusicAPI)
+        MusicAPI();
+
       public:
         APIResponseHandler<APIDJBannersData>* djBanner();
 
@@ -33,12 +35,14 @@ namespace MusicPlayer::API {
 
         APIResponseHandler<APIUserLoginData>* loginCellphone(const QString& cellphone, const QString& password);
 
-        APIResponseHandler<APIUserPrivateMessagesData>* userPrivateMessages(const QString& cookieToken, int limit = 30, int offset = 0);
+        APIResponseHandler<APIUserPrivateMessagesData>*
+        userPrivateMessages(const QString& cookieToken, int limit = 30, int offset = 0);
 
         APIResponseHandler<APIPlaylistCatListData>* playlistCatlist();
 
         // 精品歌单
-        APIResponseHandler<APITopPlayListData>* topPlaylistHighQuality(const QString& cat = "全部", int limit = 50, qint64 before = 0);
+        APIResponseHandler<APITopPlayListData>*
+        topPlaylistHighQuality(const QString& cat = "全部", int limit = 50, qint64 before = 0);
 
         // 歌单详情
         APIResponseHandler<APIPlayListDetailData>* playlistDetail(int playlistId);
@@ -58,9 +62,13 @@ namespace MusicPlayer::API {
         // 歌手介绍
         APIResponseHandler<QString>* artistDesc(ArtistId artistId);
 
-      public:
-        // 向meta type system注册，程序启动时必须调用
-        static void registerMetaTypes();
+        static void initInstance();
+
+        static void freeInstance();
+
+        static MusicAPI* instance();
+      private:
+        static MusicAPI* instance_;
     };
 } // namespace MusicPlayer::API
 

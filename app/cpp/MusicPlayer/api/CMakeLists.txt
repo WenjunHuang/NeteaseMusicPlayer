@@ -1,4 +1,6 @@
 add_library(api STATIC
+        api.h
+        api.cc
         http.h
         http.cc
         music_api.h
@@ -30,7 +32,13 @@ add_library(api STATIC
         data/top_playlist.cc
         data/top_playlist.h
         data/playlist_detail.h
-        data/playlist_detail.cc data/dj_catlist.h data/dj_catlist.cc data/lyric.cc data/lyric.h data/song_url.cc data/song_url.h)
+        data/playlist_detail.cc
+        data/dj_catlist.h
+        data/dj_catlist.cc
+        data/lyric.cc
+        data/lyric.h
+        data/song_url.cc
+        data/song_url.h)
 target_link_libraries(api PUBLIC util Qt5::Core Qt5::Network Qt5::Quick CRYPTOPP)
 target_include_directories(api INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 

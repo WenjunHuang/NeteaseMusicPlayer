@@ -16,3 +16,8 @@ struct overload : Ts ... {
 
 template<typename...Ts>
 overload(Ts...) -> overload<Ts...>;
+
+
+namespace MusicPlayer::Util {
+    void initUtilModule();
+}

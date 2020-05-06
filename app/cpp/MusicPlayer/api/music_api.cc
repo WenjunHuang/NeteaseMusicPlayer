@@ -10,9 +10,28 @@
 #include <functional>
 #include <variant>
 
-
 namespace MusicPlayer::API {
+    MusicAPI* MusicAPI::instance_ = nullptr;
+
     using namespace MusicPlayer::Util;
+
+    MusicAPI::MusicAPI() {}
+
+    void MusicAPI::initInstance() {
+        if (!instance_) {
+            instance_ = new MusicAPI;
+        }
+    }
+
+    MusicAPI* MusicAPI::instance() {return instance_;}
+
+    void MusicAPI::freeInstance() {
+        if (instance_) {
+            delete instance_;
+            instance_ = nullptr;
+        }
+    }
+
     template <typename T> APIResponse<T> parseResponse(MusicHttpResult const& result) {
         if (result.errorString.isEmpty()) {
             QJsonParseError jsonError{};
@@ -111,7 +130,8 @@ namespace MusicPlayer::API {
         return apiResponse;
     }
 
-    APIResponseHandler<APIUserPrivateMessagesData>* MusicAPI::userPrivateMessages(const QString& cookieToken, int limit, int offset) {
+    APIResponseHandler<APIUserPrivateMessagesData>*
+    MusicAPI::userPrivateMessages(const QString& cookieToken, int limit, int offset) {
         return invoke<APIUserPrivateMessagesData>([=]() {
             return MusicHttpWorker::instance()->post(QUrl("https://music.163.com/weapi/msg/private/users"),
                                                      {CryptoType::WEAPI, cookieToken},
@@ -204,5 +224,4 @@ namespace MusicPlayer::API {
         //            .thenValue([](QNetworkReply* reply) { return APIResponse<QString>{QString(reply->readAll())}; });
         return new APIResponseHandler<QString>;
     }
-    void MusicAPI::registerMetaTypes() { qRegisterMetaType<APIResponse<APIDJBannersData>> ("APIResponse<APIDJBannersData>>"); }
 } // namespace MusicPlayer::API

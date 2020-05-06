@@ -53,8 +53,7 @@ namespace MusicPlayer::API {
 
     class MusicHttpWorker : public QObject {
         Q_OBJECT
-
-        Q_DISABLE_COPY(MusicHttpWorker)
+        Q_DISABLE_COPY_MOVE(MusicHttpWorker)
 
         Q_ENUM(HttpMethod)
 
@@ -86,4 +85,3 @@ namespace MusicPlayer::API {
 } // namespace MusicPlayer::API
 Q_DECLARE_METATYPE(MusicPlayer::API::HttpMethod)
 Q_DECLARE_METATYPE(MusicPlayer::API::MusicHttpResult)
-// Q_DECLARE_METATYPE(MusicPlayer::MusicAPI::HttpWorker)

@@ -32,10 +32,4 @@ namespace MusicPlayer::Util {
         QThread* _dbThread;
         QThread* _mainThread;
     };
-
-    class QtExecutorEventWorker : public QObject {
-        Q_OBJECT
-      protected:
-        bool event(QEvent* ev) override;
-    };
 } // namespace MusicPlayer::Util

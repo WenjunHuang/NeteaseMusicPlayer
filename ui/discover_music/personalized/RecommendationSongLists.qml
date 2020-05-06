@@ -106,13 +106,16 @@ Item {
                                 source: "image://MusicImage/" + modelImageUrl
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
-                                sourceSize: Qt.size(image.width,image.height)
+                                //sourceSize: Qt.size(128,128)
                                 onStatusChanged: {
                                     if (image.status === Image.Ready)
                                         fadeInImage.contentLoaded()
                                 }
                                 visible: false
                             }
+//                Component.onCompleted: {
+//                    console.log("LinearGradientBlend")
+//                }
                         }
 
                         FAIcon {

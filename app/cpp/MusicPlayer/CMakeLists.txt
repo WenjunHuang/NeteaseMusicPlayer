@@ -29,8 +29,6 @@ if (MSVC)
     add_compile_options("/Zc:__cplusplus" "/utf-8")
 endif ()
 if (APPLE)
-    set(CMAKE_CXX_STANDARD 17)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
     find_package(PkgConfig)
     #    find_package(Boost REQUIRED COMPONENTS container)
     pkg_search_module(cryptopp REQUIRED libcryptopp IMPORTED_TARGET)
@@ -39,19 +37,15 @@ if (APPLE)
     # add interface targets
     add_library(CRYPTOPP INTERFACE)
     target_link_libraries(CRYPTOPP INTERFACE PkgConfig::cryptopp)
-    add_library(FOLLY INTERFACE)
-    target_link_libraries(FOLLY INTERFACE PkgConfig::folly)
-    add_library(GLOG INTERFACE)
-    target_link_libraries(GLOG INTERFACE PkgConfig::glog)
     add_library(SQLITE3 INTERFACE)
     target_link_libraries(SQLITE3 INTERFACE sqlite3)
 endif ()
 
 add_subdirectory(util)
 add_subdirectory(api)
-add_subdirectory(repositories)
-add_subdirectory(view_models)
-add_subdirectory(services)
+add_subdirectory(repository)
+add_subdirectory(view_model)
+add_subdirectory(service)
 add_subdirectory(player)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -62,7 +56,7 @@ else ()
 endif ()
 
 add_library(application STATIC application.h application.cc)
-target_link_libraries(application PUBLIC api util view_models services player
+target_link_libraries(application PUBLIC api util view_model service player
         Qt5::Core
         Qt5::Network
         Qt5::Quick

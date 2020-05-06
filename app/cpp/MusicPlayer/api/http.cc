@@ -167,6 +167,7 @@ namespace MusicPlayer::API {
 
     MusicHttpHandler* MusicHttpWorker::post(QUrl&& url, RequestOption&& option, QVariantHash&& data) {
         auto handler = new MusicHttpHandler( url.toString());
+        handler->moveToThread(Util::AppExecutor::instance()->getHTTPThread());
         connect(handler, &MusicHttpHandler::finished, handler, &QObject::deleteLater);
         request(HttpMethod::POST, std::move(url), std::move(option), std::move(data), handler);
         return handler;
@@ -174,6 +175,8 @@ namespace MusicPlayer::API {
 
     MusicHttpHandler* MusicHttpWorker::get(QUrl&& url) {
         auto handler = new MusicHttpHandler( url.toString());
+        handler->moveToThread(Util::AppExecutor::instance()->getHTTPThread());
+
         connect(handler, &MusicHttpHandler::finished, handler, &QObject::deleteLater);
         request(HttpMethod::GET, std::move(url), RequestOption{}, QVariantHash{}, handler);
         return handler;
@@ -182,8 +185,6 @@ namespace MusicPlayer::API {
     void MusicHttpWorker::initInstance() {
         if (!_instance) {
             _instance = new MusicHttpWorker;
-            qRegisterMetaType<HttpMethod>("HttpMethod");
-            qRegisterMetaType<RequestOption>("RequestOption");
             //            qRegisterMetaType<QFutureInterface<QNetworkReply*>>(
             //                "QFutureInterface<QNetworkReply*>");
         }

@@ -5,7 +5,7 @@
 #include "set_up.h"
 #include <iostream>
 
-#include "../MusicPlayer/player/player.h"
+#include "audio_player.h"
 using namespace MusicPlayer::Player;
 
 TEST_CASE("playSong", "[AudioPlayer]") {

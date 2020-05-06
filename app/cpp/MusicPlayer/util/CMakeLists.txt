@@ -1,4 +1,6 @@
 add_library(util STATIC
+        util.h
+        util.cc
         json.cc
         logger.cc
         misc.cc

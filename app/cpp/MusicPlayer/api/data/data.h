@@ -7,7 +7,6 @@
 #include "dj_category_excludehot.h"
 #include "dj_category_recommend.h"
 #include "dj_catlist.h"
-#include "error.h"
 #include "personalized.h"
 #include "personalized_newsong.h"
 #include "playlist_catlist.h"
