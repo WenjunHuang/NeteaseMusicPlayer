@@ -41,10 +41,10 @@ Item {
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter
                 currentIndex: root.currentIndex
-                onCurrentIndexChanged: {
-                    if (currentIndex !== root.currentIndex)
-                        mainStackView.push("qrc:/ui/discover_music/DiscoverMusic.qml",{"currentIndex":currentIndex})
-                }
+//                onCurrentIndexChanged: {
+//                    if (currentIndex !== root.currentIndex)
+//                        mainStackView.push("qrc:/ui/discover_music/DiscoverMusic.qml",{"currentIndex":currentIndex})
+//                }
 
                 TabButton {
                     width: implicitWidth
@@ -87,22 +87,46 @@ Item {
         //        Rectangle {
         //            Layout.fillHeight: true
         //        }
-        Loader {
-            id: loader
+        StackLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            sourceComponent: {
-                const index = root.currentIndex
-                if (index === 0)
-                    return personalized
-                if (index === 1)
-                    return songList
-                if (index === 2)
-                    return djRadios
+            currentIndex: tabBar.currentIndex
+            Component.onCompleted:{
+            console.log("ok")
+            }
 
-                return foo
+            Personalized {
+            Component.onCompleted:{
+                console.log("Personalized")
+            }
+            }
+            SongList {
+            Component.onCompleted:{
+                console.log("SongList")
+            }
+            }
+            DJRadios {
+            Component.onCompleted:{
+                console.log("DJRadios")
+            }
             }
         }
+//        Loader {
+//            id: loader
+//            Layout.fillWidth: true
+//            Layout.fillHeight: true
+//            sourceComponent: {
+//                const index = root.currentIndex
+//                if (index === 0)
+//                    return personalized
+//                if (index === 1)
+//                    return songList
+//                if (index === 2)
+//                    return djRadios
+//
+//                return foo
+//            }
+//        }
     }
 
     Component {
